@@ -21,8 +21,8 @@ const LoginContainer = () => {
   return (
     <AuthLayout>
       <Container as="main" className="h-full w-full">
-        <div className="flex justify-center items-center min-h-screen ">
-          <Card className="w-full max-w-sm shadow-xl rounded-2xl">
+        <div className="flex justify-center items-center min-h-screen p-4 ">
+          <Card className="w-full max-w-sm shadow-xl rounded-2xl  ">
             <CardHeader className="flex flex-col items-center space-y-2">
               <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
                 <Cat />

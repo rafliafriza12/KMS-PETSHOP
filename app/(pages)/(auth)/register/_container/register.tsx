@@ -20,82 +20,80 @@ const RegisterContainer = () => {
   return (
     <AuthLayout>
       <Container as="main" className="w-full h-full">
-        <Container as="main" className="h-full w-full">
-          <div className="flex justify-center items-center min-h-screen ">
-            <Card className="w-full max-w-sm shadow-xl rounded-2xl">
-              <CardHeader className="flex flex-col items-center space-y-2">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Cat />
-                </div>
-                <CardTitle className="text-center text-lg font-bold">KMS PETSHOP</CardTitle>
-                <CardDescription className="text-center text-sm">
-                  Sistem Rekomendasi Perawatan Kucing
-                </CardDescription>
-              </CardHeader>
+        <div className="flex justify-center items-center min-h-screen p-4">
+          <Card className="w-full max-w-sm shadow-xl rounded-2xl">
+            <CardHeader className="flex flex-col items-center space-y-2">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                <Cat />
+              </div>
+              <CardTitle className="text-center text-lg font-bold">KMS PETSHOP</CardTitle>
+              <CardDescription className="text-center text-sm">
+                Sistem Rekomendasi Perawatan Kucing
+              </CardDescription>
+            </CardHeader>
 
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <Label htmlFor="text">Nama</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                      <Input
-                        id="text"
-                        type="email"
-                        placeholder="Masukkan email Anda"
-                        className="pl-10"
-                      />
-                    </div>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="text">Nama</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="text"
+                      type="email"
+                      placeholder="Masukkan email Anda"
+                      className="pl-10"
+                    />
                   </div>
-
-                  <div className="space-y-1">
-                    <Label htmlFor="email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Masukkan email Anda"
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1">
-                    <Label htmlFor="password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                      <Input
-                        id="password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Masukkan password Anda"
-                        className="pl-10 pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                      >
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <Button className="w-full" size="lg">
-                    Masuk
-                  </Button>
                 </div>
-                <div className="flex justify-center items-center mt-2">
-                  <Link href="/login">
-                    <Label className="text-sm font-semibold cursor-pointer ">
-                      Anda Sudah Memiliki Akun?
-                    </Label>
-                  </Link>
+
+                <div className="space-y-1">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Masukkan email Anda"
+                      className="pl-10"
+                    />
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </Container>
+
+                <div className="space-y-1">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Masukkan password Anda"
+                      className="pl-10 pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <Button className="w-full" size="lg">
+                  Masuk
+                </Button>
+              </div>
+              <div className="flex justify-center items-center mt-2">
+                <Link href="/login">
+                  <Label className="text-sm font-semibold cursor-pointer ">
+                    Anda Sudah Memiliki Akun?
+                  </Label>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </Container>
     </AuthLayout>
   );
