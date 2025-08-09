@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -110,6 +110,33 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  :root {
+    --background: #eaebed;
+    --foreground: #0a0a0a;
+    --primary: #ffbe5d;
+    --primary-foreground: #0e0a17;
+    --shapeV1-parent: #453bcf;
+    --shapeV1-child: #352cb3;
+    --border: #fffdfd;
+  }
+  .dark {
+    --background: #0a0a0a;
+    --foreground: #0a0a0a;
+    --primary: #175753;
+    --primary-foreground: #000000;
+    --shapeV1-parent: #453bcf;
+    --shapeV1-child: #352cb3;
+    --border: #fffdfd;
+  }
+  .body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-plus-jakarta), sans-serif;
+    overflow: hidden;
+  }
 }
 
 @layer base {
