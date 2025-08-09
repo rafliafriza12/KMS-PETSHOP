@@ -12,7 +12,7 @@ const HomeContainer = () => {
     <HomeLayout>
       <Container className="w-full h-full">
         <Container className="flex justify-center items-center">
-          <View className="flex flex-col justify-around items-center w-full mt-6 lg:flex-row">
+          <View className="flex flex-col justify-around items-center w-full lg:mt-6 mt-10 lg:flex-row">
             <Container className="w-full relative z-0" as="section">
               <View className="flex justify-center items-center">
                 <div className="lg:w-130 lg:h-130  w-90 h-90 rounded-full bg-[var(--shapeV1-parent)] z-[-1] :scale-0" />
@@ -41,7 +41,7 @@ const HomeContainer = () => {
             </Container>
             <Container as="section" className="relative w-full">
               <View className="flex items-center justify-center flex-col mt-50">
-                <View className="absolute lg:scale-30 lg:left-2/3 lg:-top-25 lg:-translate-x-5 scale-15 bottom-16 left-33 ">
+                <View className="absolute lg:scale-30 lg:left-2/3 lg:top-15 lg:-translate-x-10 scale-15 bottom-16 left-33 ">
                   <Light />
                 </View>
 
