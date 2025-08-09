@@ -5,7 +5,7 @@ import View from '@/app/components/ui/view';
 import HomeLayout from '@/app/core/layout/home-layout';
 import { Button } from '@/app/components/ui/button';
 import Image from 'next/image';
-import { SoapDispenserDroplet } from 'lucide-react';
+import { SoapDispenserDroplet, BriefcaseMedical } from 'lucide-react';
 import Doctor from '@/app/components/svg/soap';
 
 const HomeContainer = () => {
@@ -20,8 +20,8 @@ const HomeContainer = () => {
                 <View className="absolute z-0 translate-y-15">
                   <Image alt="cat" src="/asset/cat.svg" width={500} height={500} />
                 </View>
-                <View className="flex scale-65 items-center justify-center gap-2 p-6 bg-background rounded-lg absolute bottom-25 right-5 z-2 drop-shadow-2xl  ">
-                  <SoapDispenserDroplet className="scale-150 " />
+                <View className="flex scale-65 items-center justify-center gap-4 p-6 bg-background rounded-lg absolute bottom-25 right-5 z-2 drop-shadow-2xl  ">
+                  <SoapDispenserDroplet className="scale-200 " />
                   <View className="w-full flex-col flex">
                     <Text className="font-bold text-2xl w-1/2 ">Pet Groming</Text>
                     <Text className="w-full max-w-3/4 font-light ">
@@ -29,8 +29,8 @@ const HomeContainer = () => {
                     </Text>
                   </View>
                 </View>
-                <View className="flex scale-60 items-center justify-center gap-2 p-6 bg-background rounded-lg absolute bottom-0 -left-5 z-2 drop-shadow-2xl  ">
-                  <Doctor />
+                <View className="flex scale-60 items-center justify-center gap-4 p-6 bg-background rounded-lg absolute bottom-0 -left-5 z-2 drop-shadow-2xl  ">
+                  <BriefcaseMedical className="scale-200 " />
                   <View className="w-full flex-col flex">
                     <Text className="font-bold text-2xl w-1/2 ">Pet Clinic</Text>
                     <Text className="w-full max-w-3/4 font-light ">
