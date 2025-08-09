@@ -8,6 +8,8 @@ import { User } from 'lucide-react';
 import { Button } from './ui/button';
 import Link from 'next/link';
 
+// chore
+
 export default function HeaderAppHome() {
   return (
     <nav className="flex justify-between items-center w-full p-2 ">
