@@ -1,8 +1,10 @@
-import BlankLayout from '@/app/core/layout/blank-layout';
+import HeaderApp from '@/app/components/header-app';
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main>
-      <BlankLayout>{children}</BlankLayout>
+      <HeaderApp />
+      {children}
     </main>
   );
 }
