@@ -20,9 +20,13 @@ import { RasKucing } from '@/app/core/constants/ras';
 import { ChevronRight } from 'lucide-react';
 import Spreed from '@/app/core/components/spreed';
 
+import Diagnosis from '@/app/components/diagnosis';
+import { DiagnosisAppData } from '@/app/config/component-config';
+
 const DashboardUserContainer = () => {
   const [isPopUp, setIsPopUp] = useState<'kucing' | null>(null);
   const [state, setState] = useState<'Rendah' | 'Sedang' | 'Tinggi' | null>(null);
+  const [selectId, setSelectId] = useState<string | null>(null);
 
   const aktivitas: { label: 'Rendah' | 'Sedang' | 'Tinggi'; desc: string }[] = [
     { label: 'Rendah', desc: 'Suka Tidur, Jarang Main' },
@@ -114,13 +118,13 @@ const DashboardUserContainer = () => {
                       >
                         <View className="flex justify-center items-center flex-col">
                           <Text
-                            className={`text-lg font-semibold ${
+                            className={`text-sm lg:text-lg font-semibold ${
                               state === item.label ? 'text-primary' : ''
                             }`}
                           >
                             {item.label}
                           </Text>
-                          <Text className="text-center text-sm">{item.desc}</Text>
+                          <Text className="text-center  lg:text-sm">{item.desc}</Text>
                         </View>
                       </div>
                     ))}
@@ -138,11 +142,30 @@ const DashboardUserContainer = () => {
                     ))}
                   </View>
                 </Container>
+                <View className="mt-4">
+                  <Button className="w-full">Kirim</Button>
+                </View>
               </Container>
             </PopUp>
           </View>
           <Spreed orientation="horizontal" className="mt-2" />
-          {/* Components */}
+
+          <div className="w-full h-full">
+            <Container className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-2">
+              {DiagnosisAppData.map((items, key) => {
+                const id = (items._id ?? items._id ?? items.nama ?? key).toString();
+                return (
+                  <div
+                    key={id}
+                    onClick={() => setSelectId(id === selectId ? null : id)}
+                    className="cursor-pointer"
+                  >
+                    <Diagnosis data={items} isSelect={selectId === id} />
+                  </div>
+                );
+              })}
+            </Container>
+          </div>
         </View>
       </Container>
     </HomeUserLayout>
