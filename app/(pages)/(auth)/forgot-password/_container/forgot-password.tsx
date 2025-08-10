@@ -45,7 +45,7 @@ const ForgotPasswordContainer = () => {
                 </div>
               </div>
               <div className="mt-4">
-                <Button className="w-full" size="lg">
+                <Button className="w-full font-semibold" size="lg">
                   Verifikasi
                 </Button>
               </div>

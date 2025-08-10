@@ -68,7 +68,7 @@ const LoginContainer = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button className="w-full font-semibold" size="lg">
                   Masuk
                 </Button>
 
