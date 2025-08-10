@@ -80,8 +80,8 @@ const RegisterContainer = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg">
-                  Masuk
+                <Button className="w-full font-semibold" size="lg">
+                  Daftar
                 </Button>
               </div>
               <div className="flex justify-center items-center mt-2">

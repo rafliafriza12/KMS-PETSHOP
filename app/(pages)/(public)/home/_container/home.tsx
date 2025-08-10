@@ -45,7 +45,7 @@ const HomeContainer = () => {
                   <Light />
                 </View>
 
-                <View className='className="flex justify-center items-center lg:w-2/4 w-2/3    '>
+                <View className='className="flex justify-center items-d lg:w-2/4 w-2/3    '>
                   <p className="text-4xl lg:text-6xl font-extrabold text-[#453bcf]">
                     Be Glowing Be Cute
                   </p>
