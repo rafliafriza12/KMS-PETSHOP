@@ -7,8 +7,15 @@ import CatData from '@/app/components/cat-data';
 import FilterLayanan from '@/app/components/filter-layanan';
 import LayananComponent from '@/app/components/layanan';
 import { LayananAppData } from '@/app/config/component-config';
+import { useState } from 'react';
 
 const LayananContainer = () => {
+  const [filter, setFilter] = useState<string>('all');
+
+  const filteredData =
+    filter === 'all'
+      ? LayananAppData
+      : LayananAppData.filter((item) => item.kategori.toLowerCase() === filter.toLowerCase());
   return (
     <HomeUserLayout>
       <Container as="main" className="w-full h-full">
@@ -16,10 +23,10 @@ const LayananContainer = () => {
 
         <View className="flex justify-center items-center gap-4 p-4 mt-2 flex-wrap">
           <CatData />
-          <FilterLayanan />
-          <View className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 w-full gap-2">
-            {LayananAppData.map((items, key) => (
-              <LayananComponent data={items} key={key} />
+          <FilterLayanan onChange={setFilter} />
+          <View className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 w-full gap-6 ">
+            {filteredData.map((items) => (
+              <LayananComponent data={items} key={items._id} />
             ))}
           </View>
         </View>

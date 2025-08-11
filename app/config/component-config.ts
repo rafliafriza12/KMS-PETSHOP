@@ -1,6 +1,5 @@
 import { DiagnosisAppType } from '../types/components';
 import { LayananAppType } from '../types/components';
-import { Heart } from 'lucide-react';
 
 export const DiagnosisAppData: DiagnosisAppType[] = [
   {
@@ -27,6 +26,7 @@ export const DiagnosisAppData: DiagnosisAppType[] = [
 
 export const LayananAppData: LayananAppType[] = [
   {
+    _id: '1',
     kategori: 'Kesehatan',
     rekomendasi: 'Sangat Direkomendasikan',
     judul: 'Terapi Fisik Senior',
@@ -41,6 +41,7 @@ export const LayananAppData: LayananAppType[] = [
     ],
   },
   {
+    _id: '2',
     kategori: 'Grooming',
     rekomendasi: 'Rekomendasi',
     popular: 'Popular',
@@ -56,6 +57,7 @@ export const LayananAppData: LayananAppType[] = [
     ],
   },
   {
+    _id: '3',
     kategori: 'Penitipan',
     rekomendasi: 'Sangat Direkomendasikan',
     judul: 'Terapi Fisik Senior',
@@ -70,6 +72,7 @@ export const LayananAppData: LayananAppType[] = [
     ],
   },
   {
+    _id: '4',
     kategori: 'Nutrisi',
     rekomendasi: 'Sangat Direkomendasikan',
     judul: 'Terapi Fisik Senior',
@@ -84,6 +87,7 @@ export const LayananAppData: LayananAppType[] = [
     ],
   },
   {
+    _id: '5',
     kategori: 'Pelatihan',
     rekomendasi: 'Sangat Direkomendasikan',
     judul: 'Terapi Fisik Senior',

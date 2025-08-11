@@ -127,7 +127,7 @@ const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
         </ul>
       </View>
 
-      <Button className="w-full ">Tambah ke Keranjang</Button>
+      <Button className="w-full font-semibold ">Tambah ke Keranjang</Button>
     </View>
   );
 };
