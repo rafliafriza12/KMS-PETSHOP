@@ -17,7 +17,7 @@ const LayananContainer = () => {
         <View className="flex justify-center items-center gap-4 p-4 mt-2 flex-wrap">
           <CatData />
           <FilterLayanan />
-          <View className="grid grid-cols-2 grid-rows-2 w-full gap-2">
+          <View className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 w-full gap-2">
             {LayananAppData.map((items, key) => (
               <LayananComponent data={items} key={key} />
             ))}
