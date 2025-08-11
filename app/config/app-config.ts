@@ -15,12 +15,12 @@ export const NavbarAppData: NavbarAppType[] = [
 export const NavbarUserData: NavbarAppType[] = [
   {
     title: 'Dashboard',
-    href: '',
+    href: '/users',
     icon: Cat,
   },
   {
     title: 'Layanan',
-    href: '',
+    href: '/users/layanan',
     icon: Settings,
   },
   {

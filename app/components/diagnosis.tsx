@@ -8,19 +8,21 @@ const Diagnosis: React.FC<DiagnosisAppTypeProps & { isSelect: boolean }> = ({ da
   const handleBaghe = (text: string) => {
     if (text === 'Rendah') {
       return (
-        <div className="text-sm font-light px-2 py-1 bg-green-500 text-white rounded-lg">
+        <div className="text-sm font-light px-2 py-1 bg-[#DBEAFE] text-[#3740AF] rounded-lg">
           Rendah
         </div>
       );
     } else if (text === 'Sedang') {
       return (
-        <div className="text-sm font-light px-2 py-1 bg-yellow-500 text-white rounded-lg">
+        <div className="text-sm font-light px-2 py-1 bg-[#FEF9C3] text-[#AC551D] rounded-lg">
           Sedang
         </div>
       );
     } else if (text === 'Tinggi') {
       return (
-        <div className="text-sm font-light px-2 py-1 bg-red-500 text-white rounded-lg">Tinggi</div>
+        <div className="text-sm font-light px-2 py-1 bg-[#FEE2E2] text-[#991B1B] rounded-lg">
+          Tinggi
+        </div>
       );
     }
     return null;
@@ -29,7 +31,7 @@ const Diagnosis: React.FC<DiagnosisAppTypeProps & { isSelect: boolean }> = ({ da
   return (
     <View
       className={`flex flex-col border rounded-xl ${
-        isSelect ? 'border-[var(--shapeV1-parent)]' : 'border'
+        isSelect ? 'border-[var(--shapeV1-parent)]' : 'border border-white/50'
       }`}
     >
       <View className="flex justify-between items-center w-full p-3 border-b">

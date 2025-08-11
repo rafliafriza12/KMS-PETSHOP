@@ -120,6 +120,8 @@
     --primary-foreground: #0e0a17;
     --shapeV1-parent: #453bcf;
     --shapeV1-child: #352cb3;
+    --shapeV2-parent: #f3f4f6;
+    --shapeV2-child: #f9fafb;
     --border: #fffdfd;
   }
   .dark {
@@ -127,8 +129,10 @@
     --foreground: #0a0a0a;
     --primary: #175753;
     --primary-foreground: #000000;
-    --shapeV1-parent: #453bcf;
-    --shapeV1-child: #352cb3;
+    --shapeV1-parent: #2b267a;
+    --shapeV1-child: #1f1a66;
+    --shapeV2-parent: #1f2937;
+    --shapeV2-child: #374151;
     --border: #fffdfd;
   }
   .body {

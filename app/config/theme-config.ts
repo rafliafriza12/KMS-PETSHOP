@@ -100,8 +100,8 @@ export const themeConfig: ThemeConfig = {
       child: '#352cb3',
     },
     shapeV2: {
-      parent: '#EAEAEA',
-      child: '#FFFFFF',
+      parent: '#F3F4F6',
+      child: '#F9FAFB',
     },
   },
   dark: {
@@ -151,12 +151,12 @@ export const themeConfig: ThemeConfig = {
     input: '#FFFFFF',
     ring: '#FFFFFF',
     shapeV1: {
-      parent: '#453BCF',
-      child: '#352cb3',
+      parent: '#2B267A',
+      child: '#1F1A66',
     },
     shapeV2: {
-      parent: '#4D4D4D',
-      child: '#2A2A2A',
+      parent: '#1F2937',
+      child: '#374151',
     },
   },
 };
