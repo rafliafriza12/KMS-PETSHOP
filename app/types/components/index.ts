@@ -14,3 +14,14 @@ export interface DiagnosisAppType {
   subtitle: string;
   kesehatan: string;
 }
+
+export interface LayananAppType {
+  kategori: string;
+  popular?: string;
+  rekomendasi?: string;
+  judul: string;
+  deskripsi: string;
+  durasi: string;
+  harga: string;
+  alasan: string[];
+}

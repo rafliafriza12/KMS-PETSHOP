@@ -22,6 +22,7 @@ import Spreed from '@/app/core/components/spreed';
 
 import Diagnosis from '@/app/components/diagnosis';
 import { DiagnosisAppData } from '@/app/config/component-config';
+import Informasion from '@/app/components/informasion';
 
 const DashboardUserContainer = () => {
   const [isPopUp, setIsPopUp] = useState<'kucing' | null>(null);
@@ -37,7 +38,7 @@ const DashboardUserContainer = () => {
     <HomeUserLayout>
       <Container as="main" className="w-full h-full">
         <View className="flex justify-center items-center flex-col">
-          <View className="flex justify-around items-center w-full p-2">
+          <View className="flex justify-between items-center w-full p-4">
             <View className="flex justify-center items-start flex-col">
               <Text className="font-bold text-2xl lg:text-4xl">Dashboard</Text>
               <Text className="font-semibold text-sm">
@@ -57,7 +58,10 @@ const DashboardUserContainer = () => {
                     <Plus className="text-foreground" />
                     <Text className="font-bold">Tambah Profile Kucing</Text>
                   </View>
-                  <ChevronRight className="text-foreground" onClick={() => setIsPopUp(null)} />
+                  <ChevronRight
+                    className="text-foreground cursor-pointer"
+                    onClick={() => setIsPopUp(null)}
+                  />
                 </View>
 
                 <Container className="w-full mt-4">
@@ -110,7 +114,7 @@ const DashboardUserContainer = () => {
                       <div
                         key={item.label}
                         onClick={() => setState(item.label)}
-                        className={` h-auto w-auto rounded-lg border p-2 lg:p-3 cursor-pointer transition ${
+                        className={` h-auto w-auto rounded-lg border p-4 lg:p-3 cursor-pointer transition ${
                           state === item.label
                             ? 'border-primary bg-primary/10'
                             : 'border-[var(--shapeV1-parent)]'
@@ -150,8 +154,8 @@ const DashboardUserContainer = () => {
           </View>
           <Spreed orientation="horizontal" className="mt-2" />
 
-          <div className="w-full h-full">
-            <Container className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-2">
+          <Container className="w-full h-full">
+            <View className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
               {DiagnosisAppData.map((items, key) => {
                 const id = (items._id ?? items._id ?? items.nama ?? key).toString();
                 return (
@@ -164,8 +168,9 @@ const DashboardUserContainer = () => {
                   </div>
                 );
               })}
-            </Container>
-          </div>
+            </View>
+            <View className=" p-4">{selectId && <Informasion isSelect={true} />}</View>
+          </Container>
         </View>
       </Container>
     </HomeUserLayout>
