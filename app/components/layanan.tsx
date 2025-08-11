@@ -1,11 +1,33 @@
 import View from './ui/view';
-import { Heart, Clock, Check, Scissors, House, GraduationCap, Apple, Star } from 'lucide-react';
+import {
+  Heart,
+  Clock,
+  Check,
+  Scissors,
+  House,
+  GraduationCap,
+  Apple,
+  Star,
+  Calendar,
+  Clock8,
+  Plus,
+} from 'lucide-react';
 import { LayananAppTypeProps } from '../types/props';
 import { Text } from './ui/Text';
 import { Label } from '@radix-ui/react-label';
 import { Button } from './ui/button';
+import { useState } from 'react';
+import PopUp from '../core/components/pop-up';
+import Container from './ui/container';
+import { ChevronRight } from 'lucide-react';
+import Spreed from '../core/components/spreed';
+import { Input } from './ui/input';
 
 const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
+  const [isModal, setIsModal] = useState<'Keranjang' | null>(null);
+  const [slot, setSlot] = useState<
+    '09:00' | '10:00' | '11:00' | '13:00' | '14:00' | '15:00' | '16:00' | '17:00' | null
+  >(null);
   const kategori = {
     Grooming: {
       bg: 'bg-[#EDE9FE]',
@@ -44,6 +66,19 @@ const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
       text: 'text-[#9F5F1D]',
     },
   };
+
+  const jamSlot: {
+    label: '09:00' | '10:00' | '11:00' | '13:00' | '14:00' | '15:00' | '16:00' | '17:00';
+  }[] = [
+    { label: '09:00' },
+    { label: '10:00' },
+    { label: '11:00' },
+    { label: '13:00' },
+    { label: '14:00' },
+    { label: '15:00' },
+    { label: '16:00' },
+    { label: '17:00' },
+  ];
 
   const handleIcon = (text: string) => {
     const cat = kategori[text as keyof typeof kategori];
@@ -91,7 +126,7 @@ const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
   };
 
   return (
-    <View className=" bg-[var(--shapeV2-parent)] rounded-lg  shadow p-4 space-y-4">
+    <View className=" bg-[var(--shapeV2-parent)] rounded-lg  shadow p-4 space-y-4 ">
       <View className="flex items-start justify-between">
         <View className="flex items-center gap-2">
           <View className="">{handleIcon(data.kategori)}</View>
@@ -127,7 +162,64 @@ const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
         </ul>
       </View>
 
-      <Button className="w-full font-semibold ">Tambah ke Keranjang</Button>
+      <Button className="w-full font-semibold" onClick={() => setIsModal('Keranjang')}>
+        Tambah ke Keranjang
+      </Button>
+      <PopUp isOpen={isModal === 'Keranjang'} onClose={() => setIsModal(null)}>
+        <Container className="w-full ">
+          <View className="flex justify-between items-center gap-2">
+            <View className="flex">
+              <Text className="font-bold">Tambah Ke Keranjang</Text>
+            </View>
+            <ChevronRight
+              className="text-foreground cursor-pointer"
+              onClick={() => setIsModal(null)}
+            />
+          </View>
+          <Spreed orientation="horizontal" className="my-4" />
+          <View className="flex justify-center items-start p-4 flex-col bg-[var(--shapeV1-parent)]/30 rounded-lg">
+            <Label className="font-bold ">Terapi Fisik Senior</Label>
+            <Text>Untuk : </Text>
+            <View className="flex justify-between items-center w-full">
+              <Text>Durasi:</Text>
+              <Text>Rp. </Text>
+            </View>
+          </View>
+          <View className="mt-4 flex justify-center items-start flex-col gap-2">
+            <View className="flex items-center gap-2">
+              <Calendar />
+              <Label className="font-light">Pilih Tanggal :</Label>
+            </View>
+            <Input className="w-full" type="date" placeholder="Tanggal" />
+          </View>
+          <View className="flex items-center gap-2 mt-4">
+            <Clock8 />
+            <Label className="font-light">Pilih Waktu :</Label>
+          </View>
+          <View className="grid grid-cols-4 grid-rows-1 gap-4 mt-4">
+            {jamSlot.map((item) => (
+              <div
+                className={`h-auto flex justify-center items-center border rounded-sm p-2  ${
+                  slot === item.label
+                    ? 'border-primary bg-primary/10'
+                    : 'border-[var(--shapeV1-parent)]'
+                }`}
+                key={item.label}
+                onClick={() => setSlot(item.label)}
+              >
+                <Text>{item.label}</Text>
+              </div>
+            ))}
+          </View>
+
+          <Button className="w-full mt-6">
+            <View className="flex justify-center items-center gap-1">
+              <Plus />
+              <Label className="font-semibold">Tambah Ke Keranjang</Label>
+            </View>
+          </Button>
+        </Container>
+      </PopUp>
     </View>
   );
 };

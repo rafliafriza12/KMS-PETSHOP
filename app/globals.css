@@ -139,7 +139,7 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-plus-jakarta), sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 }
 
@@ -150,4 +150,24 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='date']::-webkit-datetime-edit {
+  color: transparent;
+}
+
+input[type='date'] {
+  color: transparent;
+}
+input[type='date']:focus {
+  color: inherit;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }

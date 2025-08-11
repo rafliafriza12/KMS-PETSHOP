@@ -11,7 +11,7 @@ const PopUp: React.FC<PopUpProps> = ({ isOpen, children, onClose, className }) =
       onClick={onClose}
     >
       <div
-        className="bg-background p-6 rounded-md shadow-md w-auto h-auto max-w-lg lg:max-w-xl"
+        className="bg-background p-6 rounded-md shadow-md w-full max-w-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

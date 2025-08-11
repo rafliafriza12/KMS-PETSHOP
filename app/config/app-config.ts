@@ -25,7 +25,7 @@ export const NavbarUserData: NavbarAppType[] = [
   },
   {
     title: 'Pesanan Saya',
-    href: '',
+    href: '/users/pemesanan',
     icon: ShoppingBag,
   },
 ];
