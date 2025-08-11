@@ -30,6 +30,7 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.12",
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",

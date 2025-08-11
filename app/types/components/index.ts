@@ -16,6 +16,7 @@ export interface DiagnosisAppType {
 }
 
 export interface LayananAppType {
+  _id: string;
   kategori: string;
   popular?: string;
   rekomendasi?: string;
