@@ -116,7 +116,7 @@ const LayananComponent: React.FC<LayananAppTypeProps> = ({ data }) => {
         <Label className="text-[var(--shapeV1-child)] font-bold text-lg">{data.harga}</Label>
       </View>
 
-      <View className="border border-[var(--shapeV2-parent)]  rounded-lg p-3 space-y-1">
+      <View className="border border-[var(--shapeV2-parent)] bg-[#F0FDF4]/90 rounded-lg p-3 space-y-1">
         <p className="font-medium text-green-800">Mengapa cocok untuk kucing Anda:</p>
         <ul className="space-y-1 text-green-700">
           {data.alasan.map((item, idx) => (
