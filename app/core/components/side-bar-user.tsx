@@ -17,9 +17,8 @@ import { NavbarUserData } from '@/app/config/app-config';
 import View from '@/app/components/ui/view';
 import { usePathname } from 'next/navigation';
 
-const SideBar: React.FC = () => {
+const SideBarUser: React.FC = () => {
   const pathname = usePathname();
-  // Wait For Data App
   return (
     <Sheet>
       <SheetTrigger className="w-full">
@@ -62,4 +61,4 @@ const SideBar: React.FC = () => {
   );
 };
 
-export default SideBar;
+export default SideBarUser;

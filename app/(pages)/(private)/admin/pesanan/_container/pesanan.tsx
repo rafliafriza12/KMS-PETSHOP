@@ -11,8 +11,9 @@ import PesananAktif from '@/app/components/pesanan-aktif';
 import { PesananAktifData, RiwayatData } from '@/app/config/component-config';
 import { usePathname } from 'next/navigation';
 import Riwayat from '@/app/components/riwayat';
+import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
 
-const PemesananContainer = () => {
+const PesananContainer = () => {
   const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat' | null>('Aktif');
   const pathname = usePathname();
 
@@ -35,7 +36,7 @@ const PemesananContainer = () => {
   };
 
   return (
-    <HomeUserLayout>
+    <HomeAdminLayout>
       <Container as="main" className="w-full h-full">
         <Spreed orientation="horizontal" />
         <View className="flex justify-start items-start p-2 flex-col mt-4">
@@ -142,8 +143,8 @@ const PemesananContainer = () => {
           )}
         </View>
       </Container>
-    </HomeUserLayout>
+    </HomeAdminLayout>
   );
 };
 
-export default PemesananContainer;
+export default PesananContainer;

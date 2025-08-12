@@ -25,20 +25,30 @@ export const NavbarUserData: NavbarAppType[] = [
   },
   {
     title: 'Pesanan Saya',
-    href: '/users/pemesanan',
+    href: '/users/pesanan',
     icon: ShoppingBag,
   },
 ];
 
-export const NavbarAdmonData: NavbarAppType[] = [
+export const NavbarAdminData: NavbarAppType[] = [
   {
     title: 'Dashboard',
-    href: '',
+    href: '/admin',
     icon: Cat,
   },
   {
+    title: 'Layanan',
+    href: '/admin/layanan',
+    icon: Settings,
+  },
+  {
+    title: 'Pesanan Saya',
+    href: '/admin/pesanan',
+    icon: ShoppingBag,
+  },
+  {
     title: 'Admin Panel',
-    href: '',
+    href: '/admin/admin-panel',
     icon: Settings,
   },
 ];
