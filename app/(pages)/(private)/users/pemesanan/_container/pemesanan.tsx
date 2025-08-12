@@ -83,7 +83,7 @@ const PemesananContainer = () => {
           </View>
         </View>
 
-        {/* Component */}
+        {/* komponen */}
         <View className="w-full p-4">
           <View className=" flex l justify-between lg:justify-start lg:items-center gap-2 mb-2">
             <Button

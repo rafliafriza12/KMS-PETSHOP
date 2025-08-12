@@ -107,6 +107,21 @@ export const LayananAppData: LayananAppType[] = [
       'Sesuai untuk kucing dengan aktivitas rendah',
     ],
   },
+  {
+    _id: '6',
+    kategori: 'Grooming',
+    rekomendasi: 'Sangat Direkomendasikan',
+    judul: 'Terapi Fisik Senior',
+    deskripsi:
+      'Terapi fisik dan pijat khusus untuk kucing senior dengan masalah sendi dan mobilitas.',
+    durasi: '1 jam 15 menit',
+    harga: 'Rp 350.000',
+    alasan: [
+      'Sesuai untuk kucing senior',
+      'Mengatasi masalah: Arthritis',
+      'Sesuai untuk kucing dengan aktivitas rendah',
+    ],
+  },
 ];
 
 export const PesananAktifData: PesananAktifType[] = [
@@ -140,62 +155,6 @@ export const RiwayatData: RiwayatType[] = [
 ];
 
 export const KeranjangData: KeranjangType[] = [
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
   {
     title: 'Perawatan Gigi & Mulut',
     nama: 'Luna',
