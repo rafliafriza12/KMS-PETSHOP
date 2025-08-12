@@ -6,6 +6,11 @@ import Spreed from '../core/components/spreed';
 import { Calendar, CircleCheckBig, Clock, CreditCard } from 'lucide-react';
 import { PesananAktifTypeProps } from '../types/props';
 const PesananAktif: React.FC<PesananAktifTypeProps> = ({ data }) => {
+  const handleBaghe = (text: string) => {
+    if (text === 'Lunas') {
+      return <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">{text}</Label>;
+    }
+  };
   return (
     <View className="w-full p-2 border bg-[var(--shapeV2-parent)] rounded-lg mt-4">
       <View className="flex justify-between items-center ">
@@ -24,21 +29,22 @@ const PesananAktif: React.FC<PesananAktifTypeProps> = ({ data }) => {
           {data.metodePembayaran}
         </Label>
       </View>
-      <Label className="font-light text-lg">ID Pesanan:{data.idPesanan}</Label>
+      <Label className="font-light text-lg">ID Pesanan: {data.idPesanan}</Label>
       <View className="grid grid-cols-2 grid-rows-1 gap-2 mt-4">
         <View className="flex justify-start items-center gap-1">
           <Calendar />
-          <Text className="text-sm lg:text-lg">Jadwal :{data.jadwal}</Text>
+          <Text className="text-sm lg:text-lg">Jadwal: {data.jadwal}</Text>
         </View>
         <View className="flex justify-start items-center gap-1">
           <CreditCard />
-          <Text className="text-sm lg:text-lg">Status Pembayaran :{data.status}</Text>
+          {/*  */}
+          <Text className="text-sm lg:text-lg">Status Pembayaran: {handleBaghe(data.status)}</Text>
         </View>
         <View className="flex justify-start items-center gap-1">
           <Clock />
-          <Text className="text-sm lg:text-lg">Estimasi Selesai :{data.estimasiWaktu}</Text>
+          <Text className="text-sm lg:text-lg">Estimasi Selesai: {data.estimasiWaktu}</Text>
         </View>
-        <Text className="text-sm lg:text-lg">DiPesan :{data.dipesan}</Text>
+        <Text className="text-sm lg:text-lg">DiPesan: {data.dipesan}</Text>
       </View>
       <Spreed orientation="horizontal" className="my-2" />
       <View className="flex lg:justify-start justify-between gap-0 lg:gap-2">

@@ -157,7 +157,7 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type='date']::-webkit-datetime-edit {
+/* input[type='date']::-webkit-datetime-edit {
   color: transparent;
 }
 
@@ -166,7 +166,7 @@ input[type='date'] {
 }
 input[type='date']:focus {
   color: inherit;
-}
+} */
 
 input[type='number'] {
   -moz-appearance: textfield;
