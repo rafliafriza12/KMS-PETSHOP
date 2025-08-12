@@ -29,14 +29,14 @@ export default function HeaderAppUser() {
         )}
 
         {!isMobile && (
-          <View className="flex justify-center items-center">
+          <View className="flex justify-center items-center gap-2">
             {NavbarUserData.map((items, key) => {
               const isActive = pathname === items.href;
               return (
                 <Link href={items.href} key={key}>
                   <Button
                     variant={isActive ? 'default' : 'ghost'}
-                    className={`flex gap-2 font-semibold ${
+                    className={`flex  font-semibold ${
                       isActive ? 'bg-primary text-primary-foreground' : ''
                     }`}
                   >
