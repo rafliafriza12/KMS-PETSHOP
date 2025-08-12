@@ -26,3 +26,38 @@ export interface LayananAppType {
   harga: string;
   alasan: string[];
 }
+
+export interface PesananAktifType {
+  _id: string;
+  nama: string;
+  idPesanan: string;
+  jadwal: string;
+  harga: string;
+  metodePembayaran: string;
+  status: string;
+  estimasiWaktu: string;
+  dipesan: string;
+}
+
+export interface RiwayatType {
+  _id: string;
+  nama: string;
+  idPesanan: string;
+  jadwal: string;
+  harga: string;
+  metodePembayaran: string;
+  status: string;
+  estimasiWaktu: string;
+  dipesan: string;
+  catatan: string;
+  selesai: string;
+}
+
+export interface KeranjangType {
+  title: string;
+  nama: string;
+  tanggal: string;
+  jam: string;
+  duration: string;
+  harga: string;
+}
