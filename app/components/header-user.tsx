@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Chart from './Chart';
 import Users from './users';
 import { useIsMobile } from '../core/mobile/useMobile';
-import SideBar from '../core/components/side-bar';
+import SideBarUser from '../core/components/side-bar-user';
 import { usePathname } from 'next/navigation';
 
 export default function HeaderAppUser() {
@@ -20,7 +20,7 @@ export default function HeaderAppUser() {
     <nav className="flex justify-between items-center w-full p-2">
       <View className="flex justify-center items-center gap-2">
         {isMobile ? (
-          <SideBar />
+          <SideBarUser />
         ) : (
           <div className="flex justify-center items-center gap-1 cursor-pointer">
             <Cat className="text-[var(--shapeV1-parent)]" />
