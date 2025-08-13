@@ -8,15 +8,41 @@ import {
   CardDescription,
 } from '@/app/components/ui/card';
 import { Label } from '@/app/components/ui/label';
-import { Eye, EyeOff, Mail, Lock, User, Cat } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Cat, Target } from 'lucide-react';
 import { Input } from '@/app/components/ui/input';
 import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import Link from 'next/link';
 import AuthLayout from '@/app/core/layout/auth-layout';
+import { FormRegisterSchema } from '@/app/types/form';
+import { useRegister } from '@/app/hooks/mutasion/auth/useRegister';
+import Fallback from '@/app/components/ui/fallback';
+import { useAlert } from '@/app/hooks/alert/costum-alert';
+import { isPending } from '@reduxjs/toolkit';
 
 const RegisterContainer = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [formRegsiter, setFormRegister] = useState<FormRegisterSchema>({
+    email: '',
+    namaLengkap: '',
+    password: '',
+    role: '',
+  });
+  const alert = useAlert();
+
+  const Register = useRegister();
+
+  const handleRegister = () => {
+    if (!formRegsiter.email || !formRegsiter.namaLengkap || !formRegsiter.password) {
+      alert.toast({
+        title: 'Cek Kolom',
+        message: 'Coba Lagi',
+        icon: 'warning',
+      });
+      return;
+    }
+    return Register.mutate(formRegsiter);
+  };
   return (
     <AuthLayout>
       <Container as="main" className="w-full h-full">
@@ -43,6 +69,12 @@ const RegisterContainer = () => {
                       type="email"
                       placeholder="Masukkan email Anda"
                       className="pl-10"
+                      onChange={(e) =>
+                        setFormRegister((prev) => {
+                          const newObj = { ...prev, namaLengkap: e.target.value };
+                          return newObj;
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -56,6 +88,12 @@ const RegisterContainer = () => {
                       type="email"
                       placeholder="Masukkan email Anda"
                       className="pl-10"
+                      onChange={(e) =>
+                        setFormRegister((prev) => {
+                          const newObj = { ...prev, email: e.target.value };
+                          return newObj;
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -69,6 +107,12 @@ const RegisterContainer = () => {
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Masukkan password Anda"
                       className="pl-10 pr-10"
+                      onChange={(e) =>
+                        setFormRegister((prev) => {
+                          const newObj = { ...prev, password: e.target.value };
+                          return newObj;
+                        })
+                      }
                     />
                     <button
                       type="button"
@@ -80,8 +124,13 @@ const RegisterContainer = () => {
                   </div>
                 </div>
 
-                <Button className="w-full font-semibold" size="lg">
-                  Daftar
+                <Button
+                  className="w-full font-semibold"
+                  size="lg"
+                  onClick={() => handleRegister()}
+                  disabled={Register.isPending}
+                >
+                  {Register.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Daftar'}
                 </Button>
               </div>
               <div className="flex justify-center items-center mt-2">

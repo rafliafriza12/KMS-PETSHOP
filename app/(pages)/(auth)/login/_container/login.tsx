@@ -15,9 +15,31 @@ import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import Link from 'next/link';
 import AuthLayout from '@/app/core/layout/auth-layout';
+import { FormLoginSchema } from '@/app/types/form';
+import Fallback from '@/app/components/ui/fallback';
+import { useLogin } from '@/app/hooks/mutasion/auth/useLogin';
+import { useAlert } from '@/app/hooks/alert/costum-alert';
 
 const LoginContainer = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [formLogin, setFormLogin] = useState<FormLoginSchema>({
+    email: '',
+    password: '',
+  });
+  const alert = useAlert();
+
+  const Login = useLogin();
+  const handleLogin = () => {
+    if (!formLogin.email || !formLogin.password) {
+      alert.toast({
+        title: 'Perhatian !',
+        message: 'Mohon Isi Semua Colum',
+        icon: 'warning',
+      });
+      return;
+    }
+    return Login.mutate(formLogin);
+  };
   return (
     <AuthLayout>
       <Container as="main" className="h-full w-full">
@@ -44,6 +66,12 @@ const LoginContainer = () => {
                       type="email"
                       placeholder="Masukkan email Anda"
                       className="pl-10"
+                      onChange={(e) =>
+                        setFormLogin((prev) => {
+                          const newObj = { ...prev, email: e.target.value };
+                          return newObj;
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -57,6 +85,12 @@ const LoginContainer = () => {
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Masukkan password Anda"
                       className="pl-10 pr-10"
+                      onChange={(e) =>
+                        setFormLogin((prev) => {
+                          const newObj = { ...prev, password: e.target.value };
+                          return newObj;
+                        })
+                      }
                     />
                     <button
                       type="button"
@@ -68,8 +102,13 @@ const LoginContainer = () => {
                   </div>
                 </div>
 
-                <Button className="w-full font-semibold" size="lg">
-                  Masuk
+                <Button
+                  className="w-full font-semibold"
+                  size="lg"
+                  onClick={() => handleLogin()}
+                  disabled={Login.isPending}
+                >
+                  {Login.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Masuk'}
                 </Button>
 
                 <div className="flex justify-center items-center">
