@@ -8,7 +8,7 @@ const AxiosClient = axios.create({
 
 AxiosClient.interceptors.request.use(
   (config: any): any => {
-    const token = store.getState().auth.currentUser?.token;
+    const token = store.getState().auth.currentUser?.user?.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

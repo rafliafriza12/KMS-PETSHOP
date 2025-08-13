@@ -19,15 +19,21 @@ import {
 import { RasKucing } from '@/app/core/constants/ras';
 import { ChevronRight } from 'lucide-react';
 import Spreed from '@/app/core/components/spreed';
-
+import { useEffect } from 'react';
 import Diagnosis from '@/app/components/diagnosis';
 import { DiagnosisAppData } from '@/app/config/component-config';
 import Informasion from '@/app/components/informasion';
+import { useAppSelector } from '@/app/hooks/dispatch/dispatch';
 
 const DashboardUserContainer = () => {
   const [isPopUp, setIsPopUp] = useState<'kucing' | null>(null);
   const [state, setState] = useState<'Rendah' | 'Sedang' | 'Tinggi' | null>(null);
   const [selectId, setSelectId] = useState<string | null>(null);
+  const currentData = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    console.log('Data', currentData);
+  }, []);
 
   const aktivitas: { label: 'Rendah' | 'Sedang' | 'Tinggi'; desc: string }[] = [
     { label: 'Rendah', desc: 'Suka Tidur, Jarang Main' },
