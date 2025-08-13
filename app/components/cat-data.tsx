@@ -2,8 +2,7 @@
 import View from './ui/view';
 import { Text } from './ui/Text';
 import Container from './ui/container';
-import { Cat, Filter, Scissors, Heart, Home, GraduationCap, Apple } from 'lucide-react';
-import { LayananAppData } from '../config/component-config';
+import { Cat } from 'lucide-react';
 
 export interface CatType {
   _id?: string;
@@ -15,29 +14,14 @@ export interface CatType {
   kondisiKesehatan: string[];
 }
 
-interface FilterItem {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-}
-
 interface CatDataProps {
   data?: CatType | null;
 }
 
-const CatData: React.FC<CatDataProps> = ({ data }) => {
-  const filterData: FilterItem[] = [
-    { id: 'all', label: 'Semua Layanan', icon: <Filter size={16} /> },
-    { id: 'grooming', label: 'Grooming', icon: <Scissors size={16} /> },
-    { id: 'kesehatan', label: 'Kesehatan', icon: <Heart size={16} /> },
-    { id: 'penitipan', label: 'Penitipan', icon: <Home size={16} /> },
-    { id: 'pelatihan', label: 'Pelatihan', icon: <GraduationCap size={16} /> },
-    { id: 'nutrisi', label: 'Nutrisi', icon: <Apple size={16} /> },
-  ];
-
+const CatData: React.FC<CatDataProps & { count: any }> = ({ data, count }) => {
   const countByKategori = (kategori: string = 'all') => {
-    if (kategori === 'all') return LayananAppData.length;
-    return LayananAppData.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase())
+    if (kategori === 'all') return count?.length;
+    return count.filter((item: any) => item.kategori.toLowerCase() === kategori.toLowerCase())
       .length;
   };
 

@@ -1,23 +1,18 @@
-import { useMutation } from '@tanstack/react-query';
-import CatApi from '@/app/service/cat/cat.service';
-import { useAlert } from '../../alert/costum-alert';
-import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch } from '@/app/hooks/dispatch/dispatch';
-import { clearSelectedCat } from '@/app/store/CatSlice/catSlice';
+import { useAlert } from '../../alert/costum-alert';
+import LayananApi from '@/app/service/layanan/layanan.service';
+import { useMutation } from '@tanstack/react-query';
+import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 
-export const useDeleteCat = (options?: { onAfterSuccess?: () => void }) => {
+export const useDeleteLayanan = (options?: { onAfterSuccess?: () => void }) => {
   const alert = useAlert();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-
   return useMutation<TResponse<any>, Error, string>({
-    mutationFn: CatApi.DeleteCat,
+    mutationFn: LayananApi.DeleteLayanan,
     onSuccess: () => {
-      dispatch(clearSelectedCat());
       alert.toast({
         title: 'Berhasil',
-        message: 'Kucing berhasil dihapus',
+        message: 'Layanan berhasil dihapus',
         icon: 'success',
         onVoid: () => {
           router.refresh();
@@ -25,7 +20,8 @@ export const useDeleteCat = (options?: { onAfterSuccess?: () => void }) => {
         },
       });
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
       alert.toast({
         title: 'Gagal',
         message: 'Gagal menghapus kucing',
