@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Filter, Scissors, Heart, Home, GraduationCap, Apple } from 'lucide-react';
 import View from './ui/view';
-import { Text } from './ui/Text';
 import { Label } from './ui/label';
 import { LayananAppData } from '../config/component-config';
 

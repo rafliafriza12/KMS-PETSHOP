@@ -11,11 +11,13 @@ import Users from './users';
 import { useIsMobile } from '../core/mobile/useMobile';
 import SideBarUser from '../core/components/side-bar-user';
 import { usePathname } from 'next/navigation';
+import { clearSelectedCat } from '../store/CatSlice/catSlice';
+import { useAppDispatch } from '../hooks/dispatch/dispatch';
 
 export default function HeaderAppUser() {
   const { isMobile } = useIsMobile();
   const pathname = usePathname();
-
+  const dispatch = useAppDispatch();
   return (
     <nav className="flex justify-between items-center w-full p-2">
       <View className="flex justify-center items-center gap-2">
@@ -36,6 +38,11 @@ export default function HeaderAppUser() {
                 <Link href={items.href} key={key}>
                   <Button
                     variant={isActive ? 'default' : 'ghost'}
+                    onClick={() => {
+                      if (!items.href.includes('/users/layanan')) {
+                        dispatch(clearSelectedCat());
+                      }
+                    }}
                     className={`flex  font-semibold ${
                       isActive ? 'bg-primary text-primary-foreground' : ''
                     }`}

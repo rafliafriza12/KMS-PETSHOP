@@ -1,10 +1,16 @@
 import View from './ui/view';
-import { Cat, Calendar, Weight, Activity, Heart } from 'lucide-react';
+import { Cat, Calendar, Weight, Activity, Heart, Trash } from 'lucide-react';
 import { Text } from './ui/Text';
 import Container from './ui/container';
 import Spreed from '@/app/core/components/spreed';
 import { DiagnosisAppTypeProps } from '../types/props';
-const Diagnosis: React.FC<DiagnosisAppTypeProps & { isSelect: boolean }> = ({ data, isSelect }) => {
+import { Button } from './ui/button';
+import UseTooltip from '../hooks/tooltip/tooltip/tooltip';
+import { useAlert } from '../hooks/alert/costum-alert';
+const Kucing: React.FC<
+  DiagnosisAppTypeProps & { isSelect: boolean } & { onDelete?: (_id: string) => void }
+> = ({ data, isSelect, onDelete }) => {
+  const alert = useAlert();
   const handleBaghe = (text: string) => {
     if (text === 'Rendah') {
       return (
@@ -40,8 +46,8 @@ const Diagnosis: React.FC<DiagnosisAppTypeProps & { isSelect: boolean }> = ({ da
             <Cat className=" w-5 h-5 z-1" />
           </View>
           <View className="flex flex-col">
-            <Text className="text-sm font-semibold">{data.nama}</Text>
-            <Text className="text-sm font-semibold">{data.ras}</Text>
+            <Text className="text-sm font-semibold">{data?.namaKucing}</Text>
+            <Text className="text-sm font-semibold">{data?.ras}</Text>
           </View>
         </View>
         {isSelect ? (
@@ -57,31 +63,56 @@ const Diagnosis: React.FC<DiagnosisAppTypeProps & { isSelect: boolean }> = ({ da
         <View className="flex justify-between items-center w-full">
           <View className="flex items-center gap-1">
             <Calendar className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data.tanggal}</Text>
+            <Text className="text-sm font-light">{data?.umur} Tahun</Text>
           </View>
           <View className="flex items-center gap-1">
             <Weight className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data.berat} Kg</Text>
+            <Text className="text-sm font-light">{data?.berat} Kg</Text>
           </View>
         </View>
 
         <View className="flex justify-between items-center mt-4 w-full">
           <View className="flex items-center gap-1">
             <Activity className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data.aktivitas}</Text>
+            <Text className="text-sm font-light">{data?.tingkatAktivitas}</Text>
           </View>
-          {handleBaghe(data.aktivitas)}
+          {handleBaghe(data?.tingkatAktivitas)}
         </View>
+
+        {isSelect && (
+          <View className="flex justify-end mt-4">
+            <Button
+              className="text-xs font-medium p-2 bg-[var(--shapeV1-parent)] rounded-lg flex items-center gap-1 justify-center"
+              onClick={() =>
+                alert.confirm({
+                  icon: 'warning',
+                  title: 'Hapus',
+                  deskripsi: 'Apakah Anda yakin ingin menghapus kucing ini?',
+                  onConfirm: () => {
+                    if (data?._id) {
+                      onDelete?.(data._id);
+                    }
+                  },
+                })
+              }
+            >
+              <UseTooltip content="Hapus">
+                <Trash />
+              </UseTooltip>
+              Hapus
+            </Button>
+          </View>
+        )}
 
         <Spreed className="mt-6" />
       </Container>
 
       <View className="w-full px-3 py-2 flex items-center gap-2 border-t">
         <Heart className="w-4 h-4 text-red-500" />
-        <Text className="text-sm font-medium">Kondisi Kesehatan : {data.kesehatan}</Text>
+        <Text className="text-sm font-medium">Kondisi Kesehatan : {data?.kondisiKesehatan}</Text>
       </View>
     </View>
   );
 };
 
-export default Diagnosis;
+export default Kucing;

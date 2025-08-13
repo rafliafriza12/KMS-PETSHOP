@@ -8,13 +8,16 @@ import {
   DropdownMenuTrigger,
 } from '@/app/components/ui/dropdown-menu';
 import Link from 'next/link';
+import { useGetProfile } from '../hooks/mutasion/auth/useGetProfile';
+
 export default function Users() {
+  const Profile = useGetProfile();
   return (
     <View>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex justify-center items-center gap-1">
           <User />
-          <Text>Username</Text>
+          <Text>{Profile.data?.data.namaLengkap}</Text>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {/* Sementara */}
