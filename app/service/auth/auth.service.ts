@@ -1,5 +1,5 @@
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
-import { FormLoginSchema, FormRegisterSchema } from '@/app/types/form';
+import { FormEditProfileSchema, FormLoginSchema, FormRegisterSchema } from '@/app/types/form';
 import AxiosClient from '@/app/utils/axios.client';
 
 class AuthApi {
@@ -13,6 +13,17 @@ class AuthApi {
   }
   async GetProfile(): Promise<TResponse<any>> {
     const res = await AxiosClient.get('api/user/profile/me');
+    return res.data;
+  }
+  async DeleteUser(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.delete(`/api/user/${id}`);
+    return res.data;
+  }
+  async EditProfile(
+    id: string,
+    payload: FormEditProfileSchema
+  ): Promise<TResponse<FormEditProfileSchema>> {
+    const res = await AxiosClient.put(`/api/user/${id}`, payload);
     return res.data;
   }
 }

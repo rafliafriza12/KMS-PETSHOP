@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { Filter, Scissors, Heart, Home, GraduationCap, Apple } from 'lucide-react';
 import View from './ui/view';
 import { Label } from './ui/label';
-import { LayananAppData } from '../config/component-config';
+import { useGetLayanan } from '../hooks/mutasion/layanan/useGetLayanan';
 
 export default function FilterLayanan({ onChange }: { onChange: (id: string) => void }) {
   const [active, setActive] = useState('all');
+  const { data } = useGetLayanan();
 
   const countByKategori = (kategori: string) => {
-    if (kategori === 'all') return LayananAppData.length;
-    return LayananAppData.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase())
-      .length;
+    if (kategori === 'all') return data?.length;
+    return data?.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase()).length;
   };
 
   const filterData = [

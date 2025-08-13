@@ -17,7 +17,7 @@ export const env = createEnv({
    * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
    */
   client: {
-    NEXT_PUBLIC_API_ID: requiredString.url(),
+    NEXT_PUBLIC_API_ID: requiredString,
   },
   /*
    * Specify what values should be validated by your schemas above.

@@ -7,11 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/app/components/ui/dropdown-menu';
-import Link from 'next/link';
 import { useGetProfile } from '../hooks/mutasion/auth/useGetProfile';
+import { logout } from '../store/AuthSlice/authSlice';
+import { useAppDispatch } from '../hooks/dispatch/dispatch';
+import { useRouter } from 'next/navigation';
 
 export default function Users() {
   const Profile = useGetProfile();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   return (
     <View>
       <DropdownMenu>
@@ -20,10 +24,16 @@ export default function Users() {
           <Text>{Profile.data?.data.namaLengkap}</Text>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {/* Sementara */}
-          <Link href="/login">
+          <button
+            onClick={() => {
+              router.push('/login');
+
+              dispatch(logout());
+            }}
+            className="w-full"
+          >
             <DropdownMenuItem className="text-sm font-bold">Logout</DropdownMenuItem>
-          </Link>
+          </button>
         </DropdownMenuContent>
       </DropdownMenu>
     </View>

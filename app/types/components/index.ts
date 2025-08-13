@@ -19,14 +19,16 @@ export interface DiagnosisAppType {
 
 export interface LayananAppType {
   _id: string;
-  kategori: string;
-  popular?: string;
-  rekomendasi?: string;
-  judul: string;
+  benefit: string[];
+  createdAt: string;
   deskripsi: string;
-  durasi: string;
-  harga: string;
-  alasan: string[];
+  diskon: number;
+  durasiLayanan: number;
+  harga: number;
+  kategori: string;
+  namaLayanan: string;
+  status?: string;
+  updatedAt: string;
 }
 
 export interface PesananAktifType {

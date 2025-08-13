@@ -11,6 +11,10 @@ class CatApi {
     const res = await AxiosClient.get('/api/kucing');
     return res.data;
   }
+  async GetCatAll(): Promise<TResponse<any>> {
+    const res = await AxiosClient.get('/api/kucing/all');
+    return res.data;
+  }
   async DeleteCat(id: string): Promise<TResponse<any>> {
     const res = await AxiosClient.delete(`/api/kucing/${id}`);
     return res.data;
