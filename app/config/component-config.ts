@@ -1,34 +1,5 @@
-import {
-  DiagnosisAppType,
-  KeranjangType,
-  PesananAktifType,
-  RiwayatType,
-} from '../types/components';
+import { KeranjangType, PesananAktifType, RiwayatType } from '../types/components';
 import { LayananAppType } from '../types/components';
-import PesananAktif from '../components/pesanan-aktif';
-
-export const DiagnosisAppData: DiagnosisAppType[] = [
-  {
-    _id: '1',
-    nama: 'Kucing',
-    aktivitas: 'Rendah',
-    berat: '2',
-    kesehatan: 'Baik',
-    ras: 'Persia',
-    subtitle: 'Dipilih',
-    tanggal: '10010',
-  },
-  {
-    _id: '2',
-    nama: 'Kucing',
-    aktivitas: 'Sedang',
-    berat: '2',
-    kesehatan: 'Baik',
-    ras: 'Persia',
-    subtitle: 'Dipilih',
-    tanggal: '10010',
-  },
-];
 
 export const LayananAppData: LayananAppType[] = [
   {

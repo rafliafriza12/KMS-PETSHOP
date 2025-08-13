@@ -7,7 +7,7 @@ import { useAlert } from '../../alert/costum-alert';
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { FormLoginSchema } from '@/app/types/form';
 import { useAppDispatch } from '../../dispatch/dispatch';
-import { userSchema, userType } from '@/app/types/api';
+import { userSchema } from '@/app/types/api';
 import { setCurrentUser } from '@/app/store/AuthSlice/authSlice';
 
 export const useLogin = () => {

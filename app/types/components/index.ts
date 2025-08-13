@@ -6,13 +6,15 @@ export interface NavbarAppType {
 
 export interface DiagnosisAppType {
   _id: string;
-  nama: string;
+  berat: number;
+  createdAt: string;
+  kondisiKesehatan: string[];
+  namaKucing: string;
   ras: string;
-  tanggal: string;
-  aktivitas: string;
-  berat: string;
-  subtitle: string;
-  kesehatan: string;
+  tingkatAktivitas: string;
+  umur: number;
+
+  updatedAt?: string;
 }
 
 export interface LayananAppType {

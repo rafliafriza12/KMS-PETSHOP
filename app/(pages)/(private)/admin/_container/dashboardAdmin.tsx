@@ -18,8 +18,6 @@ import { RasKucing } from '@/app/core/constants/ras';
 import { ChevronRight, Plus } from 'lucide-react';
 import Spreed from '@/app/core/components/spreed';
 import { PenyakitKucing } from '@/app/core/constants/penyakit';
-import Diagnosis from '@/app/components/diagnosis';
-import { DiagnosisAppData } from '@/app/config/component-config';
 import Informasion from '@/app/components/informasion';
 
 const DashboardAdminContainer = () => {
@@ -154,9 +152,9 @@ const DashboardAdminContainer = () => {
             <Spreed orientation="horizontal" className="mt-2" />
 
             <Container className="w-full h-full">
-              <View className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+              {/* <View className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
                 {DiagnosisAppData.map((items, key) => {
-                  const id = (items._id ?? items._id ?? items.nama ?? key).toString();
+                  const id = (items._id ?? items._id ?? items.namaKucing ?? key).toString();
                   return (
                     <div
                       key={id}
@@ -167,7 +165,7 @@ const DashboardAdminContainer = () => {
                     </div>
                   );
                 })}
-              </View>
+              </View> */}
               <View className=" p-4">{selectId && <Informasion isSelect={true} />}</View>
             </Container>
           </View>
