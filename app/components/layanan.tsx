@@ -37,6 +37,8 @@ interface LayananComponentProps {
   isPending?: boolean;
   formEditLayanan?: FormBikinLayananScham;
   setFormEditLayanan?: React.Dispatch<React.SetStateAction<FormBikinLayananScham>>;
+  isModal?: 'Keranjang' | 'Edit' | null;
+  setIsModal?: React.Dispatch<React.SetStateAction<'Keranjang' | 'Edit' | null>>;
 }
 
 const LayananComponent: React.FC<LayananComponentProps> = ({
@@ -47,11 +49,17 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
   formEditLayanan,
   setFormEditLayanan,
   isPending,
+  isModal,
+  setIsModal,
 }) => {
-  const [isModal, setIsModal] = useState<'Keranjang' | 'Edit' | null>(null);
-
   const role = useAppSelector((state) => state.auth.currentUser?.user.role);
-
+  const handleOpenModal = (type: 'Keranjang' | 'Edit' | null) => {
+    if (setIsModal) {
+      setIsModal(type);
+    } else {
+      console.warn('setIsModal tidak tersedia');
+    }
+  };
   const alert = useAlert();
   const [slot, setSlot] = useState<
     '09:00' | '10:00' | '11:00' | '13:00' | '14:00' | '15:00' | '16:00' | '17:00' | null
@@ -193,7 +201,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             <View className="flex gap-2">
               <Button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                onClick={() => setIsModal('Edit')}
+                onClick={() => handleOpenModal('Edit')}
               >
                 Edit
               </Button>
@@ -220,7 +228,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
       </View>
 
       {onEdit && formEditLayanan && setFormEditLayanan && (
-        <PopUp isOpen={isModal === 'Edit'} onClose={() => setIsModal(null)}>
+        <PopUp isOpen={isModal === 'Edit'} onClose={() => handleOpenModal(null)}>
           <View className="w-full p-6 space-y-4">
             <Text className="text-xl font-bold">Tambah Layanan Baru</Text>
 
@@ -369,7 +377,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             </View>
 
             <View className="flex justify-end gap-2 pt-4">
-              <Button variant="outline" onClick={() => setIsModal(null)}>
+              <Button variant="outline" onClick={() => handleOpenModal(null)}>
                 Batal
               </Button>
               <Button
@@ -411,10 +419,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
         </ul>
       </View>
 
-      <Button className="w-full font-semibold" onClick={() => setIsModal('Keranjang')}>
+      <Button className="w-full font-semibold" onClick={() => handleOpenModal('Keranjang')}>
         Tambah ke Keranjang
       </Button>
-      <PopUp isOpen={isModal === 'Keranjang'} onClose={() => setIsModal(null)}>
+      <PopUp isOpen={isModal === 'Keranjang'} onClose={() => handleOpenModal(null)}>
         <Container className="w-full ">
           <View className="flex justify-between items-center gap-2">
             <View className="flex">
@@ -422,7 +430,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             </View>
             <ChevronRight
               className="text-foreground cursor-pointer"
-              onClick={() => setIsModal(null)}
+              onClick={() => handleOpenModal(null)}
             />
           </View>
           <Spreed orientation="horizontal" className="my-4" />

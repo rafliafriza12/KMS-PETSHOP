@@ -3,7 +3,7 @@ import View from './ui/view';
 import { Text } from './ui/Text';
 import Container from './ui/container';
 import { Button } from './ui/button';
-import { ChartLine, Database, Settings, User } from 'lucide-react';
+import { ChartLine, Database, Eye, EyeOff, Mail, Settings, User, Lock } from 'lucide-react';
 import { useGetUsers } from '../hooks/mutasion/admin-panel/useGetUser';
 import Spreed from '../core/components/spreed';
 import { useOverview } from '../hooks/mutasion/admin-panel/useOverview';
@@ -24,6 +24,8 @@ import { useEditLayanan } from '../hooks/mutasion/layanan/useEditLayanan';
 import { useEditProfile } from '../hooks/mutasion/auth/useEditProfile';
 import { useAppSelector } from '../hooks/dispatch/dispatch';
 import Fallback from './ui/fallback';
+import { FormRegisterSchema } from '../types/form';
+import { useRegister } from '../hooks/mutasion/auth/useRegister';
 
 const AdminPanelContent = () => {
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
@@ -32,15 +34,30 @@ const AdminPanelContent = () => {
   const Over = useOverview();
   const users = useGetUsers();
   const deleteUsers = useDeleteUser();
+  const tambahPengguna = useRegister({
+    onAfterSuccess: () => {
+      setIsModal(null);
+    },
+  });
   const { data } = useGetLayanan();
   const [selectId, setSelectId] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const editLayananMutation = useEditLayanan(selectId || '');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const [isActive, setIsActive] = useState<
     'overview' | 'pengguna' | 'knowledge' | 'layanan' | null
   >('overview');
-  const [isModal, setIsModal] = useState<'Tambah-Layanan' | 'EditProfile' | null>(null);
+  const [isModal, setIsModal] = useState<
+    'Tambah-Layanan' | 'EditProfile' | 'Tambah-Pengguna' | null
+  >(null);
 
+  const editLayananMutation = useEditLayanan(selectId || '', {
+    onAfterSuccess: () => {
+      setChildModal(null);
+    },
+  });
+
+  const [childModal, setChildModal] = useState<'Keranjang' | 'Edit' | null>(null);
   const handleOpenEditModal = (user: any) => {
     setSelectedUserId(user._id);
     setFormEditProfile({
@@ -80,6 +97,28 @@ const AdminPanelContent = () => {
     role: '',
   });
 
+  const [formTambahPengguna, setFormTambahaPengguna] = useState<FormRegisterSchema>({
+    email: '',
+    namaLengkap: '',
+    password: '',
+    role: '',
+  });
+
+  const handleTambahPengguna = () => {
+    if (
+      !formTambahPengguna.email ||
+      !formTambahPengguna.namaLengkap ||
+      !formTambahPengguna.password
+    ) {
+      alert.toast({
+        title: 'Perhatian!',
+        message: 'Mohon Isi Semua Field',
+        icon: 'warning',
+      });
+      return;
+    }
+    return tambahPengguna.mutate(formTambahPengguna);
+  };
   const handleEdit = (formData: FormBikinLayananScham) => {
     if (selectId) {
       editLayananMutation.mutate(formData);
@@ -95,7 +134,7 @@ const AdminPanelContent = () => {
 
   const editUser = useEditProfile(selectedUserId || '', {
     onAfterSuccess: () => {
-      console.log('Edit profile selesai dan sukses!');
+      setIsModal(null);
     },
   });
 
@@ -247,7 +286,17 @@ const AdminPanelContent = () => {
 
         {isActive === 'pengguna' && (
           <View className="p-4 overflow-x-auto">
-            <Text className="text-lg font-bold mb-4">Daftar Pengguna :</Text>
+            <View className="flex justify-between items-center">
+              <Text className="text-lg font-bold mb-4">Daftar Pengguna :</Text>
+              <Button
+                className="text-lg font-bold mb-4"
+                variant="ghost"
+                onClick={() => setIsModal('Tambah-Pengguna')}
+              >
+                + Tambaha Pengguna
+              </Button>
+            </View>
+
             <table className="min-w-full border rounded-lg mt-4">
               <thead className="bg-[var(--shapeV2-parent)]">
                 <tr>
@@ -266,7 +315,6 @@ const AdminPanelContent = () => {
                     <td className="px-4 py-2">{user.namaLengkap}</td>
                     <td className="px-4 py-2">{user.email}</td>
                     <td className="px-4 py-2">{user.role}</td>
-                    <td className="px-4 py-2">{user._id}</td>
                     <td className="px-4 py-2 flex justify-center gap-2">
                       {/* Dynamic Untuk Detail */}
                       <Link href={`/admin/admin-panel/detail-users`}>
@@ -387,6 +435,101 @@ const AdminPanelContent = () => {
           </Container>
         </PopUp>
 
+        <PopUp isOpen={isModal === 'Tambah-Pengguna'} onClose={() => setIsModal(null)}>
+          <View className="w-full h-full">
+            <View className="flex justify-center items-center w-full">
+              <div className="w-full space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="text">Nama :</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="text"
+                      type="email"
+                      placeholder="Nama Anda"
+                      className="pl-10"
+                      onChange={(e) =>
+                        setFormTambahaPengguna((prev) => {
+                          const newObj = { ...prev, namaLengkap: e.target.value };
+                          return newObj;
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="email">Email :</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Masukkan email Anda"
+                      className="pl-10"
+                      onChange={(e) =>
+                        setFormTambahaPengguna((prev) => {
+                          const newObj = { ...prev, email: e.target.value };
+                          return newObj;
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="password">Password :</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Masukkan password Anda"
+                      className="pl-10 pr-10"
+                      onChange={(e) =>
+                        setFormTambahaPengguna((prev) => {
+                          const newObj = { ...prev, password: e.target.value };
+                          return newObj;
+                        })
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <Select
+                  onValueChange={(value) =>
+                    setFormTambahaPengguna((prev) => ({ ...prev, role: value }))
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USER">User</SelectItem>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  className="w-full font-semibold"
+                  size="lg"
+                  onClick={() => handleTambahPengguna()}
+                  disabled={tambahPengguna.isPending}
+                >
+                  {tambahPengguna.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Daftar'}
+                </Button>
+              </div>
+            </View>
+          </View>
+        </PopUp>
+
         {isActive === 'knowledge' && (
           <View>
             <Text>Knowledge Base</Text>
@@ -425,6 +568,8 @@ const AdminPanelContent = () => {
                       formEditLayanan={formEditLayanan}
                       setFormEditLayanan={setFormEditLayanan}
                       isPending={editLayananMutation.isPending}
+                      isModal={childModal}
+                      setIsModal={setChildModal}
                       onEdit={handleEdit}
                       data={items}
                       onDelete={() => handleDelete(id)}

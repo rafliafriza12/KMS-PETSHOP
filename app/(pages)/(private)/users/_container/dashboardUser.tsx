@@ -37,6 +37,7 @@ const DashboardUserContainer = () => {
   const alert = useAlert();
   const curenttName = useAppSelector((state) => state.cat);
   const dispatch = useAppDispatch();
+  const { data } = useGetCat();
   const [selectId, setSelectId] = useState<string | null>(null);
   const [formBikinKucing, setFormBikinKucing] = useState<FormBikinKucingSchema>({
     namaKucing: '',
@@ -47,16 +48,6 @@ const DashboardUserContainer = () => {
     kondisiKesehatan: [],
   });
 
-  const { data } = useGetCat();
-  const DeleteCat = useDeleteCat({
-    onAfterSuccess: () => {
-      console.log('Kucing berhasil dihapus');
-    },
-  });
-
-  const handleDeleteCat = (id: string) => {
-    DeleteCat.mutate(id);
-  };
   const initialForm: FormBikinKucingSchema = {
     namaKucing: '',
     ras: '',
@@ -87,6 +78,16 @@ const DashboardUserContainer = () => {
       return;
     }
     return CreateCat.mutate(formBikinKucing);
+  };
+
+  const DeleteCat = useDeleteCat({
+    onAfterSuccess: () => {
+      console.log('Kucing berhasil dihapus');
+    },
+  });
+
+  const handleDeleteCat = (id: string) => {
+    DeleteCat.mutate(id);
   };
   const aktivitas: { label: 'Rendah' | 'Sedang' | 'Tinggi'; desc: string }[] = [
     { label: 'Rendah', desc: 'Suka Tidur, Jarang Main' },

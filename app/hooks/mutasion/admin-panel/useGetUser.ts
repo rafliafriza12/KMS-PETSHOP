@@ -1,5 +1,4 @@
 import AdminPanel from '@/app/service/admin-panel/admin-panel.service';
-
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetUsers = () => {
