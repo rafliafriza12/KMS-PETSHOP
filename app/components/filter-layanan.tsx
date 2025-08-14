@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { Filter, Scissors, Heart, Home, GraduationCap, Apple } from 'lucide-react';
 import View from './ui/view';
-import { Label } from './ui/label';
-import { useGetLayanan } from '../hooks/mutasion/layanan/useGetLayanan';
+import { Label } from '@radix-ui/react-label';
 
-export default function FilterLayanan({ onChange }: { onChange: (id: string) => void }) {
+interface FilterLayananProps {
+  onChange: (id: string) => void;
+  count: any[];
+}
+
+const FilterLayanan: React.FC<FilterLayananProps> = ({ onChange, count }) => {
   const [active, setActive] = useState('all');
-  const { data } = useGetLayanan();
 
   const countByKategori = (kategori: string) => {
-    if (kategori === 'all') return data?.length;
-    return data?.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase()).length;
+    if (kategori === 'all') return count?.length || 0;
+    return count?.filter(
+      (item: any) => item.layanan.kategori.toLowerCase() === kategori.toLowerCase()
+    ).length;
   };
 
   const filterData = [
@@ -26,10 +31,11 @@ export default function FilterLayanan({ onChange }: { onChange: (id: string) => 
     setActive(id);
     onChange(id);
   };
+
   return (
     <View className="space-y-2 w-full">
       <Label className="font-semibold text-lg">Filter Layanan :</Label>
-      <View className="flex flex-wrap gap-2 mt-2  ">
+      <View className="flex flex-wrap gap-2 mt-2">
         {filterData.map((item) => (
           <button
             key={item.id}
@@ -45,7 +51,7 @@ export default function FilterLayanan({ onChange }: { onChange: (id: string) => 
             <Label>{item.label}</Label>
             <Label
               className={`px-2 py-0.5 text-xs rounded-full 
-                ${active === item.id ? 'bg-[var(--shapeV1-parent)]' : ' text-gray-800'}`}
+                ${active === item.id ? 'bg-[var(--shapeV1-parent)]' : 'text-gray-800'}`}
             >
               {countByKategori(item.id)}
             </Label>
@@ -54,4 +60,6 @@ export default function FilterLayanan({ onChange }: { onChange: (id: string) => 
       </View>
     </View>
   );
-}
+};
+
+export default FilterLayanan;

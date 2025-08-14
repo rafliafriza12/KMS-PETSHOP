@@ -17,7 +17,11 @@ import { Label } from '@radix-ui/react-label';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
-import { FormBikinLayananScham, FormEditProfileSchema } from '../types/form';
+import {
+  FormBikinKnowledgeSchema,
+  FormBikinLayananScham,
+  FormEditProfileSchema,
+} from '../types/form';
 import { useCreateLayanan } from '../hooks/mutasion/layanan/useCreateLayanan';
 import { useAlert } from '../hooks/alert/costum-alert';
 import { useEditLayanan } from '../hooks/mutasion/layanan/useEditLayanan';
@@ -26,6 +30,8 @@ import { useAppSelector } from '../hooks/dispatch/dispatch';
 import Fallback from './ui/fallback';
 import { FormRegisterSchema } from '../types/form';
 import { useRegister } from '../hooks/mutasion/auth/useRegister';
+import { useCreateKnow } from '../hooks/mutasion/knowleghe/useCreateKnow';
+import { normalizeToLowercase } from '../utils/string.format';
 
 const AdminPanelContent = () => {
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
@@ -44,6 +50,16 @@ const AdminPanelContent = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const [formBikinKnowledge, setFormBikinKnowledge] = useState<FormBikinKnowledgeSchema>({
+    kondisi: [],
+    max_berat: null,
+    max_umur: null,
+    min_berat: null,
+    min_umur: null,
+    ras: [],
+    tingkatAktivitas: [],
+  });
+
   const [isActive, setIsActive] = useState<
     'overview' | 'pengguna' | 'knowledge' | 'layanan' | null
   >('overview');
@@ -57,7 +73,13 @@ const AdminPanelContent = () => {
     },
   });
 
-  const [childModal, setChildModal] = useState<'Keranjang' | 'Edit' | null>(null);
+  const createKnow = useCreateKnow(selectId || '', {
+    onAfterSuccess: () => {
+      setChildModal(null);
+    },
+  });
+
+  const [childModal, setChildModal] = useState<'Keranjang' | 'Edit' | 'Knowledge' | null>(null);
   const handleOpenEditModal = (user: any) => {
     setSelectedUserId(user._id);
     setFormEditProfile({
@@ -76,7 +98,6 @@ const AdminPanelContent = () => {
     diskon: null,
     durasiLayanan: null,
     kategori: '',
-    status: '',
   });
 
   const [formEditLayanan, setFormEditLayanan] = useState<FormBikinLayananScham>({
@@ -138,6 +159,27 @@ const AdminPanelContent = () => {
     },
   });
 
+  const handleBikinKnow = (payload: FormBikinKnowledgeSchema) => {
+    if (
+      !formBikinKnowledge.kondisi ||
+      !formBikinKnowledge.max_berat ||
+      !formBikinKnowledge.max_umur ||
+      !formBikinKnowledge.min_berat ||
+      !formBikinKnowledge.min_umur ||
+      !formBikinKnowledge.ras ||
+      !formBikinKnowledge.tingkatAktivitas
+    ) {
+      alert.toast({
+        title: 'Perhatian',
+        message: 'Mohon Isi Semua Colum Tersedia',
+        icon: 'warning',
+      });
+      return;
+    }
+    const LowerCase = normalizeToLowercase(formBikinKnowledge);
+    console.log('all data knowleght', LowerCase);
+    return createKnow.mutate(LowerCase);
+  };
   const handleEditUser = (_id: string) => {
     editUser.mutate(formEditProfile);
   };
@@ -316,7 +358,6 @@ const AdminPanelContent = () => {
                     <td className="px-4 py-2">{user.email}</td>
                     <td className="px-4 py-2">{user.role}</td>
                     <td className="px-4 py-2 flex justify-center gap-2">
-                      {/* Dynamic Untuk Detail */}
                       <Link href={`/admin/admin-panel/detail-users`}>
                         <Button className="bg-blue-500 text-white px-3 py-1 rounded-sm">
                           Detail
@@ -531,19 +572,57 @@ const AdminPanelContent = () => {
         </PopUp>
 
         {isActive === 'knowledge' && (
-          <View>
-            <Text>Knowledge Base</Text>
-            {/* Map data knowledge base */}
+          <View className="w-full h-full">
+            <Spreed orientation="horizontal" />
+            <View className="grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-2 h-full">
+              {data?.map((items, key) => {
+                const id = (items._id ?? items.namaLayanan ?? key).toString();
+                return (
+                  <div
+                    key={id}
+                    onClick={() => {
+                      setSelectId(id);
+                      setFormEditLayanan({
+                        namaLayanan: items.namaLayanan,
+                        deskripsi: items.deskripsi,
+                        benefit: items.benefit,
+                        harga: items.harga,
+                        diskon: items.diskon || null,
+                        durasiLayanan: items.durasiLayanan,
+                        kategori: items.kategori,
+                        status: items.status || 'Active',
+                      });
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <LayananComponent
+                      formEditLayanan={formEditLayanan}
+                      setFormEditLayanan={setFormEditLayanan}
+                      isPending={editLayananMutation.isPending}
+                      isModal={childModal}
+                      setIsModal={setChildModal}
+                      formBikinKnowledge={formBikinKnowledge}
+                      setFormBikinKnowledge={setFormBikinKnowledge}
+                      onKnow={handleBikinKnow}
+                      isActive={isActive}
+                      data={items}
+                      key={key}
+                      isSelect={selectId === id}
+                    />
+                  </div>
+                );
+              })}
+            </View>
           </View>
         )}
 
         {isActive === 'layanan' && (
-          <View>
+          <View className="w-full h-full">
             <Button variant="ghost" onClick={() => setIsModal('Tambah-Layanan')}>
               + Tambahah Layanan
             </Button>
             <Spreed orientation="horizontal" className="my-2" />
-            <View className="grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-2">
+            <View className="grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-2 h-full">
               {data?.map((items, key) => {
                 const id = (items._id ?? items.namaLayanan ?? key).toString();
                 return (
@@ -572,6 +651,7 @@ const AdminPanelContent = () => {
                       setIsModal={setChildModal}
                       onEdit={handleEdit}
                       data={items}
+                      isActive={isActive}
                       onDelete={() => handleDelete(id)}
                       key={key}
                       isSelect={selectId === id}
@@ -708,27 +788,6 @@ const AdminPanelContent = () => {
                 </SelectContent>
               </Select>
             </View>
-          </View>
-
-          <View className="space-y-2">
-            <Label>Status</Label>
-            <Select
-              value={formBikinLayanan.status}
-              onValueChange={(value) =>
-                setFormBikinLayanan((prev) => ({
-                  ...prev,
-                  status: value,
-                }))
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Active">Active</SelectItem>
-                <SelectItem value="Inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
           </View>
 
           <View className="flex justify-end gap-2 pt-4">
