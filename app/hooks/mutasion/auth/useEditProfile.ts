@@ -1,14 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAlert } from '../../alert/costum-alert';
-import { useRouter } from 'next/navigation';
+
 import AuthApi from '@/app/service/auth/auth.service';
 
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { FormEditProfileSchema } from '@/app/types/form';
 export const useEditProfile = (id: string, options?: { onAfterSuccess?: () => void }) => {
   const alert = useAlert();
-  const router = useRouter();
-
+  const queryClient = useQueryClient();
   return useMutation<TResponse<any>, Error, FormEditProfileSchema>({
     mutationFn: (payload: FormEditProfileSchema) => AuthApi.EditProfile(id, payload),
     onSuccess: () => {
@@ -17,7 +16,7 @@ export const useEditProfile = (id: string, options?: { onAfterSuccess?: () => vo
         message: 'Berhasi Edit Profile',
         icon: 'success',
         onVoid: () => {
-          router.refresh();
+          queryClient.invalidateQueries({ queryKey: ['admin'], exact: false });
           options?.onAfterSuccess?.();
         },
       });

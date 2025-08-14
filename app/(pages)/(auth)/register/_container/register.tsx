@@ -18,7 +18,6 @@ import { FormRegisterSchema } from '@/app/types/form';
 import { useRegister } from '@/app/hooks/mutasion/auth/useRegister';
 import Fallback from '@/app/components/ui/fallback';
 import { useAlert } from '@/app/hooks/alert/costum-alert';
-import { isPending } from '@reduxjs/toolkit';
 
 const RegisterContainer = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -29,7 +28,6 @@ const RegisterContainer = () => {
     role: '',
   });
   const alert = useAlert();
-
   const Register = useRegister();
 
   const handleRegister = () => {
@@ -61,13 +59,13 @@ const RegisterContainer = () => {
             <CardContent>
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <Label htmlFor="text">Nama</Label>
+                  <Label htmlFor="text">Nama :</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       id="text"
                       type="email"
-                      placeholder="Masukkan email Anda"
+                      placeholder="Nama Anda"
                       className="pl-10"
                       onChange={(e) =>
                         setFormRegister((prev) => {
@@ -80,7 +78,7 @@ const RegisterContainer = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email :</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
@@ -99,7 +97,7 @@ const RegisterContainer = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Password :</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input

@@ -1,12 +1,11 @@
-import { useRouter } from 'next/navigation';
 import { useAlert } from '../../alert/costum-alert';
 import LayananApi from '@/app/service/layanan/layanan.service';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 
 export const useDeleteLayanan = (options?: { onAfterSuccess?: () => void }) => {
   const alert = useAlert();
-  const router = useRouter();
+  const queryClient = useQueryClient();
   return useMutation<TResponse<any>, Error, string>({
     mutationFn: LayananApi.DeleteLayanan,
     onSuccess: () => {
@@ -15,7 +14,7 @@ export const useDeleteLayanan = (options?: { onAfterSuccess?: () => void }) => {
         message: 'Layanan berhasil dihapus',
         icon: 'success',
         onVoid: () => {
-          router.refresh();
+          queryClient.invalidateQueries({ queryKey: ['layanan'], exact: false });
           options?.onAfterSuccess?.();
         },
       });
