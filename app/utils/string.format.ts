@@ -31,3 +31,17 @@ export function formatDate(isoString: string, withTime = false): string {
 
   return new Intl.DateTimeFormat('id-ID', options).format(date);
 }
+
+export function normalizeToLowercase<T extends Record<string, any>>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => {
+      if (typeof value === 'string') {
+        return [key, value.toLowerCase()];
+      }
+      if (Array.isArray(value)) {
+        return [key, value.map((v) => (typeof v === 'string' ? v.toLowerCase() : v))];
+      }
+      return [key, value];
+    })
+  ) as T;
+}

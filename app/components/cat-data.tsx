@@ -18,11 +18,24 @@ interface CatDataProps {
   data?: CatType | null;
 }
 
-const CatData: React.FC<CatDataProps & { count: any }> = ({ data, count }) => {
-  const countByKategori = (kategori: string = 'all') => {
-    if (kategori === 'all') return count?.length;
-    return count.filter((item: any) => item.kategori.toLowerCase() === kategori.toLowerCase())
-      .length;
+const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendasi: any }> = ({
+  data,
+  countLayanan,
+  countRekomendasi,
+}) => {
+  const countTersediaByKategori = (kategori: string = 'all') => {
+    if (kategori === 'all') return countLayanan?.length;
+    return countLayanan.filter(
+      (item: any) => item.layanan.kategori.toLowerCase() === kategori.toLowerCase()
+    ).length;
+  };
+
+  const countSangatDirekomendasikanByKategori = (knowledge_id: string = 'all') => {
+    const rekomendasiArray = Object.values(countRekomendasi || {});
+    if (knowledge_id === 'all') return rekomendasiArray.length;
+    return rekomendasiArray.filter(
+      (item: any) => item.layanan.kategori?.toLowerCase() === knowledge_id.toLowerCase()
+    ).length;
   };
 
   return (
@@ -44,12 +57,12 @@ const CatData: React.FC<CatDataProps & { count: any }> = ({ data, count }) => {
       <View className="grid grid-cols-2 grid-rows-2 lg:grid-cols-4 lg:grid-rows-1 mt-4 bg-[var(--shapeV2-parent)]/60 rounded-sm p-4 text-center">
         <Container className="flex justify-center">
           <View className="flex justify-center items-center flex-col">
-            <Text className="text-lg font-bold">{countByKategori()}</Text>
+            <Text className="text-lg font-bold">{countTersediaByKategori()}</Text>
             <Text>Layanan Tersedia</Text>
           </View>
         </Container>
         <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-semibold">6</Text>
+          <Text className="text-lg font-semibold">{countSangatDirekomendasikanByKategori()}</Text>
           <Text>Sangat Direkomendasikan</Text>
         </View>
         <View className="flex justify-center items-center flex-col">

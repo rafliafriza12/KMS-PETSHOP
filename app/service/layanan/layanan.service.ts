@@ -27,6 +27,10 @@ class LayananApi {
     const res = await AxiosClient.put<TResponse<LayananAppType>>(`/api/layanan/${id}`, payload);
     return res.data;
   }
+  async getRekomendasiLayanan(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.get(`/api/layanan/${id}/rekomendasi`);
+    return res.data;
+  }
 }
 
 export default new LayananApi();

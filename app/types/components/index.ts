@@ -31,6 +31,12 @@ export interface LayananAppType {
   updatedAt: string;
 }
 
+export interface LayanananByRekomendasiType {
+  knowledge_id: string;
+  layanan: LayananAppType;
+  score: number;
+}
+
 export interface PesananAktifType {
   _id: string;
   nama: string;

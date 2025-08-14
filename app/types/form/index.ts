@@ -1,4 +1,4 @@
-import z from 'zod';
+import z, { any, string } from 'zod';
 
 export const FormRegisterType = z.object({
   namaLengkap: z.string(),
@@ -20,6 +20,7 @@ export const FormLoginType = z.object({
 });
 
 export const FormBikinKucing = z.object({
+  _id: any(),
   namaKucing: z.string(),
   ras: z.string(),
   umur: z.number().nullable(),
@@ -36,7 +37,23 @@ export const FormBikinLayanan = z.object({
   diskon: z.number().nullable(),
   durasiLayanan: z.number().nullable(),
   kategori: z.string(),
-  status: z.string(),
+  status: z.string().optional(),
+});
+
+export const FormBikinKnowledge = z.object({
+  ras: z.array(z.string()),
+  min_umur: z.number().nullable(),
+  max_umur: z.number().nullable(),
+  min_berat: z.number().nullable(),
+  max_berat: z.number().nullable(),
+  tingkatAktivitas: z.array(z.string()),
+  kondisi: z.array(z.string()),
+});
+
+export const FormAddToChart = z.object({
+  layananId: z.string(),
+  kucingId: z.string(),
+  jadwal: z.any(),
 });
 
 export type FormRegisterSchema = z.infer<typeof FormRegisterType>;
@@ -44,3 +61,5 @@ export type FormLoginSchema = z.infer<typeof FormLoginType>;
 export type FormBikinKucingSchema = z.infer<typeof FormBikinKucing>;
 export type FormBikinLayananScham = z.infer<typeof FormBikinLayanan>;
 export type FormEditProfileSchema = z.infer<typeof FormEditProfile>;
+export type FormBikinKnowledgeSchema = z.infer<typeof FormBikinKnowledge>;
+export type FormAddToChartSchema = z.infer<typeof FormAddToChart>;
