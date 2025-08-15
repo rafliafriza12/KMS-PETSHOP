@@ -52,7 +52,6 @@ const LayananContainer = () => {
       return;
     }
 
-    //Miss Jadwall
     AddToChart.mutate(formAddToChart);
   };
 

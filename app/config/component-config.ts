@@ -29,14 +29,3 @@ export const RiwayatData: RiwayatType[] = [
     selesai: 'Senin, 11 Agustus 2025 pukul 19.37',
   },
 ];
-
-export const KeranjangData: KeranjangType[] = [
-  {
-    title: 'Perawatan Gigi & Mulut',
-    nama: 'Luna',
-    tanggal: 'Jum, 22 Agu',
-    jam: '13:00',
-    duration: '1 jam',
-    harga: '300.000',
-  },
-];

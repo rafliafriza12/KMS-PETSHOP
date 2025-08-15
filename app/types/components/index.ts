@@ -63,11 +63,21 @@ export interface RiwayatType {
   selesai: string;
 }
 
+export interface KucingType {
+  _id: string;
+  berat: number;
+  kondisiKesehatan: string[];
+  namaKucing: string;
+  ras: string;
+  tingkatAktivitas: string;
+  umur: number;
+}
+
 export interface KeranjangType {
-  title: string;
-  nama: string;
-  tanggal: string;
-  jam: string;
-  duration: string;
-  harga: string;
+  _id: string;
+  jadwal: string;
+  keranjangId: string;
+  kucingId: string;
+  layanan: LayananAppType;
+  totalHarga: number;
 }
