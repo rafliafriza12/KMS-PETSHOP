@@ -26,6 +26,10 @@ class AuthApi {
     const res = await AxiosClient.put(`/api/user/${id}`, payload);
     return res.data;
   }
+  async GetUserById(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.get(`/api/user/${id}`);
+    return res.data;
+  }
 }
 
 export default new AuthApi();

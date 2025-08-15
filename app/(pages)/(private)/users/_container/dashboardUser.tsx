@@ -5,7 +5,7 @@ import { Text } from '@/app/components/ui/Text';
 import HomeUserLayout from '@/app/core/layout/home-user';
 import { Button } from '@/app/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PopUp from '@/app/core/components/pop-up';
 import { PenyakitKucing } from '@/app/core/constants/penyakit';
 import { Input } from '@/app/components/ui/input';
@@ -30,6 +30,7 @@ import { useAppSelector } from '@/app/hooks/dispatch/dispatch';
 import { setSelectedCat } from '@/app/store/CatSlice/catSlice';
 import { useDeleteCat } from '@/app/hooks/mutasion/cat/useDeleteCat';
 import Kucing from '@/app/components/diagnosis';
+import { useEditCat } from '@/app/hooks/mutasion/cat/useEditChat';
 
 const DashboardUserContainer = () => {
   const [isPopUp, setIsPopUp] = useState<'kucing' | null>(null);
@@ -39,6 +40,8 @@ const DashboardUserContainer = () => {
   const dispatch = useAppDispatch();
   const { data } = useGetCat();
   const [selectId, setSelectId] = useState<string | null>(null);
+  const [isModal, setIsModal] = useState<'edit' | null>(null);
+
   const [formBikinKucing, setFormBikinKucing] = useState<FormBikinKucingSchema>({
     namaKucing: '',
     ras: '',

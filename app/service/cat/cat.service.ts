@@ -19,6 +19,10 @@ class CatApi {
     const res = await AxiosClient.delete(`/api/kucing/${id}`);
     return res.data;
   }
+  async Edit(id: string, payload: FormBikinKucingSchema): Promise<TResponse<any>> {
+    const res = await AxiosClient.put(`/api/kucing/${id}`, payload);
+    return res.data;
+  }
 }
 
 export default new CatApi();
