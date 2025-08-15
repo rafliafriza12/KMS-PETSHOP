@@ -45,3 +45,15 @@ export function normalizeToLowercase<T extends Record<string, any>>(obj: T): T {
     })
   ) as T;
 }
+
+export function getTime(datetime: string): string {
+  if (!datetime) return '';
+  const parts = datetime.split('T');
+  if (parts.length < 2) return '';
+  return parts[1].slice(0, 5);
+}
+
+export function getDate(datetime: string): string {
+  if (!datetime) return '';
+  return datetime.split('T')[0];
+}

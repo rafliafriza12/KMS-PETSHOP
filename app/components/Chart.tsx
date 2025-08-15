@@ -9,6 +9,7 @@ import {
   Phone,
   ShoppingCart,
   Smartphone,
+  Trash,
   User,
 } from 'lucide-react';
 import {
@@ -23,21 +24,26 @@ import UseTooltip from '../hooks/tooltip/tooltip/tooltip';
 import Spreed from '../core/components/spreed';
 import { Text } from './ui/Text';
 import Keranjang from './keranjang';
-import { KeranjangData } from '../config/component-config';
 import View from './ui/view';
 import { Button } from './ui/button';
 import PopUp from '../core/components/pop-up';
 import { useState } from 'react';
 import { PaymentMethodCard } from '../core/components/paymentMethot';
 import { Input } from './ui/input';
+import { useGetChart } from '../hooks/mutasion/keranjang/useGetCart';
+import { useDeleteAll } from '../hooks/mutasion/keranjang/useDeleteAll';
+import Fallback from './ui/fallback';
 
 const Chart: React.FC = () => {
   const [isModal, setIsModal] = useState<'pembayaran' | null>(null);
   const [isSelect, setIsSelect] = useState<
     'Bayar di Tempat' | 'Transfer Bank' | 'GoPay' | 'OVO' | 'DANA' | 'Kartu Kredit/Debit' | null
   >(null);
+  const Chart = useGetChart();
+  const data = Chart.data?.data || [];
+  const DeleteAll = useDeleteAll();
 
-  const totalLayanan = KeranjangData.length;
+  const totalLayanan = data.length;
   // const totalPembayaran = KeranjangData.reduce((sum, item) => sum + (item.harga ?? 0), 0);
   // const totalMenit = KeranjangData.reduce((sum, item) => sum + (item.durationMenit ?? 0), 0);
   // const jam = Math.floor(totalMenit / 60);
@@ -63,20 +69,27 @@ const Chart: React.FC = () => {
 
         <div className="flex-1 overflow-y-auto">
           <SheetDescription className="flex flex-col gap-4 p-4">
-            {KeranjangData.length === 0 ? (
+            {data.length === 0 ? (
               <View className="flex flex-col items-center justify-center gap-2 mt-10">
                 <ShoppingCart size={86} />
                 <Text className="font-semibold text-lg">Keranjang Masih Kosong</Text>
                 <Text className="font-light text-sm">Tambah Layanan Untuk Kucing Anda</Text>
               </View>
             ) : (
-              KeranjangData.map((items, key) => <Keranjang key={key} data={items} />)
+              data.map((items: any, key: any) => <Keranjang key={key} data={items} />)
             )}
           </SheetDescription>
         </div>
 
-        {KeranjangData.length > 0 && (
+        {data.length > 0 && (
           <div className="bg-[var(--shapeV2-parent)] p-4 shadow-lg border-t">
+            <Button
+              className="w-full mb-4 flex "
+              onClick={DeleteAll.mutate}
+              disabled={DeleteAll.isPending}
+            >
+              {DeleteAll.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Hapus Semua'}
+            </Button>
             <View className="flex justify-between">
               <Text className="font-semibold">Total Layanan:</Text>
               <Text className="font-bold">{totalLayanan} layanan</Text>
