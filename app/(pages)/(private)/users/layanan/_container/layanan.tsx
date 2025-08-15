@@ -45,7 +45,11 @@ const LayananContainer = () => {
     jadwal: '',
   });
 
-  const AddToChart = useAddCart();
+  const AddToChart = useAddCart({
+    onAfterSuccess: () => {
+      setChildModal(null);
+    },
+  });
   const handleAddtoChart = () => {
     if (!selectId) {
       console.error('Pilih layanan terlebih dahulu');
@@ -92,6 +96,7 @@ const LayananContainer = () => {
                     onAddToChart={handleAddtoChart}
                     isSelect={selectId === id}
                     setIsModal={setChildModal}
+                    isPending={AddToChart.isPending}
                     isModal={childModal}
                     data={items}
                   />

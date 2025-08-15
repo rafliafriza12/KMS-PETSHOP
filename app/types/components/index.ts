@@ -39,14 +39,28 @@ export interface LayanananByRekomendasiType {
 
 export interface PesananAktifType {
   _id: string;
-  nama: string;
-  idPesanan: string;
-  jadwal: string;
-  harga: string;
+  items: [
+    {
+      _id: string;
+      estimasiWaktu: number;
+      harga: number;
+      jadwal: string;
+      kucingId: string | KucingType;
+      layananId: string | LayananAppType;
+      pesananId?: any;
+      statusPembayaran: string;
+      statusPesanan: string;
+      createdAt: string;
+      updatedAt: string;
+    }
+  ];
   metodePembayaran: string;
-  status: string;
-  estimasiWaktu: string;
-  dipesan: string;
+  statusPembayaran: string;
+  totalHarga: number;
+  totalItems: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
 }
 
 export interface RiwayatType {

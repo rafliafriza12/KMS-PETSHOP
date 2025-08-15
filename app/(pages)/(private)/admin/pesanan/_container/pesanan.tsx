@@ -2,37 +2,48 @@
 import Container from '@/app/components/ui/container';
 import View from '@/app/components/ui/view';
 import { Text } from '@/app/components/ui/Text';
-import HomeUserLayout from '@/app/core/layout/home-user';
+import { PesananAktifType } from '@/app/types/components';
+
 import Spreed from '@/app/core/components/spreed';
 import { CircleAlert, CircleCheckBig, Clock, Clock2, CreditCard, History } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import PesananAktif from '@/app/components/pesanan-aktif';
-import { PesananAktifData, RiwayatData } from '@/app/config/component-config';
-import { usePathname } from 'next/navigation';
-import Riwayat from '@/app/components/riwayat';
 import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
+import { useGetPesanan } from '@/app/hooks/mutasion/pesanan/useGetPesanan';
 
+type SummaryResponse = {
+  data: PesananAktifType[];
+  summary: {
+    proses: number;
+    aktif: number;
+    selesai: number;
+    totalHarga: number;
+  };
+};
 const PesananContainer = () => {
   const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat' | null>('Aktif');
-  const pathname = usePathname();
+  const pesanan = useGetPesanan() as unknown as { data?: SummaryResponse };
+  const summary = pesanan.data?.summary;
+  const data: PesananAktifType[] = pesanan.data?.data || [];
 
   const countPemesanan = (_id?: string) => {
-    if (!PesananAktifData || PesananAktifData.length === 0) return 0;
-
-    if (!_id) {
-      return PesananAktifData.length;
+    if (!data || data.length === 0) return 0;
+    if (_id) {
+      const count = data.find((item) => item._id === _id);
+      return count?.items.length ?? 0;
     }
-
-    return PesananAktifData.filter((item) => item._id === _id).length;
+    return data.reduce((total, parent) => total + (parent.items?.length ?? 0), 0);
   };
 
-  const countRiwayat = (_id?: string) => {
-    if (!RiwayatData || Riwayat.length === 0) return 0;
-    if (!_id) {
-      return RiwayatData.length;
+  const getTotalHarga = (_id?: string) => {
+    if (!data || data.length === 0) return 0;
+    if (_id) {
+      const pesanan = data.find((item) => item._id === _id);
+      return pesanan?.totalHarga ?? 0;
     }
-    return RiwayatData.filter((item) => item._id === _id).length;
+
+    return data.reduce((acc, item) => acc + (item.totalHarga ?? 0), 0);
   };
 
   return (
@@ -60,7 +71,7 @@ const PesananContainer = () => {
               <CircleAlert size={40} className="text-[#9333EA]" />
             </View>
             <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">0</Text>
+              <Text className="font-bold">{summary?.proses}</Text>
               <Text className="font-semibold">Sedang Di Proses</Text>
             </View>
           </View>
@@ -69,7 +80,7 @@ const PesananContainer = () => {
               <CircleCheckBig size={40} className="text-[#2CAD5C]" />
             </View>
             <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">{countRiwayat()}</Text>
+              <Text className="font-bold">{summary?.selesai}</Text>
               <Text className="font-semibold">Selesai</Text>
             </View>
           </View>
@@ -78,7 +89,7 @@ const PesananContainer = () => {
               <CreditCard size={40} className="text-[#4F46E5]" />
             </View>
             <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">Rp.0</Text>
+              <Text className="font-bold">Rp.{getTotalHarga().toLocaleString('id-Id')}</Text>
               <Text className="font-semibold">Total Transaksi</Text>
             </View>
           </View>
@@ -101,32 +112,38 @@ const PesananContainer = () => {
               className="flex justify-center items-center"
             >
               <CircleCheckBig size={66} />
-              <Text className="font-bold">Riwayat {countRiwayat()}</Text>
+              <Text className="font-bold">Riwayat {summary?.selesai}</Text>
             </Button>
           </View>
           <Spreed orientation="horizontal" />
 
           {isActive === 'Aktif' && (
-            <>
-              {PesananAktifData.length === 0 ? (
-                <View className="flex justify-center items-center flex-col mt-4 bg-[var(--shapeV2-parent)] rounded-lg p-4">
+            <View className="space-y-4">
+              {data.length === 0 ? (
+                <View className="flex flex-col justify-center items-center mt-6 bg-[var(--shapeV2-parent)] rounded-lg p-6 gap-4">
                   <Clock size={86} />
-                  <View className="flex justify-center items-center flex-col">
-                    <Text className="font-semibold">Tidak Ada Pesanan Aktif</Text>
-                    <Text className="font-light">
-                      Pesanan Anda Akan Muncul Di Sini Setelah Checkout
+                  <View className="flex flex-col justify-center items-center gap-2 text-center">
+                    <Text className="font-semibold text-lg">Tidak Ada Pesanan Aktif</Text>
+                    <Text className="font-light text-sm">
+                      Pesanan Anda akan muncul di sini setelah checkout
                     </Text>
                   </View>
                 </View>
               ) : (
-                PesananAktifData.map((items, key) => <PesananAktif data={items} key={key} />)
+                <View className="w-full">
+                  {data.map((items, key) => (
+                    <div className="flex" key={key}>
+                      <PesananAktif data={items} />
+                    </div>
+                  ))}
+                </View>
               )}
-            </>
+            </View>
           )}
 
-          {isActive === 'Riwayat' && (
+          {/* {isActive === 'Riwayat' && (
             <>
-              {RiwayatData.length === 0 ? (
+              {data.length === 0 ? (
                 <View className="flex justify-center items-center flex-col mt-4 bg-[var(--shapeV2-parent)] rounded-lg p-4">
                   <History size={86} />
                   <View className="flex justify-center items-center flex-col">
@@ -137,10 +154,10 @@ const PesananContainer = () => {
                   </View>
                 </View>
               ) : (
-                RiwayatData.map((items, key) => <Riwayat data={items} key={key} />)
+                data.map((items, key) => <Riwayat data={items} key={key} />)
               )}
             </>
-          )}
+          )} */}
         </View>
       </Container>
     </HomeAdminLayout>

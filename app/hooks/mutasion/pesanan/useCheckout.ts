@@ -1,21 +1,21 @@
-import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import CatApi from '@/app/service/cat/cat.service';
-import { FormBikinKucingSchema } from '@/app/types/form';
 import { useAlert } from '../../alert/costum-alert';
-export const useEditCat = (id: string, options?: { onAfterSuccess?: () => void }) => {
+import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
+import PesananApi from '@/app/service/pesanan/pesanan.service';
+export const useCheckout = (options?: { onAfterSuccess?: () => void }) => {
   const alert = useAlert();
   const queryClient = useQueryClient();
   return useMutation<TResponse<any>, Error, any>({
-    mutationFn: (payload: FormBikinKucingSchema) => CatApi.Edit(id, payload),
+    mutationFn: PesananApi.CheckOut,
     onSuccess: (res) => {
       alert.toast({
         title: 'Berhasil',
-        message: 'Berhasil Menambahakan Kucing',
+        message: 'Berhasil Checkout Items',
         icon: 'success',
         onVoid: () => {
-          queryClient.invalidateQueries({ queryKey: ['cat'], exact: false });
           options?.onAfterSuccess?.();
+          // Nanti Setup
+          queryClient.invalidateQueries({ queryKey: ['cart'], exact: false });
         },
       });
     },
@@ -23,7 +23,7 @@ export const useEditCat = (id: string, options?: { onAfterSuccess?: () => void }
       console.log(err);
       alert.toast({
         title: 'Gagal',
-        message: 'Gagal Menambahakan Kucing',
+        message: 'Gagal Checkout Items',
         icon: 'error',
       });
     },

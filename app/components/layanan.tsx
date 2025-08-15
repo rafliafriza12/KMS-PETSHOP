@@ -214,9 +214,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
   };
 
   return (
-    <View
+    <div
       className={`bg-[var(--shapeV2-parent)]  border rounded-lg shadow p-4 space-y-4 ${
         isSelect ? 'border-red-500' : 'border'
+      } 
       }`}
     >
       <View className="flex items-start justify-between">
@@ -673,20 +674,16 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               <View className="flex">
                 <Text className="font-bold">Tambah Ke Keranjang</Text>
               </View>
+
               <ChevronRight
                 className="text-foreground cursor-pointer"
                 onClick={() => handleOpenModal(null)}
               />
             </View>
             <Spreed orientation="horizontal" className="my-4" />
-            <View className="flex justify-center items-start p-4 flex-col bg-[var(--shapeV1-parent)]/30 rounded-lg">
-              <Label className="font-bold ">{layanan.namaLayanan}</Label>
-              <Text>Untuk : {selectData?.namaKucing}</Text>
-              <View className="flex justify-between items-center w-full">
-                <Text>Durasi:{layanan.durasiLayanan}</Text>
-                <Text>Rp. {layanan.harga}</Text>
-              </View>
-            </View>
+            <Text className="font-bold p-2 rounded-sm bg-[var(--shapeV1-parent)]">
+              Untuk Kucing: {selectData?.namaKucing}
+            </Text>
             <View className="mt-4 flex justify-center items-start flex-col gap-2">
               <View className="flex items-center gap-2">
                 <Calendar />
@@ -733,16 +730,26 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               </Select>
             </View>
 
-            <Button className="w-full mt-6" onClick={() => onAddToChart(formAddToChart)}>
+            <Button
+              className="w-full mt-6"
+              onClick={() => onAddToChart(formAddToChart)}
+              disabled={isPending}
+            >
               <View className="flex justify-center items-center gap-1">
-                <Plus />
-                <Label className="font-semibold">Tambah Ke Keranjang</Label>
+                {isPending ? (
+                  <Fallback title="Tunggu Sebentar" />
+                ) : (
+                  <View className="flex items-center gap-1">
+                    <Plus />
+                    <Label className="font-semibold">Tambah Ke Keranjang</Label>
+                  </View>
+                )}
               </View>
             </Button>
           </Container>
         </PopUp>
       )}
-    </View>
+    </div>
   );
 };
 

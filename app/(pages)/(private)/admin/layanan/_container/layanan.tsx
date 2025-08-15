@@ -6,15 +6,15 @@ import Spreed from '@/app/core/components/spreed';
 import CatData from '@/app/components/cat-data';
 import FilterLayanan from '@/app/components/filter-layanan';
 import LayananComponent from '@/app/components/layanan';
-import { Text } from '@/app/components/ui/Text';
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '@/app/hooks/dispatch/dispatch';
-import { Cat } from 'lucide-react';
 import { useGetRekomendasiLayanan } from '@/app/hooks/mutasion/layanan/useGetRekomendasi';
 import { useGetLayanan } from '@/app/hooks/mutasion/layanan/useGetLayanan';
 import { FormAddToChartSchema } from '@/app/types/form';
 import { useAddCart } from '@/app/hooks/mutasion/keranjang/useAddCart';
 import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
+import { Cat } from 'lucide-react';
+import { Text } from '@/app/components/ui/Text';
 const LayananContainer = () => {
   const [filter, setFilter] = useState<string>('all');
   const [selectId, setSelectId] = useState<string | null>(null);
@@ -46,7 +46,11 @@ const LayananContainer = () => {
     jadwal: '',
   });
 
-  const AddToChart = useAddCart();
+  const AddToChart = useAddCart({
+    onAfterSuccess: () => {
+      setChildModal(null);
+    },
+  });
   const handleAddtoChart = () => {
     if (!selectId) {
       console.error('Pilih layanan terlebih dahulu');
@@ -55,6 +59,20 @@ const LayananContainer = () => {
 
     AddToChart.mutate(formAddToChart);
   };
+
+  if (!selectData) {
+    return (
+      <HomeAdminLayout>
+        <Container as="main" className="w-full h-full  justify-center items-center flex flex-col">
+          <Cat size={100} />
+          <Text className="text-lg font-semibold">Pilih kucing terlebih dahulu</Text>
+          <Text className="text-lg font-semibold">
+            Silakan pilih profil kucing dari dashboard untuk melihat layanan yang direkomendasikan.
+          </Text>
+        </Container>
+      </HomeAdminLayout>
+    );
+  }
   return (
     <HomeAdminLayout>
       <Container as="main" className="w-full h-full">
@@ -79,6 +97,7 @@ const LayananContainer = () => {
                     onAddToChart={handleAddtoChart}
                     isSelect={selectId === id}
                     setIsModal={setChildModal}
+                    isPending={AddToChart.isPending}
                     isModal={childModal}
                     data={items}
                   />

@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch } from '../hooks/dispatch/dispatch';
 import { clearSelectedCat } from '../store/CatSlice/catSlice';
 
-export default function HeaderAppUser() {
+export default function HeaderAppAdmin() {
   const { isMobile } = useIsMobile();
   const pathname = usePathname();
   const dispatch = useAppDispatch();

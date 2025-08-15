@@ -22,7 +22,6 @@ import Fallback from './ui/fallback';
 import { RasKucing } from '../core/constants/ras';
 import { useState } from 'react';
 import { useEditCat } from '../hooks/mutasion/cat/useEditChat';
-import { flattenToFormData } from '../utils/formdata';
 const Kucing: React.FC<
   DiagnosisAppTypeProps & { isSelect: boolean } & { onDelete?: (_id: string) => void } & {
     isPending?: boolean;
@@ -149,7 +148,17 @@ const Kucing: React.FC<
             </Button>
             <Button
               className="text-xs font-medium p-2 bg-[var(--shapeV1-parent)] rounded-lg flex items-center gap-1 justify-center"
-              onClick={() => setIsModal?.('edit')}
+              onClick={() => {
+                setFormEditKucing({
+                  namaKucing: data?.namaKucing ?? '',
+                  ras: data?.ras ?? '',
+                  tingkatAktivitas: data?.tingkatAktivitas ?? '',
+                  umur: data?.umur ?? null,
+                  berat: data?.berat ?? null,
+                  kondisiKesehatan: data?.kondisiKesehatan ?? [],
+                });
+                setIsModal('edit');
+              }}
             >
               Edit
             </Button>
