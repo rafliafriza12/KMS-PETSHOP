@@ -56,6 +56,14 @@ export const FormAddToChart = z.object({
   jadwal: z.any(),
 });
 
+export const FormCheckOut = z.object({
+  metodePembayaran: z.string(),
+});
+
+export const FormStatusPemesanan = z.object({
+  statusPesanan: z.string(),
+});
+
 export type FormRegisterSchema = z.infer<typeof FormRegisterType>;
 export type FormLoginSchema = z.infer<typeof FormLoginType>;
 export type FormBikinKucingSchema = z.infer<typeof FormBikinKucing>;
@@ -63,3 +71,5 @@ export type FormBikinLayananScham = z.infer<typeof FormBikinLayanan>;
 export type FormEditProfileSchema = z.infer<typeof FormEditProfile>;
 export type FormBikinKnowledgeSchema = z.infer<typeof FormBikinKnowledge>;
 export type FormAddToChartSchema = z.infer<typeof FormAddToChart>;
+export type FormCheckOutSchema = z.infer<typeof FormCheckOut>;
+export type FormStatusPemesananaSchema = z.infer<typeof FormStatusPemesanan>;

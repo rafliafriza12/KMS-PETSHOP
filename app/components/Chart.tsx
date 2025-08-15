@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Banknote,
-  ChevronRight,
-  CreditCard,
-  MapPinHouse,
-  NotebookTabs,
-  Phone,
-  ShoppingCart,
-  Smartphone,
-  Trash,
-  User,
-} from 'lucide-react';
+import { Banknote, ChevronRight, Clock, CreditCard, ShoppingCart, Smartphone } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -27,28 +16,45 @@ import Keranjang from './keranjang';
 import View from './ui/view';
 import { Button } from './ui/button';
 import PopUp from '../core/components/pop-up';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PaymentMethodCard } from '../core/components/paymentMethot';
-import { Input } from './ui/input';
 import { useGetChart } from '../hooks/mutasion/keranjang/useGetCart';
 import { useDeleteAll } from '../hooks/mutasion/keranjang/useDeleteAll';
 import Fallback from './ui/fallback';
+import { KeranjangType } from '../types/components';
+import { menitKeJam } from '../utils/string.format';
+import { useCheckout } from '../hooks/mutasion/pesanan/useCheckout';
+import { FormCheckOutSchema } from '../types/form';
 
 const Chart: React.FC = () => {
+  const checkout = useCheckout({
+    onAfterSuccess: () => {
+      setIsModal(null);
+    },
+  });
   const [isModal, setIsModal] = useState<'pembayaran' | null>(null);
   const [isSelect, setIsSelect] = useState<
-    'Bayar di Tempat' | 'Transfer Bank' | 'GoPay' | 'OVO' | 'DANA' | 'Kartu Kredit/Debit' | null
-  >(null);
+    'Bayar di Tempat' | 'Transfer Bank' | 'GoPay' | 'OVO' | 'DANA' | 'Kartu Kredit/Debit'
+  >('Bayar di Tempat');
   const Chart = useGetChart();
-  const data = Chart.data?.data || [];
+  const data: KeranjangType[] = Chart.data?.data || [];
+  const totalHarga = (Chart.data as any)?.totalHarga || 0;
   const DeleteAll = useDeleteAll();
-
   const totalLayanan = data.length;
-  // const totalPembayaran = KeranjangData.reduce((sum, item) => sum + (item.harga ?? 0), 0);
-  // const totalMenit = KeranjangData.reduce((sum, item) => sum + (item.durationMenit ?? 0), 0);
-  // const jam = Math.floor(totalMenit / 60);
-  // const menit = totalMenit % 60;
-  // const estimasiWaktu = `${jam} jam ${menit} menit`;
+  const totalWaktu = data.reduce((sum: number, item: any) => sum + (item.estimasiWaktu || 0), 0);
+  const [formCheckOut, setFormCheckOut] = useState<FormCheckOutSchema>({
+    metodePembayaran: '',
+  });
+  const handleCheckout = () => {
+    return checkout.mutate(formCheckOut);
+  };
+
+  useEffect(() => {
+    setFormCheckOut((prev) => ({
+      ...prev,
+      metodePembayaran: isSelect || '',
+    }));
+  }, [isSelect]);
 
   return (
     <Sheet>
@@ -96,13 +102,13 @@ const Chart: React.FC = () => {
             </View>
             <View className="flex justify-between">
               <Text className="font-semibold">Estimasi Waktu:</Text>
-              {/* <Text className="font-bold">{estimasiWaktu}</Text> */}
+              <Text className="font-bold">{totalWaktu} Menit</Text>
             </View>
             <View className="flex justify-between mt-2">
               <Text className="font-semibold text-lg">Total Pembayaran:</Text>
-              {/* <Text className="font-bold text-lg text-primary">
-          Rp {totalPembayaran.toLocaleString('id-ID')}
-        </Text> */}
+              <Text className="font-bold text-lg text-primary">
+                Rp {totalHarga.toLocaleString('id-ID')}
+              </Text>
             </View>
 
             <Button
@@ -127,13 +133,51 @@ const Chart: React.FC = () => {
           </View>
           <Spreed orientation="horizontal" className="my-4" />
           <View className="w-full p-2">
-            <Text className="font-semibold">Ringkasa Pesanan :</Text>
+            <View className="my-2 bg-[var(--shapeV2-parent)] p-2 rounded-sm">
+              <Text className="font-semibold">Ringkasa Pesanan :</Text>
+              <View className="flex justify-between items-center">
+                <View className="flex-col flex gap-1">
+                  {data.map((items, key) => (
+                    <Text className="text-sm" key={key}>
+                      {items.layanan.namaLayanan}
+                    </Text>
+                  ))}
+                </View>
+                <View className="flex flex-col gap-1">
+                  {data.map((items, key) => (
+                    <Text className="text-sm" key={key}>
+                      Rp.{items.layanan.harga.toLocaleString('id-Id')}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+              <Spreed orientation="horizontal" className="my-1" />
+
+              <View className="flex justify-between">
+                <Text>SubTotal:</Text>
+                <Text>{totalHarga.toLocaleString('id-Id')}</Text>
+              </View>
+              <Spreed orientation="horizontal" className="my-1" />
+            </View>
+
             <View className="flex justify-between items-center">
-              <Text className="text-sm">Data Perawatan :</Text>
-              <Text className="text-sm">Pricing</Text>
+              <Text className="text-lg font-semibold">Total :</Text>
+              <Text className="font-bold text-lg text-primary">
+                Rp {totalHarga.toLocaleString('id-ID')}
+              </Text>
+            </View>
+            <View className="p-2 bg-[var(--shapeV1-parent)] rounded-sm">
+              <View className="flex gap-2">
+                <Clock />
+                <Text>Estimasi Penyelesaian</Text>
+              </View>
+              <View className="flex justify-start items-start flex-col">
+                <Text>Semua layanan diperkirakan selesai pada saat kami memulai layanan</Text>
+                <Text>Total Durasi: {menitKeJam(totalWaktu)} </Text>
+              </View>
             </View>
           </View>
-          <Text className="font-semibold mt-4">Metode Pembayaran</Text>
+          <Text className="font-semibold mt-4">Metode Pembayaran :</Text>
           <View className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-2">
             <PaymentMethodCard
               icon={<Banknote />}
@@ -185,7 +229,7 @@ const Chart: React.FC = () => {
               onClick={() => setIsSelect('Kartu Kredit/Debit')}
             />
           </View>
-          <Text>Informasi Pemesanan</Text>
+          {/* <Text>Informasi Pemesanan</Text>
           <View className="flex flex-col gap-4 mt-4">
             <View>
               <View className="flex justify-start items-center gap-1 mb-2">
@@ -221,8 +265,12 @@ const Chart: React.FC = () => {
                 className="w-full p-2 border rounded-md"
               />
             </View>
-            <Button className="w-full">Bayar Sekarang</Button>
-          </View>
+           
+          </View> */}
+          <Spreed orientation="horizontal" className="my-4" />
+          <Button className="w-full" disabled={checkout.isPending} onClick={() => handleCheckout()}>
+            {checkout.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Bayar Sekarang'}
+          </Button>
         </PopUp>
       </SheetContent>
     </Sheet>

@@ -57,3 +57,17 @@ export function getDate(datetime: string): string {
   if (!datetime) return '';
   return datetime.split('T')[0];
 }
+
+export const menitKeJam = (menit: number): string => {
+  if (menit <= 0) return '0 jam';
+  const jam = Math.floor(menit / 60);
+  const sisaMenit = menit % 60;
+
+  if (jam > 0 && sisaMenit > 0) {
+    return `${jam} jam ${sisaMenit} menit`;
+  } else if (jam > 0) {
+    return `${jam} jam`;
+  } else {
+    return `${sisaMenit} menit`;
+  }
+};
