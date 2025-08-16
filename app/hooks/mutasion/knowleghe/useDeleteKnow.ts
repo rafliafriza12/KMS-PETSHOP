@@ -1,27 +1,31 @@
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import PesananApi from '@/app/service/pesanan/pesanan.service';
+import KnowLedgeApi from '@/app/service/knowledge/know.service';
 import { useAlert } from '../../alert/costum-alert';
-import { FormStatusPemesananaSchema } from '@/app/types/form';
-export const useEditPesanan = (id: string) => {
+import { useRouter } from 'next/navigation';
+
+export const useDeleteKnow = (id: string) => {
   const alert = useAlert();
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation<TResponse<any>, Error, any>({
-    mutationFn: (payload: FormStatusPemesananaSchema) => PesananApi.EditStatus(id, payload),
+    mutationFn: () => KnowLedgeApi.Delete(id),
     onSuccess: (res) => {
       alert.toast({
-        title: 'Berhasil',
-        message: 'Berhasil Edit Pesanana',
+        title: 'Berhasil ',
+        message: 'Behasil Delete',
         icon: 'success',
         onVoid: () => {
-          queryClient.invalidateQueries({ queryKey: ['pesanan'], exact: false });
+          queryClient.invalidateQueries({ queryKey: ['knowledge'] });
+          router.push('/admin/admin-panel');
         },
       });
     },
     onError: (err) => {
+      console.log(err);
       alert.toast({
-        title: 'Gagal',
-        message: 'Gagal Edit Pesanan',
+        title: 'Gagal ',
+        message: 'Gagal Delete',
         icon: 'error',
       });
     },

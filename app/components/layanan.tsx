@@ -330,7 +330,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             <Input
               inputMode="numeric"
               value={formBikinKnowledge.min_umur ?? ''}
-              placeholder="Contoh 1 Minggu"
+              placeholder="Contoh 1 Tahun"
               onChange={(e) =>
                 setFormBikinKnowledge((prev) => ({
                   ...prev,
@@ -352,7 +352,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             />
             <Label className="font-semibold">Minimal Berat :</Label>
             <Input
-              placeholder="Contoh 1 on"
+              placeholder="Contoh 1 kg"
               inputMode="numeric"
               value={formBikinKnowledge.min_berat ?? ''}
               onChange={(e) =>
@@ -611,7 +611,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               </View>
             </View>
 
-            <View className="space-y-2">
+            {/* <View className="space-y-2">
               <Label>Status</Label>
               <Select
                 value={formEditLayanan.status}
@@ -630,7 +630,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   <SelectItem value="Inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
-            </View>
+            </View> */}
 
             <View className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => handleOpenModal(null)}>

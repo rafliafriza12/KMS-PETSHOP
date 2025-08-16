@@ -33,9 +33,9 @@ import { KeranjangType } from '../types/components';
 import { menitKeJam } from '../utils/string.format';
 import { useCheckout } from '../hooks/mutasion/pesanan/useCheckout';
 import { FormCheckOutSchema, FormPembayaranShema } from '../types/form';
-import { any } from 'zod';
-import { Input } from './ui/input';
-import { usePembayaran } from '../hooks/mutasion/pembayaran/usePembayaran';
+import { useAppDispatch } from '../hooks/dispatch/dispatch';
+// import { usePembayaran } from '../hooks/mutasion/pembayaran/usePembayaran';
+import { setPesananId } from '../store/pesananSlice/pesananSlice';
 
 const Chart: React.FC = () => {
   const checkout = useCheckout({
@@ -44,6 +44,8 @@ const Chart: React.FC = () => {
     },
   });
   const [isModal, setIsModal] = useState<'pembayaran' | null>(null);
+  const dispatch = useAppDispatch();
+
   const [isSelect, setIsSelect] = useState<
     'Bayar di Tempat' | 'Transfer Bank' | 'GoPay' | 'OVO' | 'DANA' | 'Kartu Kredit/Debit'
   >('Bayar di Tempat');
@@ -70,10 +72,10 @@ const Chart: React.FC = () => {
     pesananId: '',
   });
 
-  const pay = usePembayaran();
-  const handlePay = () => {
-    return pay.mutate(formPembayaran);
-  };
+  // const pay = usePembayaran();
+  // const handlePay = () => {
+  //   return pay.mutate(formPembayaran);
+  // };
 
   useEffect(() => {
     setFormPembayaran((prev) => ({
@@ -267,33 +269,13 @@ const Chart: React.FC = () => {
               onClick={() => setIsSelect('Kartu Kredit/Debit')}
             />
           </View>
-          {/* Pembayaran */}
-          {/* <View className="flex flex-col gap-4 mt-4">
-            <View>
-              <View className="flex justify-start items-center gap-1 mb-2">
-                <CreditCard />
-                <Text className="font-semibold"> Masukan Jumlah : </Text>
-              </View>
-              <Input
-                placeholder="Masukkan nama lengkap"
-                type="number"
-                inputMode="decimal"
-                className="w-full p-2 border rounded-md"
-                onChange={(e) =>
-                  setFormPembayaran((prev) => ({
-                    ...prev,
-                    amount: e.target.value === '' ? null : Number(e.target.value),
-                  }))
-                }
-              />
-            </View>
-          </View> */}
+
           <Spreed orientation="horizontal" className="my-4" />
           <Button
             className="w-full"
             disabled={checkout.isPending}
             onClick={() => {
-              handlePay();
+              // handlePay();
               handleCheckout();
             }}
           >

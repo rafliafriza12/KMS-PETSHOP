@@ -11,6 +11,10 @@ class KnowLedgeApi {
     const res = await AxiosClient.get(`/api/knowledge/${id}`);
     return res.data;
   }
+  async Delete(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.delete(`/api/knowledge/${id}`);
+    return res.data;
+  }
 }
 
 export default new KnowLedgeApi();

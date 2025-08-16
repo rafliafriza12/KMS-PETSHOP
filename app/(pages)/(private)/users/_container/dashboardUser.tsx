@@ -42,6 +42,12 @@ const DashboardUserContainer = () => {
   const [selectId, setSelectId] = useState<string | null>(null);
   const [isModal, setIsModal] = useState<'edit' | null>(null);
 
+  const idPesanan = useAppSelector((state) => state.pesanan.pesananId);
+
+  // useEffect(() => {
+  //   console.log('IdPemesanan', idPesanan);
+  // }, [idPesanan]);
+
   const [formBikinKucing, setFormBikinKucing] = useState<FormBikinKucingSchema>({
     namaKucing: '',
     ras: '',

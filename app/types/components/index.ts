@@ -95,3 +95,13 @@ export interface KeranjangType {
   layanan: LayananAppType;
   totalHarga: number;
 }
+
+export interface Pesanan {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  metodePembayaran: string;
+  statusPembayaran: string;
+  totalHarga: number;
+  userId: string;
+}

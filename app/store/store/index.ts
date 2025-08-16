@@ -4,9 +4,11 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from '../AuthSlice/authSlice';
 import catReducer from '../CatSlice/catSlice';
+import pesananReducer from '../pesananSlice/pesananSlice';
 const rootReduser = combineReducers({
   auth: authReducer,
   cat: catReducer,
+  pesanan: pesananReducer,
 });
 
 const persistConfig = {
