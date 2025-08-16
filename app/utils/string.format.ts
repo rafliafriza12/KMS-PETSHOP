@@ -71,3 +71,9 @@ export const menitKeJam = (menit: number): string => {
     return `${sisaMenit} menit`;
   }
 };
+
+export function calculateDuration(startTime: string, estimasiJam: number) {
+  const startDate = new Date(startTime);
+  const selesai = new Date(startDate.getTime() + estimasiJam * 60 * 60 * 1000);
+  return selesai.toLocaleString();
+}

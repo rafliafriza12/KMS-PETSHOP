@@ -3,6 +3,8 @@ import View from './ui/view';
 import { Text } from './ui/Text';
 import Container from './ui/container';
 import { Cat } from 'lucide-react';
+import { useGetLayanan } from '../hooks/mutasion/layanan/useGetLayanan';
+import { LayananAppType } from '../types/components';
 
 export interface CatType {
   _id?: string;
@@ -38,6 +40,19 @@ const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendas
     ).length;
   };
 
+  const countDiskonAll = (diskon: number | 'all') => {
+    if (diskon === 'all') return countLayanan?.length;
+    return countLayanan.filter((item: any) => item.layanan.diskon.toLowerCase() === diskon).length;
+  };
+
+  const totalMenit = () => {
+    if (!countRekomendasi || countRekomendasi.length === 0) return 0;
+
+    return countRekomendasi.reduce((acc: number, item: any) => {
+      return acc + (item.layanan.durasiLayanan ?? 0);
+    }, 0);
+  };
+
   return (
     <Container className="w-full">
       <View className="flex justify-start items-center gap-2">
@@ -55,6 +70,7 @@ const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendas
       </View>
 
       <View className="grid grid-cols-2 grid-rows-2 lg:grid-cols-4 lg:grid-rows-1 mt-4 bg-[var(--shapeV2-parent)]/60 rounded-sm p-4 text-center">
+        {}
         <Container className="flex justify-center">
           <View className="flex justify-center items-center flex-col">
             <Text className="text-lg font-bold">{countTersediaByKategori()}</Text>
@@ -66,11 +82,11 @@ const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendas
           <Text>Sangat Direkomendasikan</Text>
         </View>
         <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-bold">1</Text>
+          <Text className="text-lg font-bold">{countDiskonAll('all')}</Text>
           <Text>Promo Tersedia</Text>
         </View>
         <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-semibold">990</Text>
+          <Text className="text-lg font-semibold">{totalMenit()}</Text>
           <Text>Total Menit</Text>
         </View>
       </View>

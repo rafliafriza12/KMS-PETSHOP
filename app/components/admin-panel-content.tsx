@@ -234,8 +234,8 @@ const AdminPanelContent = () => {
         <Button
           variant="ghost"
           onClick={() => setIsActive('overview')}
-          className={`flex gap-2 ${
-            isActive === 'overview' ? 'bg-primary text-white' : 'text-[var(--shapeV1-parent)]'
+          className={`flex gap-2 font-semibold ${
+            isActive === 'overview' ? 'bg-primary text-white' : 'text-foreground'
           }`}
         >
           <ChartLine />
@@ -245,8 +245,8 @@ const AdminPanelContent = () => {
         <Button
           variant="ghost"
           onClick={() => setIsActive('pengguna')}
-          className={`flex gap-2 ${
-            isActive === 'pengguna' ? 'bg-primary text-white' : 'text-[var(--shapeV1-parent)]'
+          className={`flex gap-2 font-semibold ${
+            isActive === 'pengguna' ? 'bg-primary text-white' : 'text-foreground'
           }`}
         >
           <User />
@@ -256,8 +256,8 @@ const AdminPanelContent = () => {
         <Button
           variant="ghost"
           onClick={() => setIsActive('layanan')}
-          className={`flex gap-2 ${
-            isActive === 'layanan' ? 'bg-primary text-white' : 'text-[var(--shapeV1-parent)]'
+          className={`flex gap-2 font-semibold ${
+            isActive === 'layanan' ? 'bg-primary text-white' : 'text-foreground'
           }`}
         >
           <Settings />
@@ -267,8 +267,8 @@ const AdminPanelContent = () => {
         <Button
           variant="ghost"
           onClick={() => setIsActive('knowledge')}
-          className={`flex gap-2 ${
-            isActive === 'knowledge' ? 'bg-primary text-white' : 'text-[var(--shapeV1-parent)]'
+          className={`flex gap-2 font-semibold ${
+            isActive === 'knowledge' ? 'bg-primary text-white' : 'text-foreground'
           }`}
         >
           <Database />
