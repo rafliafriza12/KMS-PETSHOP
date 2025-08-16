@@ -47,18 +47,31 @@ const PesananAktif = ({ data }: Props) => {
 
   const handleBaghe = (text: string) => {
     if (text === 'UNPAID') {
-      return <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Lunas</Label>;
+      return (
+        <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Belum Lunas</Label>
+      );
     }
   };
-  const baghe = (text: string) => {
-    if (text === 'PENDING') {
-      return <Label className="p-1 rounded-sm lg:p-2 bg-yellow-100 text-yellow-700">Pending</Label>;
-    } else if (text === 'PROSES') {
-      return <Label className="p-1 rounded-sm lg:p-2 bg-blue-100 text-blue-700">Proses</Label>;
-    } else if (text === 'SELESAI') {
-      return <Label className="p-1 rounded-sm lg:p-2 bg-green-100 text-green-700">Selesai</Label>;
-    }
+
+  // Fixed Nanti
+  const status = {
+    PENDING: {
+      bg: 'bg-[#EDE9FE]',
+      text: 'text-[#6D28D9]',
+      icon: <CircleCheckBig />,
+    },
   };
+  // const baghe = (text: string) => {
+  //   if (text === 'PENDING') {
+  //     return <Label className="p-1 rounded-sm lg:p-2  text-yellow-700">Pending</Label>;
+  //   } else if (text === 'PROSES') {
+  //     return <Label className="p-1 rounded-sm lg:p-2  text-blue-700">Proses</Label>;
+  //   } else if (text === 'SELESAI') {
+  //     return <Label className="p-1 rounded-sm lg:p-2  text-green-700">Selesai</Label>;
+  //   }
+  // };
+
+  const handleStatus = () => {};
 
   return (
     <View className="w-full p-2 rounded-lg mt-4 space-y-6">
@@ -88,7 +101,7 @@ const PesananAktif = ({ data }: Props) => {
                 <Text className="font-bold text-2xl">{layanan?.namaLayanan}</Text>
                 <View className="flex justify-center scale-70 lg:scale-100 items-center gap-3 rounded-lg bg-[#DBEAFE] p-2">
                   <CircleCheckBig className="text-[#2563EB]" />
-                  <Label className="text-[#2563EB]">{baghe(items.statusPesanan)}</Label>
+                  {/* <Label className="text-[#2563EB]">{baghe(items.statusPesanan)}</Label> */}
                 </View>
               </View>
               <Label className="font-bold text-sm lg:text-2xl">Rp. {layanan?.harga}</Label>

@@ -7,6 +7,10 @@ class KnowLedgeApi {
     const res = await AxiosClient.post(`/api/knowledge/${id}`, payload);
     return res.data;
   }
+  async Get(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.get(`/api/knowledge/${id}`);
+    return res.data;
+  }
 }
 
 export default new KnowLedgeApi();
