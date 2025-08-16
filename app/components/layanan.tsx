@@ -34,6 +34,7 @@ import { LayanananByRekomendasiType, LayananAppType } from '../types/components'
 import Fallback from './ui/fallback';
 import { RasKucing } from '../core/constants/ras';
 import { PenyakitKucing } from '../core/constants/penyakit';
+import Link from 'next/link';
 
 interface LayananComponentProps {
   data: LayanananByRekomendasiType | LayananAppType;
@@ -83,8 +84,13 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
   };
   const selectData = useAppSelector((state) => state.cat.selectedCat);
   const layanan = 'layanan' in data ? data.layanan : data;
+  const baseKnow = 'knowledge_id' in data ? data.knowledge_id : data._id;
   const score = 'score' in data ? data.score : undefined;
   const alert = useAlert();
+
+  useEffect(() => {
+    console.log('idKnow', baseKnow);
+  }, [baseKnow]);
 
   const kategori = {
     Grooming: {
@@ -256,13 +262,18 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             </View>
           )}
           {isSelect && role?.toLowerCase() === 'admin' && isActive === 'knowledge' && (
-            <View className="gap-2">
+            <View className="gap-2 flex flex-col">
               <Button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 onClick={() => handleOpenModal('Knowledge')}
               >
-                Tambah Knowlage
+                Tambah Knowledge
               </Button>
+              <Link href={`/admin/admin-panel/knowledge/${baseKnow}`}>
+                <View className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                  Detail Knowledge
+                </View>
+              </Link>
             </View>
           )}
         </View>

@@ -1,6 +1,14 @@
 'use client';
 
-import { Banknote, ChevronRight, Clock, CreditCard, ShoppingCart, Smartphone } from 'lucide-react';
+import {
+  Banknote,
+  ChevronRight,
+  Clock,
+  CreditCard,
+  ShoppingCart,
+  Smartphone,
+  User,
+} from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -24,7 +32,10 @@ import Fallback from './ui/fallback';
 import { KeranjangType } from '../types/components';
 import { menitKeJam } from '../utils/string.format';
 import { useCheckout } from '../hooks/mutasion/pesanan/useCheckout';
-import { FormCheckOutSchema } from '../types/form';
+import { FormCheckOutSchema, FormPembayaranShema } from '../types/form';
+import { any } from 'zod';
+import { Input } from './ui/input';
+import { usePembayaran } from '../hooks/mutasion/pembayaran/usePembayaran';
 
 const Chart: React.FC = () => {
   const checkout = useCheckout({
@@ -42,9 +53,36 @@ const Chart: React.FC = () => {
   const DeleteAll = useDeleteAll();
   const totalLayanan = data.length;
   const totalWaktu = data.reduce((sum: number, item: any) => sum + (item.estimasiWaktu || 0), 0);
+  const id = Chart.data?.data?._id;
   const [formCheckOut, setFormCheckOut] = useState<FormCheckOutSchema>({
     metodePembayaran: '',
   });
+
+  useEffect(() => {
+    if (id) {
+      console.log('id', id);
+    }
+  }, [id]);
+
+  const [formPembayaran, setFormPembayaran] = useState<FormPembayaranShema>({
+    amount: null,
+    metodePembayaran: '',
+    pesananId: '',
+  });
+
+  const pay = usePembayaran();
+  const handlePay = () => {
+    return pay.mutate(formPembayaran);
+  };
+
+  useEffect(() => {
+    setFormPembayaran((prev) => ({
+      ...prev,
+      metodePembayaran: isSelect || '',
+      pesananId: id || '',
+    }));
+  }, [isSelect, id]);
+
   const handleCheckout = () => {
     return checkout.mutate(formCheckOut);
   };
@@ -229,46 +267,36 @@ const Chart: React.FC = () => {
               onClick={() => setIsSelect('Kartu Kredit/Debit')}
             />
           </View>
-          {/* <Text>Informasi Pemesanan</Text>
-          <View className="flex flex-col gap-4 mt-4">
+          {/* Pembayaran */}
+          {/* <View className="flex flex-col gap-4 mt-4">
             <View>
               <View className="flex justify-start items-center gap-1 mb-2">
-                <User />
-                <Text className="font-semibold">Nama Lengkap :</Text>
-              </View>
-              <Input placeholder="Masukkan nama lengkap" className="w-full p-2 border rounded-md" />
-            </View>
-            <View>
-              <View className="flex justify-start items-center gap-1 mb-2">
-                <Phone />
-                <Text className="font-semibold">Nomor Telepon :</Text>
-              </View>
-              <Input placeholder="Contoh: 08123456789" className="w-full p-2 border rounded-md" />
-            </View>
-            <View>
-              <View className="flex justify-start items-center gap-1 mb-2">
-                <MapPinHouse />
-                <Text className="font-semibold">Alamat :</Text>
+                <CreditCard />
+                <Text className="font-semibold"> Masukan Jumlah : </Text>
               </View>
               <Input
-                placeholder="Alamat lengkap untuk pickup/delivery"
+                placeholder="Masukkan nama lengkap"
+                type="number"
+                inputMode="decimal"
                 className="w-full p-2 border rounded-md"
+                onChange={(e) =>
+                  setFormPembayaran((prev) => ({
+                    ...prev,
+                    amount: e.target.value === '' ? null : Number(e.target.value),
+                  }))
+                }
               />
             </View>
-            <View>
-              <View className="flex justify-start items-center gap-1 mb-2 ">
-                <NotebookTabs />
-                <Text className="font-semibold">Catatan Tambahan :</Text>
-              </View>
-              <Input
-                placeholder="Catatan khusus untuk layanan (opsional)"
-                className="w-full p-2 border rounded-md"
-              />
-            </View>
-           
           </View> */}
           <Spreed orientation="horizontal" className="my-4" />
-          <Button className="w-full" disabled={checkout.isPending} onClick={() => handleCheckout()}>
+          <Button
+            className="w-full"
+            disabled={checkout.isPending}
+            onClick={() => {
+              handlePay();
+              handleCheckout();
+            }}
+          >
             {checkout.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Bayar Sekarang'}
           </Button>
         </PopUp>

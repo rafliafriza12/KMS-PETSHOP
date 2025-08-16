@@ -1,4 +1,4 @@
-import z, { any, string } from 'zod';
+import z, { any, string, TypeOf } from 'zod';
 
 export const FormRegisterType = z.object({
   namaLengkap: z.string(),
@@ -64,6 +64,12 @@ export const FormStatusPemesanan = z.object({
   statusPesanan: z.string(),
 });
 
+export const FormPembayaran = z.object({
+  pesananId: z.string(),
+  metodePembayaran: z.string(),
+  amount: z.number().nullable(),
+});
+
 export type FormRegisterSchema = z.infer<typeof FormRegisterType>;
 export type FormLoginSchema = z.infer<typeof FormLoginType>;
 export type FormBikinKucingSchema = z.infer<typeof FormBikinKucing>;
@@ -73,3 +79,4 @@ export type FormBikinKnowledgeSchema = z.infer<typeof FormBikinKnowledge>;
 export type FormAddToChartSchema = z.infer<typeof FormAddToChart>;
 export type FormCheckOutSchema = z.infer<typeof FormCheckOut>;
 export type FormStatusPemesananaSchema = z.infer<typeof FormStatusPemesanan>;
+export type FormPembayaranShema = z.infer<typeof FormPembayaran>;

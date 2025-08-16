@@ -3,7 +3,6 @@ import Container from '@/app/components/ui/container';
 import View from '@/app/components/ui/view';
 import { Text } from '@/app/components/ui/Text';
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
 import { useGetProfileById } from '@/app/hooks/mutasion/auth/useGetProfileById';
 import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
 
