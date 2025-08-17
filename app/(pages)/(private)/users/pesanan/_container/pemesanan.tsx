@@ -35,12 +35,10 @@ const PesananContainer = () => {
     if (!data || data.length === 0) return [];
 
     if (isActive === 'Aktif') {
-      // filter semua pesanan yang BELUM selesai
       return data.filter((pesanan) =>
         pesanan.items.some((item) => item.statusPesanan !== 'SELESAI')
       );
     } else {
-      // filter semua pesanan yang SUDAH selesai
       return data.filter((pesanan) =>
         pesanan.items.every((item) => item.statusPesanan === 'SELESAI')
       );

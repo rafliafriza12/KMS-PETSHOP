@@ -134,7 +134,9 @@ const PesananAktif = ({ data }: Props) => {
               setIdPesananKecil(items._id);
             }}
             key={index}
-            className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] `}
+            className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] ${
+              idPesananKecil ? 'border-red-500' : 'border'
+            }`}
           >
             {['PENDING', 'PROSES'].includes(items.statusPesanan) ? (
               <>
