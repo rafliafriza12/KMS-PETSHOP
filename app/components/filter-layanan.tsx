@@ -33,25 +33,29 @@ const FilterLayanan: React.FC<FilterLayananProps> = ({ onChange, count }) => {
   };
 
   return (
-    <View className="space-y-2 w-full">
-      <Label className="font-semibold text-lg">Filter Layanan :</Label>
-      <View className="flex flex-wrap gap-2 mt-2">
+    <View className="space-y-4 w-full p-4 card-glass rounded-xl shadow-enhanced">
+      <Label className="font-bold text-xl text-gradient-primary">Filter Layanan :</Label>
+      <View className="flex flex-wrap gap-3 mt-2 ">
         {filterData.map((item) => (
           <button
             key={item.id}
             onClick={() => handleClick(item.id)}
-            className={`flex items-center gap-2 px-6 py-4 rounded-lg transition 
+            className={`flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 hover-lift hover:scale-105 shadow-enhanced backdrop-blur-enhanced
+            ${
+              active === item.id
+                ? 'gradient-primary/20 text-[var(--shapeV1-parent)]'
+                : 'bg-[var(--shapeV2-parent)]/50 text-foreground hover:bg-[var(--shapeV1-parent)]/80'
+            }`}
+          >
+            <View className="">{item.icon}</View>
+            <Label className="font-semibold">{item.label}</Label>
+            <Label
+              className={`px-3 py-1 text-xs rounded-full card-glass animate-glow
               ${
                 active === item.id
-                  ? 'bg-[var(--shapeV1-child)] text-foreground'
-                  : 'bg-[var(--shapeV2-parent)] text-foreground hover:bg-[var(--shapeV1-parent)]'
+                  ? 'bg-[var(--shapeV1-parent)]/80 text-foreground'
+                  : 'text-foreground'
               }`}
-          >
-            {item.icon}
-            <Label>{item.label}</Label>
-            <Label
-              className={`px-2 py-0.5 text-xs rounded-full 
-                ${active === item.id ? 'bg-[var(--shapeV1-parent)]' : 'text-foreground'}`}
             >
               {countByKategori(item.id)}
             </Label>

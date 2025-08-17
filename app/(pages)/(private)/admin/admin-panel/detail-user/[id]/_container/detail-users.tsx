@@ -21,6 +21,7 @@ import {
 import { useState } from 'react';
 import Spreed from '@/app/core/components/spreed';
 import { Label } from '@radix-ui/react-label';
+import React from 'react';
 
 const DetailUsersContainer = () => {
   const params = useParams();
@@ -40,10 +41,10 @@ const DetailUsersContainer = () => {
       <HomeAdminLayout>
         <Container as="main" className="w-full h-full">
           <View className="flex justify-center items-center min-h-screen">
-            <div className="flex flex-col items-center gap-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <View className="flex flex-col items-center gap-4">
+              <View className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></View>
               <Text className="text-gray-600">Memuat data user...</Text>
-            </div>
+            </View>
           </View>
         </Container>
       </HomeAdminLayout>
@@ -101,124 +102,110 @@ const DetailUsersContainer = () => {
     },
   ];
 
-  const formatDisplayValue = (value: string, type: string) => {
-    if (!value) return 'N/A';
-
-    if (type === 'id' && value.length > 12) {
-      return `${value.slice(0, 8)}...${value.slice(-4)}`;
-    }
-
-    if (value.length > 25) {
-      return value.slice(0, 25) + '...';
-    }
-
-    return value;
-  };
-
   return (
     <HomeAdminLayout>
       <Container as="main" className="w-full min-h-screen">
-        <View className="max-w-7xl mx-auto px-4 py-8 ">
-          <div className="text-center mb-10">
+        <View className="max-w-7xl mx-auto px-4 py-8">
+          <View className="text-center mb-10">
             <View className="flex justify-center items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-600 rounded-full shadow-lg">
-                <BookUser size={28} className="text-white" />
-              </div>
-              <Text className="text-3xl font-bold ">Detail Pengguna</Text>
+              <View className="p-3 gradient-primary rounded-full shadow-enhanced animate-glow">
+                <BookUser size={28} className="text-primary-foreground " />
+              </View>
+              <Text className="text-3xl font-bold text-gradient-primary">Detail Pengguna</Text>
             </View>
-            <Text className="">Informasi lengkap profil pengguna sistem</Text>
-          </div>
+            <Text className="text-foreground">Informasi lengkap profil pengguna sistem</Text>
+          </View>
 
-          <div className="bg-[var(--shapeV2-parent)] rounded-2xl shadow-2xl border  overflow-hidden mb-8">
-            <div className="bg-gradient-to-r from-[var(--shapeV1-parent)]  to-[var(--shapeV1-children)]  p-8">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                    <UserCheck size={32} />
-                  </div>
-                  <div className="flex flex-col ">
-                    <Text className="text-2xl font-bold">
+          <View className="card-glass rounded-2xl shadow-enhanced border-gray-200/50 animate-glow overflow-hidden mb-8">
+            <View className="gradient-primary p-8">
+              <View className="flex items-center justify-between">
+                <View className="flex items-center gap-4">
+                  <View className="w-16 h-16 gradient-primary/20 rounded-full flex items-center justify-center backdrop-blur-enhanced">
+                    <UserCheck size={32} className="text-primary " />
+                  </View>
+                  <View className="flex flex-col">
+                    <Text className="text-2xl font-bold text-primary-foreground">
                       {baseData.namaLengkap || 'Nama tidak tersedia'}
                     </Text>
-                    <Label className="text-blue-100 mt-1">{baseData.email}</Label>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <Label
-                    className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold border-2  bg-white/90`}
-                  >
-                    <Shield size={16} className="mr-2" />
+                    <Label className="text-primary-foreground mt-1">{baseData.email}</Label>
+                  </View>
+                </View>
+                <View className="text-right">
+                  <Text className="inline-flex items-center px-4 py-2 gradient-primary/20  rounded-full text-sm font-semibold border-2 border-primary/50 animate-glow hover:scale-105 transition-all duration-300">
+                    <Shield size={16} className="mr-2  " />
                     {baseData.role?.toUpperCase() || 'USER'}
-                  </Label>
-                </div>
-              </div>
-            </div>
+                  </Text>
+                </View>
+              </View>
+            </View>
 
-            <div className="p-8">
+            <View className="p-8">
               <View className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {userFields.map((field, index) => (
-                  <div
+                  <View
                     key={field.label}
-                    className="group relative   rounded-xl border border-[var(--shapeV1-parent)] p-6 hover:[var(--shapeV1-child)] hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                    className="group relative card-glass rounded-xl border-gray-200/50 p-6 hover:gradient-primary/10 backdrop-blur-enhanced hover-lift hover:scale-105 transition-all duration-300 animate-glow"
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-[var(--shapeV2-parent)] rounded-lg group-hover:bg-blue-50 transition-colors">
-                          {field.icon}
-                        </div>
-                        <Text className="font-semibold  text-sm">{field.label}</Text>
-                      </div>
+                    <View className="flex items-center justify-between mb-3">
+                      <View className="flex items-center gap-3">
+                        <View className="p-2 gradient-primary/20 rounded-lg group-hover:gradient-primary/30 transition-colors">
+                          {React.cloneElement(field.icon, {
+                            className: 'text-primary w-5 h-5 ',
+                          })}
+                        </View>
+                        <Text className="font-semibold text-sm text-foreground">{field.label}</Text>
+                      </View>
 
                       {field.copyable && field.fullValue && (
                         <button
                           onClick={() => handleCopy(field.fullValue, field.label)}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                          className="p-2 hover:bg-[var(--shapeV2-parent)]/50 rounded-lg transition-colors opacity-0 group-hover:opacity-100 animate-glow"
                           title="Salin ke clipboard"
                         >
                           {copiedField === field.label ? (
-                            <Check size={16} className="text-green-600" />
+                            <Check size={16} className="text-success " />
                           ) : (
-                            <Copy size={16} className="text-gray-500" />
+                            <Copy size={16} className="text-foreground " />
                           )}
                         </button>
                       )}
-                    </div>
+                    </View>
 
-                    <div className="space-y-2">
+                    <View className="space-y-2 flex flex-col">
                       {field.type === 'role' ? (
-                        <Label
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border `}
-                        >
+                        <Label className="inline-flex items-center px-3 py-1 gradient-primary/20 text-primary rounded-full text-sm font-medium border-2 border-primary/50 animate-glow hover:scale-105 transition-all duration-300">
                           {field.value?.toUpperCase() || 'N/A'}
                         </Label>
-                      ) : null}
+                      ) : (
+                        <Text className="text-foreground">{field.value || 'N/A'}</Text>
+                      )}
 
                       {field.copyable && copiedField === field.label && (
-                        <Text className="text-green-600 text-xs">Berhasil disalin!</Text>
+                        <Text className="text-success text-xs">Berhasil disalin!</Text>
                       )}
-                    </div>
+                    </View>
 
-                    <div className="absolute top-2 right-2 w-2 h-2 bg-blue-200 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  </div>
+                    <View className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity animate-pulse"></View>
+                  </View>
                 ))}
               </View>
-            </div>
+            </View>
 
-            <Spreed orientation="horizontal" />
-            <div className="bg-[var(--shapeV2-parent)] px-8 py-4">
-              <div className="flex items-center justify-between text-sm text-foreground">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <Spreed orientation="horizontal" className="border-gray-200/50 animate-glow" />
+            <View className="gradient-primary/10 px-8 py-4 backdrop-blur-enhanced">
+              <View className="flex items-center justify-between text-sm text-foreground">
+                <View className="flex items-center gap-2">
+                  <View className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></View>
                   <Label>Status: Aktif</Label>
-                </div>
-                <div className="flex items-center gap-4">
+                </View>
+                <View className="flex items-center gap-4">
                   <Label>ID: {baseData._id?.slice(-8)}</Label>
-                  <Label>•</Label>
+                  <Label className="text-foreground/50">•</Label>
                   <Label>Role: {baseData.role}</Label>
-                </div>
-              </div>
-            </div>
-          </div>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
       </Container>
     </HomeAdminLayout>

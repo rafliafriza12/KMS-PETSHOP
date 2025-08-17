@@ -3,7 +3,22 @@ import View from './ui/view';
 import { Text } from './ui/Text';
 import Container from './ui/container';
 import { Button } from './ui/button';
-import { ChartLine, Database, Eye, EyeOff, Mail, Settings, User, Lock } from 'lucide-react';
+import {
+  ChartLine,
+  Database,
+  Eye,
+  EyeOff,
+  Mail,
+  Settings,
+  User,
+  Lock,
+  Plus,
+  Trash2,
+  Edit3,
+  Save,
+  X,
+  UserPlus,
+} from 'lucide-react';
 import { useGetUsers } from '../hooks/mutasion/admin-panel/useGetUser';
 import Spreed from '../core/components/spreed';
 import { useOverview } from '../hooks/mutasion/admin-panel/useOverview';
@@ -32,6 +47,16 @@ import { FormRegisterSchema } from '../types/form';
 import { useRegister } from '../hooks/mutasion/auth/useRegister';
 import { useCreateKnow } from '../hooks/mutasion/knowleghe/useCreateKnow';
 import { normalizeToLowercase } from '../utils/string.format';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
 const AdminPanelContent = () => {
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
@@ -49,6 +74,26 @@ const AdminPanelContent = () => {
   const [selectId, setSelectId] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+  const barAnimationPlugin = {
+    id: 'barAnimation',
+    beforeDatasetDraw(chart: any) {
+      const { ctx, data } = chart;
+      ctx.save();
+      data.datasets.forEach((dataset: any, i: any) => {
+        const meta = chart.getDatasetMeta(i);
+        meta.data.forEach((bar: any, index: any) => {
+          const gradient = ctx.createLinearGradient(0, bar.y, 0, bar.y - bar.height);
+          gradient.addColorStop(0, 'rgba(69, 59, 207, 0.5)'); // primary: #453BCF
+          gradient.addColorStop(1, 'rgba(99, 102, 241, 0.8)'); // primary-dark: #6366F1
+          dataset.backgroundColor = gradient;
+        });
+      });
+      ctx.restore();
+    },
+  };
+
+  ChartJS.register(barAnimationPlugin);
 
   const [formBikinKnowledge, setFormBikinKnowledge] = useState<FormBikinKnowledgeSchema>({
     kondisi: [],
@@ -229,7 +274,7 @@ const AdminPanelContent = () => {
   };
 
   return (
-    <Container as="section" className="bg-[var(--shapeV2-child)] p-4 rounded-lg ">
+    <Container as="section" className="p-4 rounded-lg ">
       <View className="flex flex-col sm:flex-row justify-start items-center gap-4">
         <Button
           variant="ghost"
@@ -276,38 +321,123 @@ const AdminPanelContent = () => {
         </Button>
       </View>
       <Spreed orientation="horizontal" className="my-2" />
-
       <View className="mt-4">
         {isActive === 'overview' && (
-          <View className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <View className="p-4 bg-[var(--shapeV2-parent)] rounded-lg shadow flex justify-start items-start gap-2 flex-col">
-              <Text>Total Pengguna :</Text>
-              <Text className="text-xl font-bold">{Over.data?.data.total_users ?? 0}</Text>
-            </View>
+          <>
+            <View className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8 bg-gradient-primary/10 card-glass rounded-xl">
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Total Pengguna :
+                </Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_users ?? 0}
+                </Text>
+              </View>
 
-            <View className="p-4 bg-[var(--shapeV2-parent)] rounded-lg shadow flex justify-start items-start gap-2 flex-col">
-              <Text>Profil Kucing :</Text>
-              <Text className="text-xl font-bold">{Over.data?.data.total_kucing ?? 0}</Text>
-            </View>
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">Profil Kucing :</Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_kucing ?? 0}
+                </Text>
+              </View>
 
-            <View className="p-4 bg-[var(--shapeV2-parent)] rounded-lg shadow flex justify-start items-start gap-2 flex-col">
-              <Text>Rekomendasi Dibuat :</Text>
-              <Text className="text-xl font-bold">{Over.data?.data.total_layanan ?? 0}</Text>
-            </View>
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Rekomendasi Dibuat :
+                </Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_layanan ?? 0}
+                </Text>
+              </View>
 
-            <View className="p-4 bg-[var(--shapeV2-parent)] rounded-lg shadow flex justify-start items-start gap-2 flex-col">
-              <Text>Tingkat Kepuasan :</Text>
-              {/* <Text className="text-xl font-bold">94%</Text> */}
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Tingkat Kepuasan :
+                </Text>
+                <View className="w-full card-glass p-4 rounded-lg shadow-enhanced animate-glow">
+                  <Bar
+                    data={{
+                      labels: ['Kepuasan'],
+                      datasets: [
+                        {
+                          label: 'Tingkat Kepuasan',
+                          data: [94],
+                          backgroundColor: 'rgba(69, 59, 207, 0.5)',
+                          borderColor: '#453BCF',
+                          borderWidth: 2,
+                          borderRadius: 8,
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          max: 100,
+                          title: {
+                            display: true,
+                            text: 'Persentase (%)',
+                            color: '#1F2937', // text-foreground in light mode
+                            font: { size: 14, weight: 'bold' },
+                          },
+                          ticks: {
+                            color: '#1F2937',
+                            stepSize: 20,
+                          },
+                          grid: {
+                            color: 'rgba(31, 41, 55, 0.1)', // subtle grid lines
+                          },
+                        },
+                        x: {
+                          ticks: {
+                            color: '#1F2937',
+                            font: { size: 12 },
+                          },
+                          grid: {
+                            display: false,
+                          },
+                        },
+                      },
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(69, 59, 207, 0.8)',
+                          titleColor: '#FFFFFF',
+                          bodyColor: '#FFFFFF',
+                          callbacks: {
+                            label: (context) => `${context.parsed.y}%`,
+                          },
+                        },
+                      },
+                      animation: {
+                        duration: 1500,
+                        easing: 'easeOutBounce',
+                      },
+                    }}
+                    height={180}
+                  />
+                </View>
+              </View>
             </View>
-
-            <View className="col-span-2 p-4 bg-[var(--shapeV2-parent)] rounded-lg shadow">
-              <Text className="font-bold mb-2">Ras Kucing Populer</Text>
+            <View className="col-span-2 p-6 bg-gradient-primary/20 card-glass rounded-xl  mt-4 shadow-enhanced animate-glow">
+              <Text className="font-bold text-xl text-gradient-primary mb-4">
+                Ras Kucing Populer
+              </Text>
               {Over.data?.data.ras_kucing_Populer?.map((r: any) => (
-                <View key={r._id} className="flex items-center gap-2 mb-1">
-                  <Text className="w-32">{r._id}</Text>
-                  <div className="h-2 bg-gray-200 rounded flex-1">
+                <View
+                  key={r._id}
+                  className="flex items-center gap-4 mb-3 hover-lift hover:scale-105 transition-all duration-300"
+                >
+                  <Text className="w-32 text-foreground font-semibold text-gradient-primary">
+                    {r._id}
+                  </Text>
+                  <div className="h-4 bg-gray-200/30 rounded-full flex-1 card-glass animate-pulse shadow-enhanced">
                     <div
-                      className="h-2 bg-blue-500 rounded"
+                      className="h-4 gradient-primary rounded-full"
                       style={{
                         width: `${
                           (r.count /
@@ -319,60 +449,73 @@ const AdminPanelContent = () => {
                       }}
                     />
                   </div>
-                  <Text className="w-12 text-right">{r.count}</Text>
+                  <Text className="w-12 text-right text-gradient-primary font-semibold">
+                    {r.count}
+                  </Text>
                 </View>
               ))}
             </View>
-          </View>
+          </>
         )}
 
         {isActive === 'pengguna' && (
-          <View className="p-4 overflow-x-auto">
-            <View className="flex justify-between items-center">
-              <Text className="text-lg font-bold mb-4">Daftar Pengguna :</Text>
+          <View className="p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced overflow-x-auto">
+            <View className="flex justify-between items-center mb-6">
+              <Text className="text-xl font-bold text-gradient-primary">Daftar Pengguna :</Text>
               <Button
-                className="text-lg font-bold mb-4"
-                variant="ghost"
+                className="gradient-primary text-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300"
                 onClick={() => setIsModal('Tambah-Pengguna')}
               >
-                + Tambaha Pengguna
+                <Plus className="w-5 h-5 mr-2 " />
+                Tambah Pengguna
               </Button>
             </View>
 
-            <table className="min-w-full border rounded-lg mt-4">
-              <thead className="bg-[var(--shapeV2-parent)]">
+            <table className="min-w-full card-glass rounded-xl shadow-enhanced">
+              <thead className="bg-gradient-primary/20">
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium">Nama</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium">Email</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium">Role</th>
-                  <th className="px-4 py-2 text-center text-sm font-medium">Aksi</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gradient-neutral">
+                    Nama
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gradient-neutral">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gradient-neutral">
+                    Role
+                  </th>
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gradient-neutral">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {users.data?.data?.map((user: any) => (
                   <tr
                     key={user._id}
-                    className="border-t border-gray-200 hover:bg-[var(--shapeV1-parent)]"
+                    className="border-t border-gray-200/50 hover:bg-[var(--shapeV1-parent)]/80 hover:scale-[1.01] transition-all duration-300"
                   >
-                    <td className="px-4 py-2">{user.namaLengkap}</td>
-                    <td className="px-4 py-2">{user.email}</td>
-                    <td className="px-4 py-2">{user.role}</td>
-                    <td className="px-4 py-2 flex justify-center gap-2">
+                    <td className="px-6 py-4 text-foreground">{user.namaLengkap}</td>
+                    <td className="px-6 py-4 text-foreground">{user.email}</td>
+                    <td className="px-6 py-4 text-foreground">{user.role}</td>
+                    <td className="px-6 py-4 flex justify-center gap-3">
                       <Link href={`/admin/admin-panel/detail-user/${user._id}`}>
-                        <Button className="bg-blue-500 text-white px-3 py-1 rounded-sm">
+                        <Button className="gradient-info text-info-foreground px-4 py-2 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow">
+                          <Eye className="w-4 h-4 mr-2 " />
                           Detail
                         </Button>
                       </Link>
                       <Button
-                        className="bg-blue-500 text-white px-3 py-1 rounded-sm"
+                        className="gradient-destructive text-destructive-foreground px-4 py-2 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow"
                         onClick={() => handleOpenEditModal(user)}
                       >
+                        <Edit3 className="w-4 h-4 mr-2 " />
                         Edit
                       </Button>
                       <Button
-                        className="bg-red-500 text-white px-3 py-1 rounded-sm"
+                        className="gradient-destructive text-destructive-foreground px-4 py-2 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow"
                         onClick={() => handleDeleteUser(user._id)}
                       >
+                        <Trash2 className="w-4 h-4 mr-2 " />
                         Delete
                       </Button>
                     </td>
@@ -384,12 +527,16 @@ const AdminPanelContent = () => {
         )}
 
         <PopUp isOpen={isModal === 'EditProfile'} onClose={() => setIsModal(null)}>
-          <Container className="w-full h-full">
-            <View className=" space-y-4">
-              <Text className="text-xl font-bold text-center">Edit Profil</Text>
+          <Container className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced">
+            <View className="space-y-6">
+              <Text className="text-2xl font-bold text-center text-gradient-primary animate-pulse">
+                Edit Profil
+              </Text>
 
-              <View className="space-y-2">
-                <Label>Nama Lengkap :</Label>
+              <View className="space-y-3">
+                <Label className="text-base font-semibold text-gradient-neutral">
+                  Nama Lengkap :
+                </Label>
                 <Input
                   value={formEditProfile.namaLengkap}
                   onChange={(e) =>
@@ -399,11 +546,12 @@ const AdminPanelContent = () => {
                     }))
                   }
                   placeholder="Masukkan nama lengkap"
+                  className="card-glass rounded-lg p-3 h-full text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                 />
               </View>
 
-              <View className="space-y-2">
-                <Label>Email :</Label>
+              <View className="space-y-3">
+                <Label className="text-base font-semibold text-gradient-neutral">Email :</Label>
                 <Input
                   value={formEditProfile.email}
                   onChange={(e) =>
@@ -414,11 +562,14 @@ const AdminPanelContent = () => {
                   }
                   placeholder="Masukkan email"
                   type="email"
+                  className="card-glass rounded-lg p-3  h-full text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                 />
               </View>
 
-              <View className="space-y-2">
-                <Label>Password (Kosongkan jika tidak ingin mengubah) :</Label>
+              <View className="space-y-3">
+                <Label className="text-base font-semibold text-gradient-neutral">
+                  Password (Kosongkan jika tidak ingin mengubah) :
+                </Label>
                 <Input
                   value={formEditProfile.password}
                   onChange={(e) =>
@@ -429,12 +580,13 @@ const AdminPanelContent = () => {
                   }
                   placeholder="Masukkan password baru"
                   type="password"
+                  className="card-glass rounded-lg p-3 h-full text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                 />
               </View>
 
               {curentRole === 'ADMIN' && (
-                <View className="space-y-2">
-                  <Label>Role :</Label>
+                <View className="space-y-3">
+                  <Label className="text-base  font-semibold text-gradient-neutral">Role :</Label>
                   <Select
                     value={formEditProfile.role}
                     onValueChange={(value) =>
@@ -444,10 +596,10 @@ const AdminPanelContent = () => {
                       }))
                     }
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih role" />
+                    <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift   transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                      <SelectValue placeholder="Pilih role" className="h-full w-full" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                       <SelectItem value="ADMIN">Admin</SelectItem>
                       <SelectItem value="USER">User</SelectItem>
                     </SelectContent>
@@ -455,8 +607,13 @@ const AdminPanelContent = () => {
                 </View>
               )}
 
-              <View className="flex justify-end gap-2 pt-4">
-                <Button variant="outline" onClick={() => setIsModal(null)}>
+              <View className="flex justify-end gap-3 pt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsModal(null)}
+                  className="gradient-neutral text-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow border-gray-200/50"
+                >
+                  <X className="w-4 h-4 mr-2 " />
                   Batal
                 </Button>
                 <Button
@@ -468,8 +625,16 @@ const AdminPanelContent = () => {
                     }
                   }}
                   disabled={editUser.isPending}
+                  className="gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow"
                 >
-                  {editUser.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Simpan Perubahan'}
+                  {editUser.isPending ? (
+                    <Fallback title="Tunggu Sebentar" />
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2 " />
+                      Simpan Perubahan
+                    </>
+                  )}
                 </Button>
               </View>
             </View>
@@ -477,94 +642,117 @@ const AdminPanelContent = () => {
         </PopUp>
 
         <PopUp isOpen={isModal === 'Tambah-Pengguna'} onClose={() => setIsModal(null)}>
-          <View className="w-full h-full">
+          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced">
             <View className="flex justify-center items-center w-full">
-              <div className="w-full space-y-4">
-                <div className="space-y-1">
-                  <Label htmlFor="text">Nama :</Label>
+              <div className="w-full space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="text" className="text-base font-semibold text-gradient-neutral">
+                    Nama :
+                  </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
                     <Input
                       id="text"
-                      type="email"
+                      type="text"
                       placeholder="Nama Anda"
-                      className="pl-10"
+                      className="pl-12 pr-4 py-3 h-full card-glass rounded-lg text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                       onChange={(e) =>
-                        setFormTambahaPengguna((prev) => {
-                          const newObj = { ...prev, namaLengkap: e.target.value };
-                          return newObj;
-                        })
+                        setFormTambahaPengguna((prev) => ({
+                          ...prev,
+                          namaLengkap: e.target.value,
+                        }))
                       }
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <Label htmlFor="email">Email :</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-base font-semibold text-gradient-neutral">
+                    Email :
+                  </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
                     <Input
                       id="email"
                       type="email"
                       placeholder="Masukkan email Anda"
-                      className="pl-10"
+                      className="pl-12 pr-4 py-3 card-glass rounded-lg h-full text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                       onChange={(e) =>
-                        setFormTambahaPengguna((prev) => {
-                          const newObj = { ...prev, email: e.target.value };
-                          return newObj;
-                        })
+                        setFormTambahaPengguna((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
                       }
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <Label htmlFor="password">Password :</Label>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="password"
+                    className="text-base font-semibold text-gradient-neutral"
+                  >
+                    Password :
+                  </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
                     <Input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Masukkan password Anda"
-                      className="pl-10 pr-10"
+                      className="pl-12 pr-12 py-3 card-glass h-full rounded-lg text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
                       onChange={(e) =>
-                        setFormTambahaPengguna((prev) => {
-                          const newObj = { ...prev, password: e.target.value };
-                          return newObj;
-                        })
+                        setFormTambahaPengguna((prev) => ({
+                          ...prev,
+                          password: e.target.value,
+                        }))
                       }
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:scale-110 transition-all duration-300"
                     >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showPassword ? (
+                        <EyeOff size={20} className="" />
+                      ) : (
+                        <Eye size={20} className="" />
+                      )}
                     </button>
                   </div>
                 </div>
 
-                <Select
-                  onValueChange={(value) =>
-                    setFormTambahaPengguna((prev) => ({ ...prev, role: value }))
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pilih role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USER">User</SelectItem>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="space-y-2">
+                  <Label className="text-base font-semibold text-gradient-neutral">Role :</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      setFormTambahaPengguna((prev) => ({ ...prev, role: value }))
+                    }
+                  >
+                    <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                      <SelectValue placeholder="Pilih role" />
+                    </SelectTrigger>
+                    <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                      <SelectItem value="USER">User</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <Button
-                  className="w-full font-semibold"
+                  className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
                   size="lg"
                   onClick={() => handleTambahPengguna()}
                   disabled={tambahPengguna.isPending}
                 >
-                  {tambahPengguna.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Daftar'}
+                  {tambahPengguna.isPending ? (
+                    <Fallback title="Tunggu Sebentar" />
+                  ) : (
+                    <>
+                      <UserPlus className="w-5 h-5 mr-2 " />
+                      Daftar
+                    </>
+                  )}
                 </Button>
               </div>
             </View>
@@ -618,7 +806,11 @@ const AdminPanelContent = () => {
 
         {isActive === 'layanan' && (
           <View className="w-full h-full">
-            <Button variant="ghost" onClick={() => setIsModal('Tambah-Layanan')}>
+            <Button
+              variant="default"
+              className="gradient-primary"
+              onClick={() => setIsModal('Tambah-Layanan')}
+            >
               + Tambahah Layanan
             </Button>
             <Spreed orientation="horizontal" className="my-2" />
@@ -664,11 +856,11 @@ const AdminPanelContent = () => {
         )}
       </View>
       <PopUp isOpen={isModal === 'Tambah-Layanan'} onClose={() => setIsModal(null)}>
-        <View className="w-full p-6 space-y-4">
-          <Text className="text-xl font-bold">Tambah Layanan Baru</Text>
+        <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-6">
+          <Text className="text-2xl font-bold text-gradient-primary">Tambah Layanan Baru</Text>
 
           <View className="space-y-2">
-            <Label>Nama Layanan</Label>
+            <Label className="text-base font-semibold text-gradient-neutral">Nama Layanan</Label>
             <Input
               value={formBikinLayanan.namaLayanan}
               onChange={(e) =>
@@ -677,11 +869,13 @@ const AdminPanelContent = () => {
                   namaLayanan: e.target.value,
                 }))
               }
+              placeholder="Masukkan nama layanan"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
           </View>
 
           <View className="space-y-2">
-            <Label>Deskripsi</Label>
+            <Label className="text-base font-semibold text-gradient-neutral">Deskripsi</Label>
             <Textarea
               value={formBikinLayanan.deskripsi}
               onChange={(e) =>
@@ -690,19 +884,27 @@ const AdminPanelContent = () => {
                   deskripsi: e.target.value,
                 }))
               }
+              placeholder="Masukkan deskripsi layanan"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
           </View>
 
           <View className="space-y-2">
-            <Label>Benefit</Label>
+            <Label className="text-base font-semibold text-gradient-neutral">Benefit</Label>
             <View className="flex gap-2">
               <Input
                 value={currentBenefit}
                 onChange={(e) => setCurrentBenefit(e.target.value)}
                 placeholder="Tambah benefit"
                 onKeyDown={(e) => e.key === 'Enter' && handleAddBenefit()}
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
               />
-              <Button type="button" onClick={handleAddBenefit}>
+              <Button
+                type="button"
+                onClick={handleAddBenefit}
+                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
+              >
+                <Plus className="w-4 h-4 mr-2 " />
                 Tambah
               </Button>
             </View>
@@ -710,10 +912,13 @@ const AdminPanelContent = () => {
               {formBikinLayanan.benefit.map((item, index) => (
                 <View
                   key={index}
-                  className="bg-[var(--shapeV1-parent)] px-3 py-1 rounded-full flex items-center gap-2"
+                  className="gradient-primary/20 px-3 py-1 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
                 >
                   <Text>{item}</Text>
-                  <button onClick={() => handleRemoveBenefit(index)} className="text-red-500">
+                  <button
+                    onClick={() => handleRemoveBenefit(index)}
+                    className="text-destructive hover:text-destructive-dark hover:scale-110 transition-all duration-300"
+                  >
                     ×
                   </button>
                 </View>
@@ -721,9 +926,9 @@ const AdminPanelContent = () => {
             </View>
           </View>
 
-          <View className="grid grid-cols-2 gap-4">
+          <View className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <View className="space-y-2">
-              <Label>Harga</Label>
+              <Label className="text-base font-semibold text-gradient-neutral">Harga</Label>
               <Input
                 type="number"
                 value={formBikinLayanan.harga ?? ''}
@@ -733,11 +938,12 @@ const AdminPanelContent = () => {
                     harga: e.target.value === '' ? null : Number(e.target.value),
                   }))
                 }
+                placeholder="Masukkan harga layanan"
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
               />
             </View>
-
             <View className="space-y-2">
-              <Label>Diskon (%)</Label>
+              <Label className="text-base font-semibold text-gradient-neutral">Diskon (%)</Label>
               <Input
                 type="number"
                 value={formBikinLayanan.diskon ?? ''}
@@ -747,13 +953,17 @@ const AdminPanelContent = () => {
                     diskon: e.target.value === '' ? null : Number(e.target.value),
                   }))
                 }
+                placeholder="Masukkan diskon"
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
               />
             </View>
           </View>
 
-          <View className="grid grid-cols-2 gap-4">
+          <View className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <View className="space-y-2">
-              <Label>Durasi (menit)</Label>
+              <Label className="text-base font-semibold text-gradient-neutral">
+                Durasi (menit)
+              </Label>
               <Input
                 type="number"
                 value={formBikinLayanan.durasiLayanan ?? ''}
@@ -763,11 +973,12 @@ const AdminPanelContent = () => {
                     durasiLayanan: e.target.value === '' ? null : Number(e.target.value),
                   }))
                 }
+                placeholder="Masukkan durasi layanan"
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced"
               />
             </View>
-
             <View className="space-y-2">
-              <Label>Kategori</Label>
+              <Label className="text-base font-semibold text-gradient-neutral">Kategori</Label>
               <Select
                 value={formBikinLayanan.kategori}
                 onValueChange={(value) =>
@@ -777,10 +988,10 @@ const AdminPanelContent = () => {
                   }))
                 }
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Kategori" />
+                <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                  <SelectValue placeholder="Pilih kategori" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                   <SelectItem value="Grooming">Grooming</SelectItem>
                   <SelectItem value="Kesehatan">Kesehatan</SelectItem>
                   <SelectItem value="Penitipan">Penitipan</SelectItem>
@@ -790,11 +1001,22 @@ const AdminPanelContent = () => {
             </View>
           </View>
 
-          <View className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={() => setIsModal(null)}>
+          <View className="flex justify-end gap-3 pt-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsModal(null)}
+              className="gradient-neutral text-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow border-gray-200/50"
+            >
+              <X className="w-4 h-4 mr-2 " />
               Batal
             </Button>
-            <Button onClick={() => handleCreateLayanan()}>Simpan Layanan</Button>
+            <Button
+              onClick={() => handleCreateLayanan()}
+              className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
+            >
+              <Save className="w-4 h-4 mr-2 " />
+              Simpan Layanan
+            </Button>
           </View>
         </View>
       </PopUp>

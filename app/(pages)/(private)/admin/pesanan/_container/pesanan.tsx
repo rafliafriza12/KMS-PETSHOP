@@ -10,6 +10,7 @@ import { Button } from '@/app/components/ui/button';
 import PesananAktif from '@/app/components/pesanan-aktif';
 import { PesananAktifType } from '@/app/types/components';
 import { useGetPesananAll } from '@/app/hooks/mutasion/pesanan/useGetPesananAll';
+import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
 type SummaryResponse = {
   data: PesananAktifType[];
   summary: {
@@ -31,7 +32,7 @@ const PesananContainer = () => {
     : [];
 
   return (
-    <HomeUserLayout>
+    <HomeAdminLayout>
       <Container as="main" className="w-full h-full">
         <Spreed orientation="horizontal" />
         <View className="flex justify-start items-start p-2 flex-col mt-4">
@@ -40,43 +41,45 @@ const PesananContainer = () => {
             Kelola dan pantau status layanan perawatan kucing Anda
           </Text>
         </View>
-        <View className="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 p-2">
-          <View className="flex justify-center items-center w-full gap-2 border rounded-lg p-4 shadow-lg">
-            <View className="bg-[#DBEAFE] p-2 rounded-full">
-              <Clock2 size={40} className="text-[#2563EB]" />
+        <View className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4">
+          <View className="flex justify-center items-center w-full gap-3 card-glass rounded-xl p-6 shadow-enhanced hover-lift transition-all duration-300">
+            <View className="bg-primary/10 p-3 rounded-full backdrop-blur-enhanced animate-glow ">
+              <Clock2 size={48} className="text-primary " />
             </View>
             <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">{summary?.pending ?? 0}</Text>
-              <Text className="font-semibold">Pesanan Aktif</Text>
-            </View>
-          </View>
-          <View className="flex justify-center items-center w-full gap-2 border rounded-lg p-4 shadow-lg">
-            <View className="bg-[#F3E8FF] p-2 rounded-full">
-              <CircleAlert size={40} className="text-[#9333EA]" />
-            </View>
-            <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">{summary?.proses}</Text>
-              <Text className="font-semibold">Sedang Di Proses</Text>
-            </View>
-          </View>
-          <View className="flex justify-center items-center w-full gap-2 border rounded-lg p-4 shadow-lg">
-            <View className="bg-[#DCFCE7] p-2 rounded-full">
-              <CircleCheckBig size={40} className="text-[#2CAD5C]" />
-            </View>
-            <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">{summary?.selesai}</Text>
-              <Text className="font-semibold">Selesai</Text>
-            </View>
-          </View>
-          <View className="flex justify-center items-center w-full gap-2 border rounded-lg p-4 shadow-lg">
-            <View className="bg-[#E0E7FF] p-2 rounded-full">
-              <CreditCard size={40} className="text-[#4F46E5]" />
-            </View>
-            <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">
-                Rp.{summary?.total_transaksi.toLocaleString('id-Id')}
+              <Text className="font-bold text-xl text-gradient-primary">
+                {summary?.pending ?? 0}
               </Text>
-              <Text className="font-semibold">Total Transaksi</Text>
+              <Text className="font-semibold text-base text-foreground">Pesanan Aktif</Text>
+            </View>
+          </View>
+          <View className="flex justify-center items-center w-full gap-3 card-glass rounded-xl p-6 shadow-enhanced hover-lift transition-all duration-300">
+            <View className="bg-destructive/10 p-3 rounded-full backdrop-blur-enhanced animate-glow animate-float">
+              <CircleAlert size={48} className="text-destructive " />
+            </View>
+            <View className="flex justify-start items-start flex-col">
+              <Text className="font-bold text-xl text-gradient-primary">{summary?.proses}</Text>
+              <Text className="font-semibold text-base text-foreground">Sedang Di Proses</Text>
+            </View>
+          </View>
+          <View className="flex justify-center items-center w-full gap-3 card-glass rounded-xl p-6 shadow-enhanced hover-lift transition-all duration-300">
+            <View className="bg-success/10 p-3 rounded-full backdrop-blur-enhanced animate-glow animate-float">
+              <CircleCheckBig size={48} className="text-success " />
+            </View>
+            <View className="flex justify-start items-start flex-col">
+              <Text className="font-bold text-xl text-gradient-primary">{summary?.selesai}</Text>
+              <Text className="font-semibold text-base text-foreground">Selesai</Text>
+            </View>
+          </View>
+          <View className="flex justify-center items-center w-full gap-3 card-glass rounded-xl p-6 shadow-enhanced hover-lift transition-all duration-300">
+            <View className="bg-info/10 p-3 rounded-full backdrop-blur-enhanced animate-glow animate-float">
+              <CreditCard size={48} className="text-info " />
+            </View>
+            <View className="flex justify-start items-start flex-col">
+              <Text className="font-bold text-xl text-gradient-primary">
+                Rp.{summary?.total_transaksi.toLocaleString('id-ID')}
+              </Text>
+              <Text className="font-semibold text-base text-foreground">Total Transaksi</Text>
             </View>
           </View>
         </View>
@@ -129,7 +132,7 @@ const PesananContainer = () => {
           }
         </View>
       </Container>
-    </HomeUserLayout>
+    </HomeAdminLayout>
   );
 };
 
