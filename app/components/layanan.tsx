@@ -661,7 +661,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
           <Clock size={16} />
           <Label>{layanan.durasiLayanan} Menit</Label>
         </View>
-        <Label className="text-[var(--shapeV1-child)] font-bold text-lg">Rp{layanan.harga}</Label>
+        <Label className=" font-bold text-lg">Rp{layanan.harga.toLocaleString('id-ID')}</Label>
       </View>
 
       <View className="border border-[var(--shapeV2-parent)] bg-[#F0FDF4]/90 rounded-lg p-3 space-y-1">

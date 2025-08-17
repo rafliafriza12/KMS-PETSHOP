@@ -2,35 +2,53 @@
 import Container from '@/app/components/ui/container';
 import View from '@/app/components/ui/view';
 import { Text } from '@/app/components/ui/Text';
-import { PesananAktifType } from '@/app/types/components';
-
+import HomeUserLayout from '@/app/core/layout/home-user';
 import Spreed from '@/app/core/components/spreed';
 import { CircleAlert, CircleCheckBig, Clock, Clock2, CreditCard, History } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import PesananAktif from '@/app/components/pesanan-aktif';
-import HomeAdminLayout from '@/app/core/layout/home-admin-layout';
-import { useGetPesanan } from '@/app/hooks/mutasion/pesanan/useGetPesanan';
-import Riwayat from '@/app/components/riwayat';
 import { useGetPesananAll } from '@/app/hooks/mutasion/pesanan/useGetPesananAll';
+import { PesananAktifType } from '@/app/types/components';
+import Riwayat from '@/app/components/riwayat';
+type SummaryResponse = {
+  data: PesananAktifType[];
+  summary: {
+    proses: number;
+    pending: number;
+    selesai: number;
+    total_transaksi: number;
+  };
+};
 
 const PesananContainer = () => {
-  const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat' | null>('Aktif');
-  const DataPemesanan = useGetPesananAll();
+  const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat'>('Aktif');
+  const pesanan = useGetPesananAll() as unknown as { data?: SummaryResponse };
+  const summary = pesanan.data?.summary;
+  const data: PesananAktifType[] = Array.isArray(pesanan.data?.data)
+    ? pesanan.data?.data
+    : pesanan.data?.data
+    ? [pesanan.data?.data]
+    : [];
 
-  const res = DataPemesanan.data?.data ?? [];
+  const handleFilter = () => {
+    if (!data || data.length === 0) return [];
 
-  const allItems = res.flatMap((p: any) => p.items ?? []);
-
-  const summary = {
-    pending: allItems.filter((item: any) => item.statusPesanan === 'PENDING').length,
-    proses: allItems.filter((item: any) => item.statusPesanan === 'PROSES').length,
-    selesai: allItems.filter((item: any) => item.statusPesanan === 'SELESAI').length,
-    total_transaksi: res.reduce((acc: any, p: any) => acc + (p.totalHarga ?? 0), 0),
+    if (isActive === 'Aktif') {
+      // filter semua pesanan yang BELUM selesai
+      return data.filter((pesanan) =>
+        pesanan.items.some((item) => item.statusPesanan !== 'SELESAI')
+      );
+    } else {
+      // filter semua pesanan yang SUDAH selesai
+      return data.filter((pesanan) =>
+        pesanan.items.every((item) => item.statusPesanan === 'SELESAI')
+      );
+    }
   };
 
   return (
-    <HomeAdminLayout>
+    <HomeUserLayout>
       <Container as="main" className="w-full h-full">
         <Spreed orientation="horizontal" />
         <View className="flex justify-start items-start p-2 flex-col mt-4">
@@ -45,7 +63,7 @@ const PesananContainer = () => {
               <Clock2 size={40} className="text-[#2563EB]" />
             </View>
             <View className="flex justify-start items-start flex-col">
-              <Text className="font-bold">{summary?.pending}</Text>
+              <Text className="font-bold">{summary?.pending ?? 0}</Text>
               <Text className="font-semibold">Pesanan Aktif</Text>
             </View>
           </View>
@@ -79,8 +97,6 @@ const PesananContainer = () => {
             </View>
           </View>
         </View>
-
-        {/* komponen */}
         <View className="w-full p-4">
           <View className=" flex l justify-between lg:justify-start lg:items-center gap-2 mb-2">
             <Button
@@ -89,7 +105,9 @@ const PesananContainer = () => {
               className="flex justify-center items-center"
             >
               <Clock size={66} />
-              <Text className="font-bold">Pesanan Aktif {summary?.pending}</Text>
+              <Text className="font-bold">
+                Pesanan Aktif {(summary?.pending ?? 0) + (summary?.proses ?? 0)}
+              </Text>
             </Button>
             <Button
               variant="ghost"
@@ -104,7 +122,7 @@ const PesananContainer = () => {
 
           {isActive === 'Aktif' && (
             <View className="space-y-4">
-              {res.length === 0 ? (
+              {handleFilter().length === 0 ? (
                 <View className="flex flex-col justify-center items-center mt-6 bg-[var(--shapeV2-parent)] rounded-lg p-6 gap-4">
                   <Clock size={86} />
                   <View className="flex flex-col justify-center items-center gap-2 text-center">
@@ -116,7 +134,7 @@ const PesananContainer = () => {
                 </View>
               ) : (
                 <View className="w-full">
-                  {res.map((items: any, key: any) => (
+                  {handleFilter().map((items, key) => (
                     <div className="flex" key={key}>
                       <PesananAktif data={items} />
                     </div>
@@ -128,7 +146,7 @@ const PesananContainer = () => {
 
           {isActive === 'Riwayat' && (
             <View className="space-y-4">
-              {res.length === 0 ? (
+              {handleFilter().length === 0 ? (
                 <View>
                   <View className="flex justify-center items-center flex-col mt-4 bg-[var(--shapeV2-parent)] rounded-lg p-4">
                     <History size={86} />
@@ -142,7 +160,7 @@ const PesananContainer = () => {
                 </View>
               ) : (
                 <View className="w-full">
-                  {res.map((items: any, key: any) => (
+                  {handleFilter().map((items, key) => (
                     <div className="flex" key={key}>
                       <Riwayat data={items} />
                     </div>
@@ -153,7 +171,7 @@ const PesananContainer = () => {
           )}
         </View>
       </Container>
-    </HomeAdminLayout>
+    </HomeUserLayout>
   );
 };
 
