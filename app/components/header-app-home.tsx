@@ -14,7 +14,7 @@ import { NavbarAppData } from '../config/app-config';
 export default function HeaderAppHome() {
   const { isMobile } = useIsMobile();
   return (
-    <nav className="flex justify-between items-center w-full p-2 ">
+    <nav className="flex justify-between items-center w-full py-2 px-20 ">
       <View className="flex justify-center items-center gap-1">
         <Cat className="text-[var(--shapeV1-parent)]" />
         <Label className="text-2xl font-bold">KMS PETSHOP</Label>

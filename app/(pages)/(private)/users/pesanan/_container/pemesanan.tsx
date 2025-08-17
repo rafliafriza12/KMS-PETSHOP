@@ -22,7 +22,7 @@ type SummaryResponse = {
 };
 
 const PesananContainer = () => {
-  const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat' | null>('Aktif');
+  const [isActive, setIsActive] = useState<'Aktif' | 'Riwayat'>('Aktif');
   const pesanan = useGetPesanan() as unknown as { data?: SummaryResponse };
   const summary = pesanan.data?.summary;
   const data: PesananAktifType[] = Array.isArray(pesanan.data?.data)
@@ -30,22 +30,6 @@ const PesananContainer = () => {
     : pesanan.data?.data
     ? [pesanan.data?.data]
     : [];
-
-  const handleFilter = () => {
-    if (!data || data.length === 0) return [];
-
-    if (isActive === 'Aktif') {
-      // filter semua pesanan yang BELUM selesai
-      return data.filter((pesanan) =>
-        pesanan.items.some((item) => item.statusPesanan !== 'SELESAI')
-      );
-    } else {
-      // filter semua pesanan yang SUDAH selesai
-      return data.filter((pesanan) =>
-        pesanan.items.every((item) => item.statusPesanan === 'SELESAI')
-      );
-    }
-  };
 
   return (
     <HomeUserLayout>
@@ -81,9 +65,10 @@ const PesananContainer = () => {
           </View>
           <Spreed orientation="horizontal" />
 
-          {isActive === 'Aktif' && (
+          {
             <View className="space-y-4">
-              {handleFilter().length === 0 ? (
+              {(isActive === 'Aktif' && (summary?.pending ?? 0) + (summary?.proses ?? 0) === 0) ||
+              (isActive === 'Riwayat' && (summary?.selesai ?? 0) === 0) ? (
                 <View className="flex flex-col justify-center items-center mt-6 bg-[var(--shapeV2-parent)] rounded-lg p-6 gap-4">
                   <Clock size={86} />
                   <View className="flex flex-col justify-center items-center gap-2 text-center">
@@ -95,41 +80,15 @@ const PesananContainer = () => {
                 </View>
               ) : (
                 <View className="w-full">
-                  {handleFilter().map((items, key) => (
+                  {data.map((items, key) => (
                     <div className="flex" key={key}>
-                      <PesananAktif data={items} />
+                      <PesananAktif data={items} tabActive={isActive} />
                     </div>
                   ))}
                 </View>
               )}
             </View>
-          )}
-
-          {isActive === 'Riwayat' && (
-            <View className="space-y-4">
-              {handleFilter().length === 0 ? (
-                <View>
-                  <View className="flex justify-center items-center flex-col mt-4 bg-[var(--shapeV2-parent)] rounded-lg p-4">
-                    <History size={86} />
-                    <View className="flex justify-center items-center flex-col">
-                      <Text className="font-semibold">Tidak Ada Riwayat</Text>
-                      <Text className="font-light">
-                        Pesanan Anda Akan Muncul Di Sini Setelah Selesai
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              ) : (
-                <View className="w-full">
-                  {handleFilter().map((items, key) => (
-                    <div className="flex" key={key}>
-                      <Riwayat data={items} />
-                    </div>
-                  ))}
-                </View>
-              )}
-            </View>
-          )}
+          }
         </View>
       </Container>
     </HomeUserLayout>

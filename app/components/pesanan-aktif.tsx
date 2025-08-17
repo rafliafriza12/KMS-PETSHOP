@@ -19,8 +19,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useGetCatAll } from '../hooks/mutasion/cat/useGetCatAll';
 interface Props {
   data: PesananAktifType;
+  tabActive: 'Aktif' | 'Riwayat';
 }
-const PesananAktif = ({ data }: Props) => {
+const PesananAktif = ({ data, tabActive }: Props) => {
+  console.log('Pesanan Aktif Data:', data);
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
   const layananQuery = useGetLayanan();
   let catQuery;
@@ -128,7 +130,7 @@ const PesananAktif = ({ data }: Props) => {
           kucing = items.kucingId as KucingType;
         }
 
-        return (
+        return ['PENDING', 'PROSES'].includes(items.statusPesanan) && tabActive === 'Aktif' ? (
           <div
             onClick={() => {
               setIdPesananKecil(items._id);
@@ -136,115 +138,229 @@ const PesananAktif = ({ data }: Props) => {
             key={index}
             className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] `}
           >
-            {['PENDING', 'PROSES'].includes(items.statusPesanan) ? (
-              <>
-                <View className="flex justify-between items-center">
-                  <View className="flex justify-center items-center gap-6">
-                    <Text className="font-bold text-2xl">{layanan?.namaLayanan}</Text>
-                    {handleBagheStatus(items.statusPesanan)}
-                  </View>
-
-                  <Label className="font-bold text-sm lg:text-2xl">
-                    Rp. {layanan?.harga.toLocaleString('id-ID')}
-                  </Label>
+            <>
+              <View className="flex justify-between items-center">
+                <View className="flex justify-center items-center gap-6">
+                  <Text className="font-bold text-2xl">{layanan?.namaLayanan}</Text>
+                  {handleBagheStatus(items.statusPesanan)}
                 </View>
 
-                {curentRole === ''}
-                <View className="flex justify-between items-center">
-                  <Label className="font-light">Untuk Kucing : {kucing?.namaKucing} </Label>
-                  <Label className="font-bold text-lg ">{data.metodePembayaran}</Label>
+                <Label className="font-bold text-sm lg:text-2xl">
+                  Rp. {layanan?.harga.toLocaleString('id-ID')}
+                </Label>
+              </View>
+
+              {curentRole === ''}
+              <View className="flex justify-between items-center">
+                <Label className="font-light">Untuk Kucing : {kucing?.namaKucing} </Label>
+                <Label className="font-bold text-lg ">{data.metodePembayaran}</Label>
+              </View>
+
+              <Label className="font-light text-lg">ID Pesanan: {items._id}</Label>
+
+              <View className="grid grid-cols-2 gap-4 mt-4">
+                <View className="flex justify-start items-center gap-2">
+                  <Calendar />
+                  <Text className="text-sm lg:text-lg">Jadwal: {getDate(items.jadwal)}</Text>
+                </View>
+                <View className="flex justify-end items-center gap-2">
+                  <CreditCard />
+                  <Text className="text-sm lg:text-lg">
+                    Status Pembayaran: {handleBaghe(items.statusPembayaran)}
+                  </Text>
                 </View>
 
-                <Label className="font-light text-lg">ID Pesanan: {items._id}</Label>
-
-                <View className="grid grid-cols-2 gap-4 mt-4">
-                  <View className="flex justify-start items-center gap-2">
-                    <Calendar />
-                    <Text className="text-sm lg:text-lg">Jadwal: {getDate(items.jadwal)}</Text>
-                  </View>
-                  <View className="flex justify-end items-center gap-2">
-                    <CreditCard />
-                    <Text className="text-sm lg:text-lg">
-                      Status Pembayaran: {handleBaghe(items.statusPembayaran)}
-                    </Text>
-                  </View>
-
-                  <View className="flex gap-2 items-center">
-                    <Clock />
-                    <Text className="text-sm lg:text-lg">
-                      Estimasi Selesai: {getTime(items.jadwal)}
-                    </Text>
-                  </View>
-                  <View className="flex justify-end gap-2">
-                    <Text>Dipesan: {formatDate(items.createdAt)}</Text>
-                  </View>
+                <View className="flex gap-2 items-center">
+                  <Clock />
+                  <Text className="text-sm lg:text-lg">
+                    Estimasi Selesai: {getTime(items.jadwal)}
+                  </Text>
                 </View>
+                <View className="flex justify-end gap-2">
+                  <Text>Dipesan: {formatDate(items.createdAt)}</Text>
+                </View>
+              </View>
 
-                <Spreed orientation="horizontal" className="my-4" />
-                {curentRole === 'ADMIN' ? (
-                  <View className="flex lg:justify-start justify-between gap-3">
-                    {items.statusPembayaran === 'UNPAID' ? (
-                      <View className="flex justify-center items-center gap-2">
-                        {isSelect !== 'pay' ? (
-                          <Button onClick={() => setIsSelect('pay')}>Edit Status Pembayaran</Button>
-                        ) : (
-                          <>
-                            <Select
-                              onValueChange={(value) =>
-                                setFormPembayaran((prev) => ({
-                                  ...prev,
-                                  statusPembayaran: value,
-                                }))
-                              }
-                            >
-                              <SelectTrigger className="w-[180px] mt-2">
-                                <SelectValue placeholder="Pilih status" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="PAID">Lunas</SelectItem>
-                                <SelectItem value="UNPAID">Belum Lunas</SelectItem>
-                              </SelectContent>
-                            </Select>
+              <Spreed orientation="horizontal" className="my-4" />
+              {curentRole === 'ADMIN' ? (
+                <View className="flex lg:justify-start justify-between gap-3">
+                  {items.statusPembayaran === 'UNPAID' ? (
+                    <View className="flex justify-center items-center gap-2">
+                      {isSelect !== 'pay' ? (
+                        <Button onClick={() => setIsSelect('pay')}>Edit Status Pembayaran</Button>
+                      ) : (
+                        <>
+                          <Select
+                            onValueChange={(value) =>
+                              setFormPembayaran((prev) => ({
+                                ...prev,
+                                statusPembayaran: value,
+                              }))
+                            }
+                          >
+                            <SelectTrigger className="w-[180px] mt-2">
+                              <SelectValue placeholder="Pilih status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="PAID">Lunas</SelectItem>
+                              <SelectItem value="UNPAID">Belum Lunas</SelectItem>
+                            </SelectContent>
+                          </Select>
 
-                            <Button className="mt-2" onClick={() => handlePembayaran()}>
-                              Simpan
-                            </Button>
-                          </>
-                        )}
-                      </View>
-                    ) : (
-                      <>
-                        <Button
-                          variant="ghost"
-                          className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
-                          onClick={() => {
-                            setId(items._id);
+                          <Button className="mt-2" onClick={() => handlePembayaran()}>
+                            Simpan
+                          </Button>
+                        </>
+                      )}
+                    </View>
+                  ) : (
+                    <>
+                      <Button
+                        variant="ghost"
+                        className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
+                        onClick={() => {
+                          setId(items._id);
 
-                            EditStatus.mutate({ statusPesanan: 'PROSES' });
-                          }}
-                        >
-                          Mulai Proses
-                        </Button>
+                          EditStatus.mutate({ statusPesanan: 'PROSES' });
+                        }}
+                      >
+                        Mulai Proses
+                      </Button>
 
-                        <Button
-                          variant="ghost"
-                          className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
-                          onClick={() => {
-                            setId(items._id);
+                      <Button
+                        variant="ghost"
+                        className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
+                        onClick={() => {
+                          setId(items._id);
 
-                            EditStatus.mutate({ statusPesanan: 'SELESAI' });
-                          }}
-                        >
-                          Ditandai Selesai
-                        </Button>
-                      </>
-                    )}
-                  </View>
-                ) : null}
-              </>
-            ) : null}
+                          EditStatus.mutate({ statusPesanan: 'SELESAI' });
+                        }}
+                      >
+                        Ditandai Selesai
+                      </Button>
+                    </>
+                  )}
+                </View>
+              ) : null}
+            </>
           </div>
-        );
+        ) : !['PENDING', 'PROSES'].includes(items.statusPesanan) && tabActive === 'Riwayat' ? (
+          <div
+            onClick={() => {
+              setIdPesananKecil(items._id);
+            }}
+            key={index}
+            className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] ${
+              idPesananKecil ? 'border-red-500' : 'border'
+            }`}
+          >
+            <>
+              <View className="flex justify-between items-center">
+                <View className="flex justify-center items-center gap-6">
+                  <Text className="font-bold text-2xl">{layanan?.namaLayanan}</Text>
+                  {handleBagheStatus(items.statusPesanan)}
+                </View>
+
+                <Label className="font-bold text-sm lg:text-2xl">
+                  Rp. {layanan?.harga.toLocaleString('id-ID')}
+                </Label>
+              </View>
+
+              {curentRole === ''}
+              <View className="flex justify-between items-center">
+                <Label className="font-light">Untuk Kucing : {kucing?.namaKucing} </Label>
+                <Label className="font-bold text-lg ">{data.metodePembayaran}</Label>
+              </View>
+
+              <Label className="font-light text-lg">ID Pesanan: {items._id}</Label>
+
+              <View className="grid grid-cols-2 gap-4 mt-4">
+                <View className="flex justify-start items-center gap-2">
+                  <Calendar />
+                  <Text className="text-sm lg:text-lg">Jadwal: {getDate(items.jadwal)}</Text>
+                </View>
+                <View className="flex justify-end items-center gap-2">
+                  <CreditCard />
+                  <Text className="text-sm lg:text-lg">
+                    Status Pembayaran: {handleBaghe(items.statusPembayaran)}
+                  </Text>
+                </View>
+
+                <View className="flex gap-2 items-center">
+                  <Clock />
+                  <Text className="text-sm lg:text-lg">
+                    Estimasi Selesai: {getTime(items.jadwal)}
+                  </Text>
+                </View>
+                <View className="flex justify-end gap-2">
+                  <Text>Dipesan: {formatDate(items.createdAt)}</Text>
+                </View>
+              </View>
+
+              <Spreed orientation="horizontal" className="my-4" />
+              {curentRole === 'ADMIN' ? (
+                <View className="flex lg:justify-start justify-between gap-3">
+                  {items.statusPembayaran === 'UNPAID' ? (
+                    <View className="flex justify-center items-center gap-2">
+                      {isSelect !== 'pay' ? (
+                        <Button onClick={() => setIsSelect('pay')}>Edit Status Pembayaran</Button>
+                      ) : (
+                        <>
+                          <Select
+                            onValueChange={(value) =>
+                              setFormPembayaran((prev) => ({
+                                ...prev,
+                                statusPembayaran: value,
+                              }))
+                            }
+                          >
+                            <SelectTrigger className="w-[180px] mt-2">
+                              <SelectValue placeholder="Pilih status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="PAID">Lunas</SelectItem>
+                              <SelectItem value="UNPAID">Belum Lunas</SelectItem>
+                            </SelectContent>
+                          </Select>
+
+                          <Button className="mt-2" onClick={() => handlePembayaran()}>
+                            Simpan
+                          </Button>
+                        </>
+                      )}
+                    </View>
+                  ) : (
+                    <>
+                      <Button
+                        variant="ghost"
+                        className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
+                        onClick={() => {
+                          setId(items._id);
+
+                          EditStatus.mutate({ statusPesanan: 'PROSES' });
+                        }}
+                      >
+                        Mulai Proses
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
+                        onClick={() => {
+                          setId(items._id);
+
+                          EditStatus.mutate({ statusPesanan: 'SELESAI' });
+                        }}
+                      >
+                        Ditandai Selesai
+                      </Button>
+                    </>
+                  )}
+                </View>
+              ) : null}
+            </>
+          </div>
+        ) : null;
       })}
     </View>
   );

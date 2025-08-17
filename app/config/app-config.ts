@@ -4,11 +4,11 @@ import { Cat, Settings, ShoppingBag } from 'lucide-react';
 export const NavbarAppData: NavbarAppType[] = [
   {
     title: 'Home',
-    href: '',
+    href: '/',
   },
   {
     title: 'Layanan',
-    href: '',
+    href: '/login',
   },
 ];
 
