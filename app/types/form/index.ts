@@ -70,6 +70,10 @@ export const FormPembayaran = z.object({
   amount: z.number().nullable(),
 });
 
+export const FormStatusPembayaran = z.object({
+  statusPembayaran: z.string(),
+});
+
 export type FormRegisterSchema = z.infer<typeof FormRegisterType>;
 export type FormLoginSchema = z.infer<typeof FormLoginType>;
 export type FormBikinKucingSchema = z.infer<typeof FormBikinKucing>;
@@ -80,3 +84,4 @@ export type FormAddToChartSchema = z.infer<typeof FormAddToChart>;
 export type FormCheckOutSchema = z.infer<typeof FormCheckOut>;
 export type FormStatusPemesananaSchema = z.infer<typeof FormStatusPemesanan>;
 export type FormPembayaranShema = z.infer<typeof FormPembayaran>;
+export type FormStatusPembayaranSchema = z.infer<typeof FormStatusPembayaran>;

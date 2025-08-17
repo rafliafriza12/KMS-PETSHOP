@@ -61,10 +61,12 @@ const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendas
         </View>
         <View className="flex justify-center items-center flex-col">
           <Text className="text-2xl font-bold">Layanan Untuk: {data?.namaKucing}</Text>
-          <View className="flex justify-center items-center gap-1">
-            <Text className="text-lg">{data?.ras}</Text>
-            <Text className="text-lg">{data?.umur} Tahun</Text>
-            <Text className="text-lg">{data?.berat} Kg</Text>
+          <View className="flex justify-center items-center gap-2 text-lg text-gray-700">
+            <Text>{data?.ras}</Text>
+            <Text>•</Text>
+            <Text>{data?.umur} Tahun</Text>
+            <Text>•</Text>
+            <Text>{data?.berat} Kg</Text>
           </View>
         </View>
       </View>

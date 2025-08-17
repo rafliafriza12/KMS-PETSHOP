@@ -43,15 +43,15 @@ const FilterLayanan: React.FC<FilterLayananProps> = ({ onChange, count }) => {
             className={`flex items-center gap-2 px-6 py-4 rounded-lg transition 
               ${
                 active === item.id
-                  ? 'bg-[var(--shapeV1-child)] text-white'
-                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                  ? 'bg-[var(--shapeV1-child)] text-foreground'
+                  : 'bg-[var(--shapeV2-parent)] text-foreground hover:bg-[var(--shapeV1-parent)]'
               }`}
           >
             {item.icon}
             <Label>{item.label}</Label>
             <Label
               className={`px-2 py-0.5 text-xs rounded-full 
-                ${active === item.id ? 'bg-[var(--shapeV1-parent)]' : 'text-gray-800'}`}
+                ${active === item.id ? 'bg-[var(--shapeV1-parent)]' : 'text-foreground'}`}
             >
               {countByKategori(item.id)}
             </Label>

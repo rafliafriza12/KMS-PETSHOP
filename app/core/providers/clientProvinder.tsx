@@ -17,8 +17,8 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <ThemeProvider>
-          <MobileContex value={IsMobile}>
+        <MobileContex.Provider value={IsMobile}>
+          <ThemeProvider>
             <AlertProvinder>
               <ReactQueryClientProvinder>
                 {children}
@@ -31,8 +31,8 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
                 }}
               />
             </AlertProvinder>
-          </MobileContex>
-        </ThemeProvider>
+          </ThemeProvider>
+        </MobileContex.Provider>
       </PersistGate>
     </Provider>
   );

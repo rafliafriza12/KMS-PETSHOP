@@ -1,6 +1,10 @@
 import { TResponse } from '@/app/pkg/react-query/mutation-wrapper.type';
 import { Pesanan } from '@/app/types/components';
-import { FormCheckOutSchema, FormStatusPemesananaSchema } from '@/app/types/form';
+import {
+  FormCheckOutSchema,
+  FormStatusPembayaranSchema,
+  FormStatusPemesananaSchema,
+} from '@/app/types/form';
 import AxiosClient from '@/app/utils/axios.client';
 
 class PesananApi {
@@ -22,6 +26,10 @@ class PesananApi {
   }
   async GetPesananAll(): Promise<TResponse<any>> {
     const res = await AxiosClient.get('/api/pesanan/all');
+    return res.data;
+  }
+  async EditPembayaran(id: string, payload: FormStatusPembayaranSchema): Promise<TResponse<any>> {
+    const res = await AxiosClient.put(`/api/pesanan/statusPembayaran/${id}`, payload);
     return res.data;
   }
 }

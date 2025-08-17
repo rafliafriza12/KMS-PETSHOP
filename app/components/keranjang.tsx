@@ -33,7 +33,7 @@ const Keranjang: React.FC<KeranjangTypeProps> = ({ data }) => {
       </View>
       <View className="flex justify-between items-center mt-2">
         <Text>Duration: {data.layanan.durasiLayanan} Menit</Text>
-        <Text>Rp: {data.layanan.harga}</Text>
+        <Text>Rp: {data.layanan.harga.toLocaleString('id-ID')}</Text>
       </View>
     </Container>
   );

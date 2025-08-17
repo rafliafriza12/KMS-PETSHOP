@@ -26,9 +26,8 @@ export default function Users() {
         <DropdownMenuContent>
           <button
             onClick={() => {
-              router.push('/login');
-
               dispatch(logout());
+              router.push('/login');
             }}
             className="w-full"
           >

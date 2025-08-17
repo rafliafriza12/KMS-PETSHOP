@@ -9,31 +9,48 @@ import { KucingType, LayananAppType, PesananAktifType } from '../types/component
 import { useGetCat } from '../hooks/mutasion/cat/useGetCat';
 import { getTime } from '../utils/string.format';
 import { getDate } from '../utils/string.format';
-import Container from './ui/container';
 import { useEditPesanan } from '../hooks/mutasion/pesanan/useEdiStatus';
 import { useEffect, useState } from 'react';
-import { FormStatusPemesananaSchema } from '../types/form';
+import { FormStatusPembayaranSchema, FormStatusPemesananaSchema } from '../types/form';
 import { formatDate } from '../utils/string.format';
 import { useAppSelector } from '../hooks/dispatch/dispatch';
+import { useEditPembayaran } from '../hooks/mutasion/pesanan/useEditPembayaran';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useGetCatAll } from '../hooks/mutasion/cat/useGetCatAll';
 interface Props {
   data: PesananAktifType;
 }
 const PesananAktif = ({ data }: Props) => {
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
   const layananQuery = useGetLayanan();
-  const catQuery = useGetCat();
+  let catQuery;
+  if (curentRole === 'ADMIN') {
+    catQuery = useGetCatAll();
+  } else {
+    catQuery = useGetCat();
+  }
+
   // Ilmu
   const layananList: LayananAppType[] = layananQuery.data || [];
   // Ilmu
   const catAll = (catQuery.data?.data ?? []) as KucingType[];
-
+  const [isSelect, setIsSelect] = useState<'pay' | null>(null);
+  const [idPesananKecil, setIdPesananKecil] = useState<string | null>(null);
   const [select, setSetSelect] = useState<'PENDING' | 'PROSES' | 'SELESAI'>('PENDING');
   const [id, setId] = useState<string | null>(null);
   const EditStatus = useEditPesanan(id || '');
-
   const [formEdit, setFormEdit] = useState<FormStatusPemesananaSchema>({
     statusPesanan: '',
   });
+
+  const Pembayaran = useEditPembayaran(idPesananKecil!);
+  const [formEditPembayaran, setFormPembayaran] = useState<FormStatusPembayaranSchema>({
+    statusPembayaran: '',
+  });
+
+  const handlePembayaran = () => {
+    Pembayaran.mutate(formEditPembayaran);
+  };
 
   useEffect(() => {
     setFormEdit((prev) => ({
@@ -54,6 +71,8 @@ const PesananAktif = ({ data }: Props) => {
       return (
         <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Belum Lunas</Label>
       );
+    } else if (text === 'PAID') {
+      return <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Lunas</Label>;
     }
   };
 
@@ -110,9 +129,12 @@ const PesananAktif = ({ data }: Props) => {
         }
 
         return (
-          <Container
+          <div
+            onClick={() => {
+              setIdPesananKecil(items._id);
+            }}
             key={index}
-            className="space-y-4 p-4 rounded-lg shadow bg-[var(--shapeV2-parent)]"
+            className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] `}
           >
             {['PENDING', 'PROSES'].includes(items.statusPesanan) ? (
               <>
@@ -127,6 +149,7 @@ const PesananAktif = ({ data }: Props) => {
                   </Label>
                 </View>
 
+                {curentRole === ''}
                 <View className="flex justify-between items-center">
                   <Label className="font-light">Untuk Kucing : {kucing?.namaKucing} </Label>
                   <Label className="font-bold text-lg ">{data.metodePembayaran}</Label>
@@ -160,34 +183,67 @@ const PesananAktif = ({ data }: Props) => {
                 <Spreed orientation="horizontal" className="my-4" />
                 {curentRole === 'ADMIN' ? (
                   <View className="flex lg:justify-start justify-between gap-3">
-                    <Button
-                      variant="ghost"
-                      className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
-                      onClick={() => {
-                        setId(items._id);
+                    {items.statusPembayaran === 'UNPAID' ? (
+                      <View className="flex justify-center items-center gap-2">
+                        {isSelect !== 'pay' ? (
+                          <Button onClick={() => setIsSelect('pay')}>Edit Status Pembayaran</Button>
+                        ) : (
+                          <>
+                            <Select
+                              onValueChange={(value) =>
+                                setFormPembayaran((prev) => ({
+                                  ...prev,
+                                  statusPembayaran: value,
+                                }))
+                              }
+                            >
+                              <SelectTrigger className="w-[180px] mt-2">
+                                <SelectValue placeholder="Pilih status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="PAID">Lunas</SelectItem>
+                                <SelectItem value="UNPAID">Belum Lunas</SelectItem>
+                              </SelectContent>
+                            </Select>
 
-                        EditStatus.mutate({ statusPesanan: 'PROSES' });
-                      }}
-                    >
-                      Mulai Proses
-                    </Button>
+                            <Button className="mt-2" onClick={() => handlePembayaran()}>
+                              Simpan
+                            </Button>
+                          </>
+                        )}
+                      </View>
+                    ) : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
+                          onClick={() => {
+                            setId(items._id);
 
-                    <Button
-                      variant="ghost"
-                      className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
-                      onClick={() => {
-                        setId(items._id);
+                            EditStatus.mutate({ statusPesanan: 'PROSES' });
+                          }}
+                        >
+                          Mulai Proses
+                        </Button>
 
-                        EditStatus.mutate({ statusPesanan: 'SELESAI' });
-                      }}
-                    >
-                      Ditandai Selesai
-                    </Button>
+                        <Button
+                          variant="ghost"
+                          className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
+                          onClick={() => {
+                            setId(items._id);
+
+                            EditStatus.mutate({ statusPesanan: 'SELESAI' });
+                          }}
+                        >
+                          Ditandai Selesai
+                        </Button>
+                      </>
+                    )}
                   </View>
                 ) : null}
               </>
             ) : null}
-          </Container>
+          </div>
         );
       })}
     </View>
