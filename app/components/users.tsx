@@ -11,11 +11,13 @@ import { useGetProfile } from '../hooks/mutasion/auth/useGetProfile';
 import { logout } from '../store/AuthSlice/authSlice';
 import { useAppDispatch } from '../hooks/dispatch/dispatch';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Users() {
   const Profile = useGetProfile();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const queryClient = useQueryClient();
   return (
     <View>
       <DropdownMenu>
@@ -26,6 +28,7 @@ export default function Users() {
         <DropdownMenuContent>
           <button
             onClick={() => {
+              queryClient.removeQueries();
               dispatch(logout());
               router.push('/login');
             }}

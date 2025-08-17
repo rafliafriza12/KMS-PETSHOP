@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import AuthApi from '@/app/service/auth/auth.service';
 import { useRouter } from 'next/navigation';
 import { useAlert } from '../../alert/costum-alert';
@@ -14,6 +14,7 @@ export const useLogin = () => {
   const router = useRouter();
   const alert = useAlert();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation<TResponse<any>, Error, FormLoginSchema>({
     mutationFn: AuthApi.LoginUser,
@@ -32,7 +33,8 @@ export const useLogin = () => {
       };
 
       dispatch(setCurrentUser(userPayload));
-      console.log(valid);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      // console.log(valid);
       alert.toast({
         title: 'Berhasil',
         message: 'Berhasil Login',

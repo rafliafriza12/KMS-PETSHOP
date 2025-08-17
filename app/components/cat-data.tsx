@@ -54,43 +54,54 @@ const CatData: React.FC<CatDataProps & { countLayanan: any } & { countRekomendas
   };
 
   return (
-    <Container className="w-full">
-      <View className="flex justify-start items-center gap-2">
-        <View className="rounded-full bg-[var(--shapeV1-parent)] p-2 z-0">
-          <Cat className="w-5 h-5 z-1" />
+    <Container className="w-full p-6 card-glass rounded-xl shadow-enhanced">
+      <View className="flex justify-start items-center gap-4">
+        <View className=" rounded-full bg-primary/10 p-3 card-glass backdrop-blur-enhanced animate-glow">
+          <Cat className="w-6 h-6 text-primary " />
         </View>
         <View className="flex justify-center items-center flex-col">
-          <Text className="text-2xl font-bold">Layanan Untuk: {data?.namaKucing}</Text>
-          <View className="flex justify-center items-center gap-2 text-lg text-gray-700">
-            <Text>{data?.ras}</Text>
-            <Text>•</Text>
-            <Text>{data?.umur} Tahun</Text>
-            <Text>•</Text>
-            <Text>{data?.berat} Kg</Text>
+          <Text className="text-3xl font-bold text-gradient-primary">
+            Layanan Untuk: {data?.namaKucing}
+          </Text>
+          <View className="flex justify-center items-center gap-3 text-base text-muted-foreground mt-2">
+            <Text className="text-gradient-neutral">{data?.ras}</Text>
+            <Text className="text-foreground">•</Text>
+            <Text className="text-gradient-neutral">{data?.umur} Tahun</Text>
+            <Text className="text-foreground">•</Text>
+            <Text className="text-gradient-neutral">{data?.berat} Kg</Text>
           </View>
         </View>
       </View>
 
-      <View className="grid grid-cols-2 grid-rows-2 lg:grid-cols-4 lg:grid-rows-1 mt-4 bg-[var(--shapeV2-parent)]/60 rounded-sm p-4 text-center">
-        {}
-        <Container className="flex justify-center">
-          <View className="flex justify-center items-center flex-col">
-            <Text className="text-lg font-bold">{countTersediaByKategori()}</Text>
-            <Text>Layanan Tersedia</Text>
+      <View className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 bg-gradient-primary/20 card-glass rounded-xl p-6 shadow-enhanced">
+        <Container className="flex justify-center hover-lift transition-all duration-300">
+          <View className="flex justify-center items-center flex-col text-center">
+            <Text className="text-xl font-bold text-gradient-primary">
+              {countSangatDirekomendasikanByKategori()}
+            </Text>
+            <Text className="text-base font-semibold text-foreground">Sangat Direkomendasikan</Text>
           </View>
         </Container>
-        <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-semibold">{countSangatDirekomendasikanByKategori()}</Text>
-          <Text>Sangat Direkomendasikan</Text>
-        </View>
-        <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-bold">{countDiskonAll('all')}</Text>
-          <Text>Promo Tersedia</Text>
-        </View>
-        <View className="flex justify-center items-center flex-col">
-          <Text className="text-lg font-semibold">{totalMenit()}</Text>
-          <Text>Total Menit</Text>
-        </View>
+        <Container className="flex justify-center hover-lift transition-all duration-300">
+          <View className="flex justify-center items-center flex-col text-center">
+            <Text className="text-xl font-bold text-gradient-primary">
+              {countTersediaByKategori()}
+            </Text>
+            <Text className="text-base font-semibold text-foreground">Jumlah Layanan Tersedia</Text>
+          </View>
+        </Container>
+        <Container className="flex justify-center hover-lift transition-all duration-300">
+          <View className="flex justify-center items-center flex-col text-center">
+            <Text className="text-xl font-bold text-gradient-primary">{countDiskonAll('all')}</Text>
+            <Text className="text-base font-semibold text-foreground">Promo Tersedia</Text>
+          </View>
+        </Container>
+        <Container className="flex justify-center hover-lift transition-all duration-300">
+          <View className="flex justify-center items-center flex-col text-center">
+            <Text className="text-xl font-bold text-gradient-primary">{totalMenit()}</Text>
+            <Text className="text-base font-semibold text-foreground">Total Menit</Text>
+          </View>
+        </Container>
       </View>
     </Container>
   );

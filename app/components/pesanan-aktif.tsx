@@ -3,7 +3,17 @@ import { Text } from './ui/Text';
 import { Label } from '@radix-ui/react-label';
 import { Button } from './ui/button';
 import Spreed from '../core/components/spreed';
-import { Calendar, CircleCheckBig, Clock, CreditCard, Heart } from 'lucide-react';
+import {
+  Calendar,
+  CheckCircle,
+  CircleCheckBig,
+  Clock,
+  CreditCard,
+  Edit3,
+  Heart,
+  Play,
+  Save,
+} from 'lucide-react';
 import { useGetLayanan } from '../hooks/mutasion/layanan/useGetLayanan';
 import { KucingType, LayananAppType, PesananAktifType } from '../types/components';
 import { useGetCat } from '../hooks/mutasion/cat/useGetCat';
@@ -19,8 +29,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useGetCatAll } from '../hooks/mutasion/cat/useGetCatAll';
 interface Props {
   data: PesananAktifType;
+  tabActive: 'Aktif' | 'Riwayat';
 }
-const PesananAktif = ({ data }: Props) => {
+const PesananAktif = ({ data, tabActive }: Props) => {
+  console.log('Pesanan Aktif Data:', data);
   const curentRole = useAppSelector((state) => state.auth.currentUser?.user.role);
   const layananQuery = useGetLayanan();
   let catQuery;
@@ -69,11 +81,22 @@ const PesananAktif = ({ data }: Props) => {
   const handleBaghe = (text: string) => {
     if (text === 'UNPAID') {
       return (
-        <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Belum Lunas</Label>
+        <Label className="p-2  rounded-lg bg-red-500 gradient-warning text-warning text-sm font-semibold animate-glow hover-lift hover:scale-105 transition-all duration-300">
+          Belum Lunas
+        </Label>
       );
     } else if (text === 'PAID') {
-      return <Label className="p-1 rounded-sm lg:p-2 bg-[#DCFCE7] text-[#2CAD5C]">Lunas</Label>;
+      return (
+        <Label className="p-2 rounded-lg bg-green-500 gradient-success text-success text-sm font-semibold animate-glow hover-lift hover:scale-105 transition-all duration-300">
+          Lunas
+        </Label>
+      );
     }
+    return (
+      <Label className="p-2 rounded-lg gradient-neutral text-foreground text-sm font-semibold animate-glow hover-lift hover:scale-105 transition-all duration-300">
+        Unknown
+      </Label>
+    );
   };
 
   const status = {
@@ -112,7 +135,7 @@ const PesananAktif = ({ data }: Props) => {
   };
 
   return (
-    <View className="w-full p-2 rounded-lg mt-4 space-y-6">
+    <View className="w-full p-6 space-y-6">
       {data.items.map((items, index) => {
         let layanan: LayananAppType | undefined;
         let kucing: KucingType | undefined;
@@ -128,125 +151,275 @@ const PesananAktif = ({ data }: Props) => {
           kucing = items.kucingId as KucingType;
         }
 
-        return (
+        return ['PENDING', 'PROSES'].includes(items.statusPesanan) && tabActive === 'Aktif' ? (
           <div
             onClick={() => {
               setIdPesananKecil(items._id);
             }}
             key={index}
-            className={`space-y-4 p-4 rounded-lg border shadow bg-[var(--shapeV2-parent)] ${
-              idPesananKecil ? 'border-red-500' : 'border'
+            className={`space-y-4 p-6 card-glass rounded-xl shadow-enhanced animate-glow  backdrop-blur-enhanced hover-lift hover:scale-[1.01] transition-all duration-300 ${
+              idPesananKecil === items._id
+                ? 'gradient-primary/30 border-primary'
+                : 'border-gray-200/50'
             }`}
           >
-            {['PENDING', 'PROSES'].includes(items.statusPesanan) ? (
-              <>
-                <View className="flex justify-between items-center">
-                  <View className="flex justify-center items-center gap-6">
-                    <Text className="font-bold text-2xl">{layanan?.namaLayanan}</Text>
-                    {handleBagheStatus(items.statusPesanan)}
-                  </View>
+            <View className="flex justify-between items-center">
+              <View className="flex justify-center items-center gap-6">
+                <Text className="font-bold text-2xl text-gradient-primary">
+                  {layanan?.namaLayanan}
+                </Text>
+                {handleBagheStatus(items.statusPesanan)}
+              </View>
+              <Label className="font-bold text-lg lg:text-2xl text-gradient-primary">
+                Rp. {layanan?.harga.toLocaleString('id-ID')}
+              </Label>
+            </View>
 
-                  <Label className="font-bold text-sm lg:text-2xl">
-                    Rp. {layanan?.harga.toLocaleString('id-ID')}
-                  </Label>
-                </View>
+            <View className="flex justify-between items-center">
+              <Label className="font-light text-gradient-neutral">
+                Untuk Kucing: {kucing?.namaKucing}
+              </Label>
+              <Label className="font-bold text-lg text-gradient-primary">
+                {data.metodePembayaran}
+              </Label>
+            </View>
 
-                {curentRole === ''}
-                <View className="flex justify-between items-center">
-                  <Label className="font-light">Untuk Kucing : {kucing?.namaKucing} </Label>
-                  <Label className="font-bold text-lg ">{data.metodePembayaran}</Label>
-                </View>
+            <Label className="font-light text-lg text-gradient-neutral">
+              ID Pesanan: {items._id}
+            </Label>
 
-                <Label className="font-light text-lg">ID Pesanan: {items._id}</Label>
+            <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <View className="flex justify-start items-center gap-2">
+                <Calendar className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Jadwal: {getDate(items.jadwal)}
+                </Text>
+              </View>
+              <View className="flex justify-end items-center gap-2">
+                <CreditCard className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Status Pembayaran: {handleBaghe(items.statusPembayaran)}
+                </Text>
+              </View>
+              <View className="flex gap-2 items-center">
+                <Clock className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Estimasi Selesai: {getTime(items.jadwal)}
+                </Text>
+              </View>
+              <View className="flex justify-end gap-2">
+                <Text className="text-sm lg:text-base text-foreground">
+                  Dipesan: {formatDate(items.createdAt)}
+                </Text>
+              </View>
+            </View>
 
-                <View className="grid grid-cols-2 gap-4 mt-4">
-                  <View className="flex justify-start items-center gap-2">
-                    <Calendar />
-                    <Text className="text-sm lg:text-lg">Jadwal: {getDate(items.jadwal)}</Text>
-                  </View>
-                  <View className="flex justify-end items-center gap-2">
-                    <CreditCard />
-                    <Text className="text-sm lg:text-lg">
-                      Status Pembayaran: {handleBaghe(items.statusPembayaran)}
-                    </Text>
-                  </View>
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
 
-                  <View className="flex gap-2 items-center">
-                    <Clock />
-                    <Text className="text-sm lg:text-lg">
-                      Estimasi Selesai: {getTime(items.jadwal)}
-                    </Text>
-                  </View>
-                  <View className="flex justify-end gap-2">
-                    <Text>Dipesan: {formatDate(items.createdAt)}</Text>
-                  </View>
-                </View>
-
-                <Spreed orientation="horizontal" className="my-4" />
-                {curentRole === 'ADMIN' ? (
-                  <View className="flex lg:justify-start justify-between gap-3">
-                    {items.statusPembayaran === 'UNPAID' ? (
-                      <View className="flex justify-center items-center gap-2">
-                        {isSelect !== 'pay' ? (
-                          <Button onClick={() => setIsSelect('pay')}>Edit Status Pembayaran</Button>
-                        ) : (
-                          <>
-                            <Select
-                              onValueChange={(value) =>
-                                setFormPembayaran((prev) => ({
-                                  ...prev,
-                                  statusPembayaran: value,
-                                }))
-                              }
-                            >
-                              <SelectTrigger className="w-[180px] mt-2">
-                                <SelectValue placeholder="Pilih status" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="PAID">Lunas</SelectItem>
-                                <SelectItem value="UNPAID">Belum Lunas</SelectItem>
-                              </SelectContent>
-                            </Select>
-
-                            <Button className="mt-2" onClick={() => handlePembayaran()}>
-                              Simpan
-                            </Button>
-                          </>
-                        )}
+            {curentRole === 'ADMIN' && (
+              <View className="flex lg:justify-start justify-between gap-3 w-full ">
+                {items.statusPembayaran === 'UNPAID' ? (
+                  <View className="flex justify-center items-center gap-2">
+                    {isSelect !== 'pay' ? (
+                      <Button
+                        className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift  transition-all duration-300 animate-glow"
+                        onClick={() => setIsSelect('pay')}
+                      >
+                        <Edit3 className="w-4 h-4 mr-2 " />
+                        Edit Status Pembayaran
+                      </Button>
+                    ) : (
+                      <View className="flex gap-2 items-center flex-wrap lg:flex-nowrap  w-full max-w-100 ">
+                        <Select
+                          onValueChange={(value) =>
+                            setFormPembayaran((prev) => ({
+                              ...prev,
+                              statusPembayaran: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger className="card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                            <SelectValue placeholder="Pilih " className="w-auto lg:w-1/2" />
+                          </SelectTrigger>
+                          <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                            <SelectItem value="PAID">Lunas</SelectItem>
+                            <SelectItem value="UNPAID">Belum Lunas</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          className="gradient-primary text-primary-foreground px-4 py-2 lg:w-1/2 w-auto rounded-full hover-lift   transition-all duration-300 animate-glow"
+                          onClick={() => handlePembayaran()}
+                        >
+                          <Save className="w-4 h-4 mr-2 " />
+                          Simpan
+                        </Button>
                       </View>
+                    )}
+                  </View>
+                ) : (
+                  <>
+                    <Button
+                      className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift  transition-all duration-300 animate-glow"
+                      onClick={() => {
+                        setId(items._id);
+                        EditStatus.mutate({ statusPesanan: 'PROSES' });
+                      }}
+                    >
+                      <Play className="w-4 h-4 mr-2 " />
+                      Mulai Proses
+                    </Button>
+                    <Button
+                      className="gradient-success text-success-foreground px-4 py-2 rounded-full hover-lift  transition-all duration-300 animate-glow"
+                      onClick={() => {
+                        setId(items._id);
+                        EditStatus.mutate({ statusPesanan: 'SELESAI' });
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2 " />
+                      Ditandai Selesai
+                    </Button>
+                  </>
+                )}
+              </View>
+            )}
+          </div>
+        ) : !['PENDING', 'PROSES'].includes(items.statusPesanan) && tabActive === 'Riwayat' ? (
+          <div
+            onClick={() => {
+              setIdPesananKecil(items._id);
+            }}
+            key={index}
+            className={`space-y-4 p-6 card-glass rounded-xl shadow-enhanced animate-glow backdrop-blur-enhanced hover-lift hover:scale-[1.01] transition-all duration-300 ${
+              idPesananKecil === items._id
+                ? 'gradient-primary/30 border-primary'
+                : 'border-gray-200/50'
+            }`}
+          >
+            <View className="flex justify-between items-center w-full">
+              <View className="flex justify-start items-center gap-6 ">
+                <Text className="font-bold text-sm lg:text-2xl text-gradient-primary ">
+                  {layanan?.namaLayanan}
+                </Text>
+                {handleBagheStatus(items.statusPesanan)}
+              </View>
+              <Label className="font-bold text-sm lg:text-2xl text-gradient-primary">
+                Rp. {layanan?.harga.toLocaleString('id-ID')}
+              </Label>
+            </View>
+
+            <View className="flex justify-between  items-center">
+              <Label className="font-light text-gradient-neutral">
+                Untuk Kucing: {kucing?.namaKucing}
+              </Label>
+              <Label className="font-bold text-lg text-gradient-primary">
+                {data.metodePembayaran}
+              </Label>
+            </View>
+
+            <Label className="font-light text-lg text-gradient-neutral">
+              ID Pesanan: {items._id}
+            </Label>
+
+            <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <View className="flex justify-start items-center gap-2">
+                <Calendar className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Jadwal: {getDate(items.jadwal)}
+                </Text>
+              </View>
+              <View className="flex justify-end items-center gap-2">
+                <CreditCard className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Status Pembayaran: {handleBaghe(items.statusPembayaran)}
+                </Text>
+              </View>
+              <View className="flex gap-2 items-center">
+                <Clock className="text-primary w-5 h-5 " />
+                <Text className="text-sm lg:text-base text-foreground">
+                  Estimasi Selesai: {getTime(items.jadwal)}
+                </Text>
+              </View>
+              <View className="flex justify-end gap-2">
+                <Text className="text-sm lg:text-base text-foreground">
+                  Dipesan: {formatDate(items.createdAt)}
+                </Text>
+              </View>
+            </View>
+
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
+
+            {curentRole === 'ADMIN' && (
+              <View className="flex lg:justify-start justify-between gap-3">
+                {items.statusPembayaran === 'UNPAID' ? (
+                  <View className="flex justify-center items-center gap-2">
+                    {isSelect !== 'pay' ? (
+                      <Button
+                        className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
+                        onClick={() => setIsSelect('pay')}
+                      >
+                        <Edit3 className="w-4 h-4 mr-2 " />
+                        Edit Status Pembayaran
+                      </Button>
                     ) : (
                       <>
+                        <Select
+                          onValueChange={(value) =>
+                            setFormPembayaran((prev) => ({
+                              ...prev,
+                              statusPembayaran: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger className="w-[180px] card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                            <SelectValue placeholder="Pilih status" />
+                          </SelectTrigger>
+                          <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                            <SelectItem value="PAID">Lunas</SelectItem>
+                            <SelectItem value="UNPAID">Belum Lunas</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <Button
-                          variant="ghost"
-                          className="font-semibold bg-[#F3E8FF] text-[#9333EA]"
+                          className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
+                          onClick={() => handlePembayaran()}
+                        >
+                          <Save className="w-4 h-4 mr-2 " />
+                          Simpan
+                        </Button>
+                      </>
+                    )}
+                  </View>
+                ) : (
+                  <View>
+                    {items.statusPesanan === 'SELESAI' ? null : (
+                      <>
+                        <Button
+                          className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
                           onClick={() => {
                             setId(items._id);
-
                             EditStatus.mutate({ statusPesanan: 'PROSES' });
                           }}
                         >
+                          <Play className="w-4 h-4 mr-2 " />
                           Mulai Proses
                         </Button>
-
                         <Button
-                          variant="ghost"
-                          className="font-semibold bg-[#DCFCE7] text-[#2CAD5C]"
+                          className="gradient-success text-success-foreground px-4 py-2 rounded-full hover-lift transition-all duration-300 animate-glow"
                           onClick={() => {
                             setId(items._id);
-
                             EditStatus.mutate({ statusPesanan: 'SELESAI' });
                           }}
                         >
+                          <CheckCircle className="w-4 h-4 mr-2 " />
                           Ditandai Selesai
                         </Button>
                       </>
                     )}
                   </View>
-                ) : null}
-              </>
-            ) : null}
+                )}
+              </View>
+            )}
           </div>
-        );
+        ) : null;
       })}
     </View>
   );

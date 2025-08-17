@@ -11,6 +11,14 @@ import {
   Calendar,
   Clock8,
   Plus,
+  Book,
+  Edit3,
+  Info,
+  Trash2,
+  Save,
+  X,
+  ShoppingCart,
+  Cat,
 } from 'lucide-react';
 import { Text } from './ui/Text';
 import { Label } from '@radix-ui/react-label';
@@ -35,6 +43,7 @@ import Fallback from './ui/fallback';
 import { RasKucing } from '../core/constants/ras';
 import { PenyakitKucing } from '../core/constants/penyakit';
 import Link from 'next/link';
+import { cn } from '../utils/utils';
 
 interface LayananComponentProps {
   data: LayanananByRekomendasiType | LayananAppType;
@@ -122,19 +131,18 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
   const RekomendasiStyle = {
     'Sangat Direkomendasikan': {
-      bg: 'bg-red-100',
-      text: 'text-red-600',
+      text: 'text-destructive',
+      bg: 'bg-destructive/20',
     },
     Rekomendasi: {
-      bg: 'bg-[#FEF9C3]',
-      text: 'text-[#9F5F1D]',
+      text: 'text-warning',
+      bg: 'bg-warning/20',
     },
     'Biasa Saja': {
-      bg: 'bg-gray-100',
-      text: 'text-gray-600',
+      text: 'text-success',
+      bg: 'bg-success/20',
     },
-  };
-
+  } as const;
   const jamSlot: {
     label: '09:00' | '10:00' | '11:00' | '13:00' | '14:00' | '15:00' | '16:00' | '17:00';
   }[] = [
@@ -152,7 +160,11 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
     const cat = kategori[text as keyof typeof kategori];
     if (!cat) return null;
 
-    return <View className={`text-sm px-2 py-1 rounded-lg ${cat.bg} ${cat.text}`}>{cat.icon}</View>;
+    return (
+      <View className={`text-sm px-2 py-1 w-full rounded-lg ${cat.bg} ${cat.text}`}>
+        {cat.icon}
+      </View>
+    );
   };
 
   const handleBagheKategori = (text: string) => {
@@ -160,7 +172,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
     if (!cat) return null;
 
     return (
-      <Label className={`text-sm font-light px-2 py-1 rounded-lg ${cat.bg} ${cat.text}`}>
+      <Label className={`text-sm font-light  px-2 py-1 rounded-lg ${cat.bg} ${cat.text}`}>
         {text}
       </Label>
     );
@@ -182,19 +194,17 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
   const handleRekomendasi = (score: number) => {
     let text: keyof typeof RekomendasiStyle;
-    if (score >= 0.7) {
-      text = 'Sangat Direkomendasikan';
-    } else if (score >= 0.4) {
-      text = 'Rekomendasi';
-    } else {
-      text = 'Biasa Saja';
-    }
 
-    const rec = RekomendasiStyle[text];
+    if (score >= 0.7) text = 'Sangat Direkomendasikan';
+    else if (score >= 0.4) text = 'Rekomendasi';
+    else text = 'Biasa Saja';
+
+    const { text: textColor, bg: bgColor } = RekomendasiStyle[text];
+
     return (
-      <Label className={`text-xs font-medium px-3 py-1 rounded-full ${rec.bg} ${rec.text}`}>
+      <h1 className={`text-xs font-extrabold px-3 py-1 rounded-full ${textColor} ${bgColor}`}>
         {text}
-      </Label>
+      </h1>
     );
   };
 
@@ -222,28 +232,30 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
   return (
     <div
       className={`bg-[var(--shapeV2-parent)]  border rounded-lg shadow p-4 space-y-4 ${
-        isSelect ? 'border-red-500' : 'border'
+        isSelect ? 'border-[var(--shapeV1-parent)]' : 'border'
       } 
       }`}
     >
-      <View className="flex items-start justify-between">
-        <View className="flex items-center gap-2">
-          <View className="">{handleIcon(layanan.kategori)}</View>
-          {handleBagheKategori(layanan.kategori)}
+      <View className="flex items-start justify-between gap-4">
+        <View className="flex items-center justify-center">
+          <View className="text-primary w-auto h-6 ">{handleIcon(layanan.kategori)}</View>
+          <View className="gradient-primary/20  rounded-full px-3 py-1  text-sm ">
+            {handleBagheKategori(layanan.kategori)}
+          </View>
         </View>
         <View className="flex justify-center items-center flex-col gap-4">
-          {/* {handlePupolar(data.popular ?? '')} */}
-          {handleRekomendasi(score ?? 0)}
+          <View className=" text-sm font-semibold">{handleRekomendasi(score ?? 0)}</View>
           {isSelect && role?.toLowerCase() === 'admin' && isActive === 'layanan' && (
-            <View className="flex gap-2">
+            <View className="flex gap-3 flex-col">
               <Button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow"
                 onClick={() => handleOpenModal('Edit')}
               >
+                <Edit3 className="w-4 h-4 mr-2 " />
                 Edit
               </Button>
               <Button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="gradient-destructive text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow"
                 onClick={() =>
                   alert.confirm({
                     icon: 'warning',
@@ -257,32 +269,325 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   })
                 }
               >
+                <Trash2 className="w-4 h-4 mr-2 " />
                 Delete
               </Button>
             </View>
           )}
           {isSelect && role?.toLowerCase() === 'admin' && isActive === 'knowledge' && (
-            <View className="gap-2 flex flex-col">
+            <View className="gap-3 flex flex-col">
               <Button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow"
                 onClick={() => handleOpenModal('Knowledge')}
               >
+                <Book className="w-4 h-4 mr-2 " />
                 Tambah Knowledge
               </Button>
               <Link href={`/admin/admin-panel/knowledge/${baseKnow}`}>
-                <View className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                <Button className="gradient-info text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow">
+                  <Info className="w-4 h-4 mr-2 " />
                   Detail Knowledge
-                </View>
+                </Button>
               </Link>
             </View>
           )}
         </View>
       </View>
 
+      <View className="space-y-2 flex flex-col">
+        <Text className="font-bold text-xl text-gradient-primary">{layanan.namaLayanan}</Text>
+        <Text className="text-foreground">{layanan.deskripsi}</Text>
+      </View>
+
+      <View className="flex items-center justify-between">
+        <View className="flex items-center gap-2 text-sm">
+          <Clock className="text-primary w-5 h-5 " />
+          <Label className="text-foreground">{layanan.durasiLayanan} Menit</Label>
+        </View>
+        <Label className="font-bold text-lg text-gradient-primary">
+          Rp{layanan.harga.toLocaleString('id-ID')}
+        </Label>
+      </View>
+
+      <View className="border border-gray-200/50 gradient-success/10 rounded-lg p-4 space-y-2 animate-glow backdrop-blur-enhanced">
+        <p className="font-medium text-success">Mengapa cocok untuk kucing Anda:</p>
+        <ul className="space-y-2 text-foreground">
+          {layanan.benefit.map((item, idx) => (
+            <li key={idx} className="flex items-center gap-2">
+              <Check className="text-success w-5 h-5 " />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </View>
+
+      <Button
+        className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift  h-full transition-all duration-300 animate-glow font-semibold"
+        onClick={() => handleOpenModal('Keranjang')}
+      >
+        <ShoppingCart className="w-5 h-5 mr-2 " />
+        Tambah ke Keranjang
+      </Button>
+      {onAddToChart && formAddToChart && setFormAddToChart && (
+        <PopUp isOpen={isModal === 'Keranjang'} onClose={() => handleOpenModal(null)}>
+          <Container className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced">
+            <View className="flex justify-between items-center gap-4">
+              <View className="flex items-center gap-3">
+                <ShoppingCart className="text-primary w-6 h-6 " />
+                <Text className="text-xl font-bold text-gradient-primary">Tambah Ke Keranjang</Text>
+              </View>
+              <ChevronRight
+                className="text-primary w-6 h-6 cursor-pointer hover:scale-110 transition-all duration-300 "
+                onClick={() => handleOpenModal(null)}
+              />
+            </View>
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
+            <Text className="font-bold p-2 rounded-lg gradient-primary/20 text-foreground animate-glow">
+              Untuk Kucing: {selectData?.namaKucing}
+            </Text>
+            <View className="mt-4 flex justify-center items-start flex-col gap-4">
+              <View className="flex items-center gap-2">
+                <Calendar className="text-primary w-5 h-5 " />
+                <Label className="text-base font-semibold text-gradient-neutral">
+                  Pilih Tanggal :
+                </Label>
+              </View>
+              <Input
+                className=" card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                type="date"
+                value={formAddToChart.jadwal?.split('T')[0] || ''}
+                onChange={(e) => {
+                  const tanggal = e.target.value;
+                  const jam = formAddToChart.jadwal?.split('T')[1] || '09:00';
+                  setFormAddToChart((prev) => ({
+                    ...prev,
+                    jadwal: `${tanggal}T${jam}`,
+                  }));
+                }}
+              />
+
+              <View className="flex items-center gap-2 mt-4">
+                <Clock8 className="text-primary w-5 h-5 " />
+                <Label className="text-base font-semibold text-gradient-neutral">
+                  Pilih Waktu :
+                </Label>
+              </View>
+              <Select
+                value={formAddToChart.jadwal?.split('T')[1] || ''}
+                onValueChange={(value) => {
+                  const tanggal = formAddToChart.jadwal?.split('T')[0] || '';
+                  setFormAddToChart((prev) => ({
+                    ...prev,
+                    jadwal: `${tanggal}T${value}`,
+                  }));
+                }}
+              >
+                <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                  <SelectValue placeholder="Pilih Jam" />
+                </SelectTrigger>
+                <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                  {jamSlot.map((slot, idx) => (
+                    <SelectItem key={idx} value={slot.label}>
+                      {slot.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </View>
+
+            <Button
+              className=" mt-6 gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow font-semibold"
+              onClick={() => onAddToChart(formAddToChart)}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <Fallback title="Tunggu Sebentar" />
+              ) : (
+                <View className="flex items-center gap-2">
+                  <Cat className="w-5 h-5 " />
+                  <Label className="text-primary-foreground font-semibold">
+                    Tambah Ke Keranjang
+                  </Label>
+                </View>
+              )}
+            </Button>
+          </Container>
+        </PopUp>
+      )}
+
+      {/* FULL W H */}
+      {onEdit && formEditLayanan && setFormEditLayanan && (
+        <PopUp isOpen={isModal === 'Edit'} onClose={() => handleOpenModal(null)}>
+          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-6">
+            <Text className="text-2xl font-bold text-gradient-primary">Layanan Edit</Text>
+
+            <View className="space-y-2">
+              <Label className="text-base font-semibold text-gradient-neutral">Nama Layanan</Label>
+              <Input
+                value={formEditLayanan.namaLayanan}
+                onChange={(e) =>
+                  setFormEditLayanan((prev) => ({
+                    ...prev,
+                    namaLayanan: e.target.value,
+                  }))
+                }
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              />
+            </View>
+
+            <View className="space-y-2">
+              <Label className="text-base font-semibold text-gradient-neutral">Deskripsi</Label>
+              <Textarea
+                value={formEditLayanan.deskripsi}
+                onChange={(e) =>
+                  setFormEditLayanan((prev) => ({
+                    ...prev,
+                    deskripsi: e.target.value,
+                  }))
+                }
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              />
+            </View>
+
+            <View className="space-y-2">
+              <Label className="text-base font-semibold text-gradient-neutral">Benefit</Label>
+              <View className="flex gap-2">
+                <Input
+                  value={currentBenefit}
+                  onChange={(e) => setCurrentBenefit(e.target.value)}
+                  placeholder="Tambah benefit"
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddBenefit()}
+                  className="card-glass w-full rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddBenefit}
+                  className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-auto h-full transition-all duration-300 animate-glow"
+                >
+                  <Plus className="w-4 h-4 mr-2 " />
+                  Tambah
+                </Button>
+              </View>
+              <View className="flex flex-wrap gap-2 mt-2">
+                {formEditLayanan.benefit.map((item, index) => (
+                  <View
+                    key={index}
+                    className="gradient-primary/20 px-3 py-1 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
+                  >
+                    <Text>{item}</Text>
+                    <button
+                      onClick={() => handleRemoveBenefit(index)}
+                      className="text-destructive hover:text-destructive-dark hover:scale-110 transition-all duration-300"
+                    >
+                      ×
+                    </button>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <View className="space-y-2">
+                <Label className="text-base font-semibold text-gradient-neutral">Harga</Label>
+                <Input
+                  type="number"
+                  value={formEditLayanan.harga ?? ''}
+                  onChange={(e) =>
+                    setFormEditLayanan((prev) => ({
+                      ...prev,
+                      harga: e.target.value === '' ? null : Number(e.target.value),
+                    }))
+                  }
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                />
+              </View>
+              <View className="space-y-2">
+                <Label className="text-base font-semibold text-gradient-neutral">Diskon (%)</Label>
+                <Input
+                  type="number"
+                  value={formEditLayanan.diskon ?? ''}
+                  onChange={(e) =>
+                    setFormEditLayanan((prev) => ({
+                      ...prev,
+                      diskon: e.target.value === '' ? null : Number(e.target.value),
+                    }))
+                  }
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                />
+              </View>
+            </View>
+
+            <View className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <View className="space-y-2">
+                <Label className="text-base font-semibold text-gradient-neutral">
+                  Durasi (menit)
+                </Label>
+                <Input
+                  type="number"
+                  value={formEditLayanan.durasiLayanan ?? ''}
+                  onChange={(e) =>
+                    setFormEditLayanan((prev) => ({
+                      ...prev,
+                      durasiLayanan: e.target.value === '' ? null : Number(e.target.value),
+                    }))
+                  }
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                />
+              </View>
+              <View className="space-y-2">
+                <Label className="text-base font-semibold text-gradient-neutral">Kategori</Label>
+                <Select
+                  value={formEditLayanan.kategori}
+                  onValueChange={(value) =>
+                    setFormEditLayanan((prev) => ({
+                      ...prev,
+                      kategori: value,
+                    }))
+                  }
+                >
+                  <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                    <SelectValue placeholder="Kategori" />
+                  </SelectTrigger>
+                  <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                    <SelectItem value="Grooming">Grooming</SelectItem>
+                    <SelectItem value="Kesehatan">Kesehatan</SelectItem>
+                    <SelectItem value="Penitipan">Penitipan</SelectItem>
+                    <SelectItem value="Nutrisi">Nutrisi</SelectItem>
+                  </SelectContent>
+                </Select>
+              </View>
+            </View>
+
+            <View className="flex justify-end gap-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => handleOpenModal(null)}
+                className="gradient-neutral text-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow border-gray-200/50"
+              >
+                <X className="w-4 h-4 mr-2 " />
+                Batal
+              </Button>
+              <Button
+                onClick={() => {
+                  if (onEdit) {
+                    onEdit(formEditLayanan);
+                  }
+                }}
+                disabled={isPending}
+                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow"
+              >
+                <Save className="w-4 h-4 mr-2 " />
+                {isPending ? <Fallback title="Tunggu Sebentar" /> : 'Simpan Layanan'}
+              </Button>
+            </View>
+          </View>
+        </PopUp>
+      )}
+
       {onKnow && formBikinKnowledge && setFormBikinKnowledge && (
         <PopUp isOpen={isModal === 'Knowledge'} onClose={() => handleOpenModal(null)}>
-          <View className="w-full h-full">
-            <Label className="font-semibold ">Ras :</Label>
+          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-4">
+            <Label className="text-base font-semibold text-gradient-neutral">Ras :</Label>
             <Select
               onValueChange={(value) =>
                 setFormBikinKnowledge((prev) => ({
@@ -291,10 +596,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Ras" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                 {RasKucing.map((ras) => (
                   <SelectItem key={ras} value={ras}>
                     {ras}
@@ -307,12 +612,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.ras.map((ras, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-[var(--shapeV1-parent)] rounded-full flex items-center gap-1"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
                 >
                   {ras}
                   <button
                     type="button"
-                    className="text-red-500 hover:text-red-700"
+                    className="text-destructive hover:text-destructive-dark hover:scale-110 transition-all duration-300"
                     onClick={() =>
                       setFormBikinKnowledge((prev) => {
                         const newRas = [...prev.ras];
@@ -326,7 +631,8 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 </span>
               ))}
             </div>
-            <Label className="font-semibold">Minimal Umur :</Label>
+
+            <Label className="text-base font-semibold text-gradient-neutral">Minimal Umur :</Label>
             <Input
               inputMode="numeric"
               value={formBikinKnowledge.min_umur ?? ''}
@@ -337,8 +643,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
-            <Label className="font-semibold">Maksimal Umur :</Label>
+
+            <Label className="text-base font-semibold text-gradient-neutral">Maksimal Umur :</Label>
             <Input
               placeholder="Contoh 1 Tahun"
               inputMode="numeric"
@@ -349,8 +657,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
-            <Label className="font-semibold">Minimal Berat :</Label>
+
+            <Label className="text-base font-semibold text-gradient-neutral">Minimal Berat :</Label>
             <Input
               placeholder="Contoh 1 kg"
               inputMode="numeric"
@@ -361,9 +671,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
 
-            <Label className="font-semibold">Maksimal Berat :</Label>
+            <Label className="text-base font-semibold text-gradient-neutral">
+              Maksimal Berat :
+            </Label>
             <Input
               placeholder="Contoh 1 kg"
               inputMode="numeric"
@@ -374,8 +687,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
             />
-            <Label className="font-semibold">Tingkat Aktifitas :</Label>
+
+            <Label className="text-base font-semibold text-gradient-neutral">
+              Tingkat Aktivitas :
+            </Label>
             <Select
               onValueChange={(value) =>
                 setFormBikinKnowledge((prev) => ({
@@ -386,10 +703,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Pilih Tingkat Aktifitas" />
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                <SelectValue placeholder="Pilih Tingkat Aktivitas" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                 <SelectItem value="rendah">Rendah</SelectItem>
                 <SelectItem value="sedang">Sedang</SelectItem>
                 <SelectItem value="tinggi">Tinggi</SelectItem>
@@ -400,12 +717,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.tingkatAktivitas.map((tingkatAktivitas, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-[var(--shapeV1-parent)] rounded-full flex items-center gap-1"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
                 >
                   {tingkatAktivitas}
                   <button
                     type="button"
-                    className="text-red-500 hover:text-red-700"
+                    className="text-destructive hover:text-destructive-dark hover:scale-110 transition-all duration-300"
                     onClick={() =>
                       setFormBikinKnowledge((prev) => {
                         const newRas = [...prev.tingkatAktivitas];
@@ -420,7 +737,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               ))}
             </div>
 
-            <Label className="font-semibold">Kondisi :</Label>
+            <Label className="text-base font-semibold text-gradient-neutral">Kondisi :</Label>
             <Select
               onValueChange={(value) =>
                 setFormBikinKnowledge((prev) => ({
@@ -429,10 +746,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Kondisi" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                 {PenyakitKucing.map((ras) => (
                   <SelectItem key={ras} value={ras}>
                     {ras}
@@ -445,12 +762,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.kondisi.map((kondisi, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-[var(--shapeV1-parent)] rounded-full flex items-center gap-1"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
                 >
                   {kondisi}
                   <button
                     type="button"
-                    className="text-red-500 hover:text-red-700"
+                    className="text-destructive hover:text-destructive-dark hover:scale-110 transition-all duration-300"
                     onClick={() =>
                       setFormBikinKnowledge((prev) => {
                         const newRas = [...prev.kondisi];
@@ -465,9 +782,9 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               ))}
             </div>
 
-            <Spreed orientation="horizontal" className="my-2" />
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
             <Button
-              className="w-full my-2"
+              className=" gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow font-semibold"
               onClick={() => {
                 if (onKnow) {
                   onKnow(formBikinKnowledge);
@@ -477,287 +794,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               }}
               disabled={isPending}
             >
-              Tambahakan Knowledge
+              <Book className="w-5 h-5 mr-2 " />
+              {isPending ? <Fallback title="Tunggu Sebentar" /> : 'Tambahkan Knowledge'}
             </Button>
           </View>
-        </PopUp>
-      )}
-
-      {onEdit && formEditLayanan && setFormEditLayanan && (
-        <PopUp isOpen={isModal === 'Edit'} onClose={() => handleOpenModal(null)}>
-          <View className="w-full  p-6 ">
-            <Text className="text-xl font-bold">Layanan Edit</Text>
-
-            <View className="space-y-2">
-              <Label>Nama Layanan</Label>
-              <Input
-                value={formEditLayanan.namaLayanan}
-                onChange={(e) =>
-                  setFormEditLayanan((prev) => ({
-                    ...prev,
-                    namaLayanan: e.target.value,
-                  }))
-                }
-              />
-            </View>
-
-            <View className="space-y-2">
-              <Label>Deskripsi</Label>
-              <Textarea
-                value={formEditLayanan.deskripsi}
-                onChange={(e) =>
-                  setFormEditLayanan((prev) => ({
-                    ...prev,
-                    deskripsi: e.target.value,
-                  }))
-                }
-              />
-            </View>
-
-            <View className="space-y-2">
-              <Label>Benefit</Label>
-              <View className="flex gap-2">
-                <Input
-                  value={currentBenefit}
-                  onChange={(e) => setCurrentBenefit(e.target.value)}
-                  placeholder="Tambah benefit"
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddBenefit()}
-                />
-                <Button type="button" onClick={handleAddBenefit}>
-                  Tambah
-                </Button>
-              </View>
-              <View className="flex flex-wrap gap-2 mt-2">
-                {formEditLayanan.benefit.map((item, index) => (
-                  <View
-                    key={index}
-                    className="bg-[var(--shapeV1-parent)] px-3 py-1 rounded-full flex items-center gap-2"
-                  >
-                    <Text>{item}</Text>
-                    <button onClick={() => handleRemoveBenefit(index)} className="text-red-500">
-                      ×
-                    </button>
-                  </View>
-                ))}
-              </View>
-            </View>
-
-            <View className="grid grid-cols-2 gap-4">
-              <View className="space-y-2">
-                <Label>Harga</Label>
-                <Input
-                  type="number"
-                  value={formEditLayanan.harga ?? ''}
-                  onChange={(e) =>
-                    setFormEditLayanan((prev) => ({
-                      ...prev,
-                      harga: e.target.value === '' ? null : Number(e.target.value),
-                    }))
-                  }
-                />
-              </View>
-
-              <View className="space-y-2">
-                <Label>Diskon (%)</Label>
-                <Input
-                  type="number"
-                  value={formEditLayanan.diskon ?? ''}
-                  onChange={(e) =>
-                    setFormEditLayanan((prev) => ({
-                      ...prev,
-                      diskon: e.target.value === '' ? null : Number(e.target.value),
-                    }))
-                  }
-                />
-              </View>
-            </View>
-
-            <View className="grid grid-cols-2 gap-4">
-              <View className="space-y-2">
-                <Label>Durasi (menit)</Label>
-                <Input
-                  type="number"
-                  value={formEditLayanan.durasiLayanan ?? ''}
-                  onChange={(e) =>
-                    setFormEditLayanan((prev) => ({
-                      ...prev,
-                      durasiLayanan: e.target.value === '' ? null : Number(e.target.value),
-                    }))
-                  }
-                />
-              </View>
-
-              <View className="space-y-2">
-                <Label>Kategori</Label>
-                <Select
-                  value={formEditLayanan.kategori}
-                  onValueChange={(value) =>
-                    setFormEditLayanan((prev) => ({
-                      ...prev,
-                      kategori: value,
-                    }))
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Kategori" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Grooming">Grooming</SelectItem>
-                    <SelectItem value="Kesehatan">Kesehatan</SelectItem>
-                    <SelectItem value="Penitipan">Penitipan</SelectItem>
-                    <SelectItem value="Nutrisi">Nutrisi</SelectItem>
-                  </SelectContent>
-                </Select>
-              </View>
-            </View>
-
-            {/* <View className="space-y-2">
-              <Label>Status</Label>
-              <Select
-                value={formEditLayanan.status}
-                onValueChange={(value) =>
-                  setFormEditLayanan((prev) => ({
-                    ...prev,
-                    status: value,
-                  }))
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-            </View> */}
-
-            <View className="flex justify-end gap-2 pt-4">
-              <Button variant="outline" onClick={() => handleOpenModal(null)}>
-                Batal
-              </Button>
-              <Button
-                onClick={() => {
-                  if (onEdit) {
-                    onEdit(formEditLayanan);
-                  }
-                }}
-                disabled={isPending}
-              >
-                {isPending ? <Fallback title="Tunggu Sebentar" /> : 'Simpan Layanan'}
-              </Button>
-            </View>
-          </View>
-        </PopUp>
-      )}
-
-      <View>
-        <Text className="font-bold text-lg">{layanan.namaLayanan}</Text> <br />
-        <Text className="">{layanan.deskripsi}</Text>
-      </View>
-
-      <View className="flex items-center justify-between">
-        <View className="flex items-center gap-1  text-sm">
-          <Clock size={16} />
-          <Label>{layanan.durasiLayanan} Menit</Label>
-        </View>
-        <Label className=" font-bold text-lg">Rp{layanan.harga.toLocaleString('id-ID')}</Label>
-      </View>
-
-      <View className="border border-[var(--shapeV2-parent)] bg-[#F0FDF4]/90 rounded-lg p-3 space-y-1">
-        <p className="font-medium text-green-800">Mengapa cocok untuk kucing Anda:</p>
-        <ul className="space-y-1 text-green-700">
-          {layanan.benefit.map((item, idx) => (
-            <li key={idx} className="flex items-center gap-2">
-              <Check size={16} className="text-green-600" /> {item}
-            </li>
-          ))}
-        </ul>
-      </View>
-
-      <Button className="w-full font-semibold" onClick={() => handleOpenModal('Keranjang')}>
-        Tambah ke Keranjang
-      </Button>
-      {onAddToChart && formAddToChart && setFormAddToChart && (
-        <PopUp isOpen={isModal === 'Keranjang'} onClose={() => handleOpenModal(null)}>
-          <Container className="w-full ">
-            <View className="flex justify-between items-center gap-2">
-              <View className="flex">
-                <Text className="font-bold">Tambah Ke Keranjang</Text>
-              </View>
-
-              <ChevronRight
-                className="text-foreground cursor-pointer"
-                onClick={() => handleOpenModal(null)}
-              />
-            </View>
-            <Spreed orientation="horizontal" className="my-4" />
-            <Text className="font-bold p-2 rounded-sm bg-[var(--shapeV1-parent)]">
-              Untuk Kucing: {selectData?.namaKucing}
-            </Text>
-            <View className="mt-4 flex justify-center items-start flex-col gap-2">
-              <View className="flex items-center gap-2">
-                <Calendar />
-                <Label className="font-light">Pilih Tanggal :</Label>
-              </View>
-              <Input
-                className="w-full"
-                type="date"
-                value={formAddToChart.jadwal?.split('T')[0] || ''}
-                onChange={(e) => {
-                  const tanggal = e.target.value;
-                  const jam = formAddToChart.jadwal?.split('T')[1] || '09:00';
-                  setFormAddToChart((prev) => ({
-                    ...prev,
-                    jadwal: `${tanggal}T${jam}`,
-                  }));
-                }}
-              />
-
-              <View className="flex items-center gap-2 mt-4">
-                <Clock8 />
-                <Label className="font-light">Pilih Waktu :</Label>
-              </View>
-              <Select
-                value={formAddToChart.jadwal?.split('T')[1] || ''}
-                onValueChange={(value) => {
-                  const tanggal = formAddToChart.jadwal?.split('T')[0] || '';
-                  setFormAddToChart((prev) => ({
-                    ...prev,
-                    jadwal: `${tanggal}T${value}`,
-                  }));
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih Jam" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jamSlot.map((slot, idx) => (
-                    <SelectItem key={idx} value={slot.label}>
-                      {slot.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </View>
-
-            <Button
-              className="w-full mt-6"
-              onClick={() => onAddToChart(formAddToChart)}
-              disabled={isPending}
-            >
-              <View className="flex justify-center items-center gap-1">
-                {isPending ? (
-                  <Fallback title="Tunggu Sebentar" />
-                ) : (
-                  <View className="flex items-center gap-1">
-                    <Plus />
-                    <Label className="font-semibold">Tambah Ke Keranjang</Label>
-                  </View>
-                )}
-              </View>
-            </Button>
-          </Container>
         </PopUp>
       )}
     </div>

@@ -1,5 +1,5 @@
 import View from './ui/view';
-import { Cat, Calendar, Weight, Activity, Heart, Trash } from 'lucide-react';
+import { Cat, Calendar, Weight, Activity, Heart, Trash, Edit3, Sparkles } from 'lucide-react';
 import { Text } from './ui/Text';
 import Container from './ui/container';
 import Spreed from '@/app/core/components/spreed';
@@ -22,6 +22,7 @@ import Fallback from './ui/fallback';
 import { RasKucing } from '../core/constants/ras';
 import { useState } from 'react';
 import { useEditCat } from '../hooks/mutasion/cat/useEditChat';
+import { Label } from '@radix-ui/react-label';
 const Kucing: React.FC<
   DiagnosisAppTypeProps & { isSelect: boolean } & { onDelete?: (_id: string) => void } & {
     isPending?: boolean;
@@ -81,73 +82,84 @@ const Kucing: React.FC<
 
   return (
     <View
-      className={`flex flex-col border rounded-xl ${
+      className={`flex flex-col shadow-sm/20 border rounded-xl ${
         isSelect ? 'border-[var(--shapeV1-parent)]' : 'border border-white/50'
       }`}
     >
-      <View className="flex justify-between items-center w-full p-3 border-b">
-        <View className="flex items-center gap-3">
-          <View className="rounded-full bg-[var(--shapeV1-parent)] p-2 z-0">
-            <Cat className=" w-5 h-5 z-1" />
+      <View className="flex justify-between items-center w-full p-4 border-b border-border/30 relative ">
+        <View className="flex items-center gap-4">
+          <View className="relative">
+            <View className="rounded-xl bg-gradient-to-br from-[var(--shapeV1-parent)] to-[var(--shapeV1-child)] p-3 shadow-lg transform transition-all duration-300 group-hover:scale-110">
+              <Cat className="w-6 h-6 text-primary-foreground" />
+              {isSelect && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full animate-ping" />
+              )}
+            </View>
+            <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-warning animate-pulse opacity-60" />
           </View>
-          <View className="flex flex-col">
-            <Text className="text-sm font-semibold">{data?.namaKucing}</Text>
-            <Text className="text-sm font-semibold">{data?.ras}</Text>
-          </View>
-        </View>
-        {isSelect ? (
-          <View>
-            <Text className="text-xs font-medium p-2 bg-[var(--shapeV1-parent)] rounded-lg">
-              Dipilih
+          <View className="flex flex-col gap-1">
+            <Text className="text-lg font-bold text-card-foreground group-hover:text-gradient-primary transition-colors">
+              {data?.namaKucing}
+            </Text>
+            <Text className="text-sm font-medium text-muted-foreground bg-secondary px-2 py-1 rounded-lg shadow-sm">
+              {data?.ras}
             </Text>
           </View>
-        ) : null}
+        </View>
+        {isSelect && (
+          <Label className="text-xs font-bold px-4 py-2 bg-gradient-to-r from-[var(--shapeV1-parent)] to-[var(--shapeV1-child)] text-primary-foreground rounded-full shadow-lg flex items-center gap-2 animate-pulse">
+            <div className="w-2 h-2 bg-primary-foreground rounded-full" />
+            Dipilih
+          </Label>
+        )}
       </View>
 
-      <Container className="p-3 w-full">
-        <View className="flex justify-between items-center w-full">
-          <View className="flex items-center gap-1">
-            <Calendar className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data?.umur} Tahun</Text>
+      <Container className="p-4 w-full relative ">
+        <View className="grid grid-cols-2 gap-4 mb-4">
+          <View className="flex items-center gap-3 p-3 bg-card rounded-xl border border-border/20 transition-all hover:shadow-md hover:border-[var(--shapeV1-parent)]/30 group/stat">
+            <Calendar className="w-5 h-5 text-info group-hover/stat:animate-bounce" />
+            <div className="flex flex-col">
+              <Text className="text-xs text-muted-foreground font-medium">Umur</Text>
+              <Text className="text-sm font-bold text-card-foreground">{data?.umur} Tahun</Text>
+            </div>
           </View>
-          <View className="flex items-center gap-1">
-            <Weight className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data?.berat} Kg</Text>
+          <View className="flex items-center gap-3 p-3 bg-card rounded-xl border border-border/20 transition-all hover:shadow-md hover:border-[var(--shapeV1-parent)]/30 group/stat">
+            <Weight className="w-5 h-5 text-success group-hover/stat:animate-bounce" />
+            <div className="flex flex-col">
+              <Text className="text-xs text-muted-foreground font-medium">Berat</Text>
+              <Text className="text-sm font-bold text-card-foreground">{data?.berat} Kg</Text>
+            </div>
           </View>
         </View>
 
-        <View className="flex justify-between items-center mt-4 w-full">
-          <View className="flex items-center gap-1">
-            <Activity className="w-4 h-4 " />
-            <Text className="text-sm font-light">{data?.tingkatAktivitas}</Text>
+        <View className="flex justify-between items-center p-4 bg-muted/50 rounded-xl border border-border/20 mb-4">
+          <View className="flex items-center gap-3">
+            <Activity className="w-5 h-5 text-muted-foreground animate-pulse" />
+            <Label className="font-semibold text-muted-foreground">Tingkat Aktivitas:</Label>
           </View>
           {handleBaghe(data?.tingkatAktivitas)}
         </View>
 
         {isSelect && (
-          <View className="flex justify-end mt-4 gap-2">
+          <View className="flex justify-end mt-6 gap-3">
             <Button
-              className="text-xs font-medium p-2 bg-[var(--shapeV1-parent)] rounded-lg flex items-center gap-1 justify-center"
+              className="group/btn text-sm font-semibold px-4 py-2 bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
               onClick={() =>
                 alert.confirm({
                   icon: 'warning',
                   title: 'Hapus',
                   deskripsi: 'Apakah Anda yakin ingin menghapus kucing ini?',
-                  onConfirm: () => {
-                    if (data?._id) {
-                      onDelete?.(data._id);
-                    }
-                  },
+                  onConfirm: () => data?._id && onDelete?.(data._id),
                 })
               }
             >
               <UseTooltip content="Hapus">
-                <Trash />
+                <Trash className="w-4 h-4 group-hover/btn:animate-bounce" />
               </UseTooltip>
               Hapus
             </Button>
             <Button
-              className="text-xs font-medium p-2 bg-[var(--shapeV1-parent)] rounded-lg flex items-center gap-1 justify-center"
+              className="group/btn text-sm font-semibold px-4 py-2 bg-gradient-to-r from-[var(--shapeV1-parent)] to-[var(--shapeV1-child)] text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
               onClick={() => {
                 setFormEditKucing({
                   namaKucing: data?.namaKucing ?? '',
@@ -160,18 +172,21 @@ const Kucing: React.FC<
                 setIsModal('edit');
               }}
             >
+              <Edit3 className="w-4 h-4 group-hover/btn:animate-bounce" />
               Edit
             </Button>
           </View>
         )}
 
         <PopUp isOpen={isModal === 'edit'} onClose={() => setIsModal?.(null)}>
-          <View className="w-full h-full">
+          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced">
             <View className="flex justify-center items-center flex-col">
-              <Container className="w-full mt-4">
-                <View className="flex justify-between items-center gap-4">
-                  <View className="w-full gap-2">
-                    <Text className="font-semibold">Nama Kucing :</Text>
+              <Container className="w-full mt-6">
+                <View className="flex flex-col lg:flex-row justify-between items-center gap-4">
+                  <View className="w-full space-y-2">
+                    <Text className="text-base font-semibold text-gradient-neutral">
+                      Nama Kucing :
+                    </Text>
                     <Input
                       placeholder="Contoh : Whiskers"
                       value={formEditKucing.namaKucing}
@@ -181,36 +196,40 @@ const Kucing: React.FC<
                           namaKucing: e.target.value,
                         }))
                       }
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
                     />
                   </View>
 
-                  <View className="flex justify-center items-center w-full flex-col gap-2">
-                    <View className="w-full ">
-                      <Text className="font-semibold">Ras Kucing :</Text>
-                      <Select
-                        onValueChange={(value) =>
-                          setFormEditKucing((prev) => ({ ...prev, ras: value }))
-                        }
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Pilih Ras" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {RasKucing.map((ras) => (
-                            <SelectItem key={ras} value={ras}>
-                              {ras}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </View>
+                  <View className="w-full space-y-2">
+                    <Text className="text-base font-semibold text-gradient-neutral">
+                      Ras Kucing :
+                    </Text>
+                    <Select
+                      onValueChange={(value) =>
+                        setFormEditKucing((prev) => ({ ...prev, ras: value }))
+                      }
+                    >
+                      <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                        <SelectValue placeholder="Pilih Ras" />
+                      </SelectTrigger>
+                      <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                        {RasKucing.map((ras) => (
+                          <SelectItem key={ras} value={ras}>
+                            {ras}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </View>
                 </View>
               </Container>
+
               <Container className="w-full mt-4">
-                <View className="flex justify-between items-center gap-4">
-                  <View className="w-full ">
-                    <Text className="font-semibold">Umur (tahun) :</Text>
+                <View className="flex flex-col lg:flex-row justify-between items-center gap-4">
+                  <View className="w-full space-y-2">
+                    <Text className="text-base font-semibold text-gradient-neutral">
+                      Umur (tahun) :
+                    </Text>
                     <Input
                       placeholder="Contoh : 1"
                       type="number"
@@ -222,32 +241,36 @@ const Kucing: React.FC<
                           umur: e.target.value === '' ? null : Number(e.target.value),
                         }))
                       }
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
                     />
                   </View>
 
-                  <View className="flex justify-center items-center w-full flex-col gap-2">
-                    <View className="w-full gap-2">
-                      <Text className="font-semibold">Berat (kg) :</Text>
-                      <Input
-                        placeholder="Contoh : 2"
-                        type="number"
-                        inputMode="numeric"
-                        value={formEditKucing.berat ?? ''}
-                        onChange={(e) =>
-                          setFormEditKucing((prev) => ({
-                            ...prev,
-                            berat: e.target.value === '' ? null : Number(e.target.value),
-                          }))
-                        }
-                      />
-                    </View>
+                  <View className="w-full space-y-2">
+                    <Text className="text-base font-semibold text-gradient-neutral">
+                      Berat (kg) :
+                    </Text>
+                    <Input
+                      placeholder="Contoh : 2"
+                      type="number"
+                      inputMode="numeric"
+                      value={formEditKucing.berat ?? ''}
+                      onChange={(e) =>
+                        setFormEditKucing((prev) => ({
+                          ...prev,
+                          berat: e.target.value === '' ? null : Number(e.target.value),
+                        }))
+                      }
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                    />
                   </View>
                 </View>
               </Container>
 
-              <Container className="w-full mt-2 ">
-                <Text className="font-semibold">Tingkat Aktivitas</Text>
-                <View className="flex justify-between items-center gap-4 ">
+              <Container className="w-full mt-4">
+                <Text className="text-base font-semibold text-gradient-neutral">
+                  Tingkat Aktivitas
+                </Text>
+                <View className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
                   {aktivitas.map((item) => (
                     <div
                       key={item.label}
@@ -257,34 +280,43 @@ const Kucing: React.FC<
                           tingkatAktivitas: item.label,
                         }))
                       }
-                      className={`h-auto w-auto rounded-lg border p-4 lg:p-3 cursor-pointer transition ${
+                      className={` w-full rounded-xl p-4 cursor-pointer transition-all duration-300 hover-lift h-full card-glass shadow-enhanced animate-glow backdrop-blur-enhanced ${
                         formEditKucing.tingkatAktivitas === item.label
-                          ? 'border-primary bg-primary/10'
-                          : 'border-[var(--shapeV1-parent)]'
+                          ? 'gradient-primary/20 border-primary'
+                          : 'border-[var(--shapeV1-parent)]/50 bg-[var(--shapeV2-parent)]/50'
                       }`}
                     >
-                      <View className="flex justify-center items-center flex-col">
+                      <View className="flex justify-center items-center flex-col gap-2">
                         <Text
-                          className={`text-sm lg:text-lg font-semibold ${
-                            formEditKucing.tingkatAktivitas === item.label ? 'text-primary' : ''
+                          className={`text-base font-semibold ${
+                            formEditKucing.tingkatAktivitas === item.label
+                              ? 'text-gradient-primary'
+                              : 'text-foreground'
                           }`}
                         >
                           {item.label}
                         </Text>
-                        <Text className="text-center lg:text-sm">{item.desc}</Text>
+                        <Text className="text-sm text-center text-muted-foreground">
+                          {item.desc}
+                        </Text>
                       </View>
                     </div>
                   ))}
                 </View>
               </Container>
 
-              <Container className="w-full mt-2">
-                <Text className="font-semibold">Kondisi Kesehatan (opsional)</Text>
-                <View className="grid grid-cols-3 gap-2 mt-2">
+              <Container className="w-full mt-4">
+                <Text className="text-base font-semibold text-gradient-neutral">
+                  Kondisi Kesehatan (opsional)
+                </Text>
+                <View className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-3">
                   {PenyakitKucing.map((item) => {
                     const checked = formEditKucing.kondisiKesehatan.includes(item);
                     return (
-                      <label key={item} className="flex items-center gap-2 cursor-pointer">
+                      <label
+                        key={item}
+                        className="flex items-center gap-2 cursor-pointer h-full transition-all duration-300 animate-glow"
+                      >
                         <input
                           type="checkbox"
                           value={item}
@@ -300,21 +332,29 @@ const Kucing: React.FC<
                               return { ...prev, kondisiKesehatan: updated };
                             });
                           }}
-                          className="w-4 h-4"
+                          className="w-5 h-5 text-primary border-gray-200/50 rounded focus:ring-primary animate-glow"
                         />
-                        <span>{item}</span>
+                        <span className="text-foreground text-sm">{item}</span>
                       </label>
                     );
                   })}
                 </View>
               </Container>
-              <Spreed orientation="horizontal" className="my-2" />
+
+              <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
               <Button
-                className="w-full"
+                className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
                 onClick={() => handleEditCat()}
                 disabled={editCat.isPending}
               >
-                {editCat.isPending ? <Fallback title="Tunggu Sebentar" /> : 'Simpan Kucing'}
+                {editCat.isPending ? (
+                  <Fallback title="Tunggu Sebentar" />
+                ) : (
+                  <>
+                    <Cat className="w-5 h-5 mr-2 " />
+                    Simpan Kucing
+                  </>
+                )}
               </Button>
             </View>
           </View>
