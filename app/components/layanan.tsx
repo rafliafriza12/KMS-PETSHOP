@@ -138,7 +138,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
       text: 'text-warning',
       bg: 'bg-warning/20',
     },
-    'Biasa Saja': {
+    Biasa: {
       text: 'text-success',
       bg: 'bg-success/20',
     },
@@ -197,7 +197,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
     if (score >= 0.7) text = 'Sangat Direkomendasikan';
     else if (score >= 0.4) text = 'Rekomendasi';
-    else text = 'Biasa Saja';
+    else text = 'Biasa';
 
     const { text: textColor, bg: bgColor } = RekomendasiStyle[text];
 
