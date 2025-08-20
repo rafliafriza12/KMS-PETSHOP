@@ -389,6 +389,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               >
                 <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50  w-full h-full transition-all duration-300 backdrop-blur-enhanced">
                   <SelectValue placeholder="Pilih Jam" />
+                  {/* Chore */}
                 </SelectTrigger>
                 <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
                   {jamSlot.map((slot, idx) => (
