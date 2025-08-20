@@ -105,15 +105,209 @@ const DashboardUserContainer = () => {
               </Text>
             </View>
 
-            {hasCats && (
-              <Button className="font-semibold" onClick={() => setIsPopUp('kucing')}>
-                <View className="flex items-center gap-2">
-                  <Plus className="text-foreground" />
-                  <Text>Tambah Kucing</Text>
-                </View>
-              </Button>
-            )}
+            <Button className="font-semibold" onClick={() => setIsPopUp('kucing')}>
+              <View className="flex items-center gap-2">
+                <Plus className="text-foreground" />
+                <Text>Tambah Kucing</Text>
+              </View>
+            </Button>
           </View>
+
+          <PopUp isOpen={isPopUp === 'kucing'} onClose={() => setIsPopUp(null)}>
+            <Container className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced">
+              <View className="space-y-6">
+                <View className="flex justify-between items-center gap-4">
+                  <View className="flex items-center gap-3">
+                    <Plus className="text-primary w-6 h-6 " />
+                    <Text className="text-xl font-bold text-gradient-primary">
+                      Tambah Profile Kucing
+                    </Text>
+                  </View>
+                  <ChevronRight
+                    className="text-primary w-6 h-6 cursor-pointer  transition-all duration-300 "
+                    onClick={() => setIsPopUp(null)}
+                  />
+                </View>
+
+                <Container className="w-full">
+                  <View className="flex flex-col lg:flex-row justify-between items-center gap-4">
+                    <View className="w-full space-y-2">
+                      <Text className="text-base font-semibold text-gradient-neutral">
+                        Nama Kucing :
+                      </Text>
+                      <Input
+                        placeholder="Contoh : Whiskers"
+                        value={formBikinKucing.namaKucing}
+                        onChange={(e) =>
+                          setFormBikinKucing((prev) => ({
+                            ...prev,
+                            namaKucing: e.target.value,
+                          }))
+                        }
+                        className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      />
+                    </View>
+
+                    <View className="w-full space-y-2">
+                      <Text className="text-base font-semibold text-gradient-neutral">
+                        Ras Kucing :
+                      </Text>
+                      <Select
+                        onValueChange={(value) =>
+                          setFormBikinKucing((prev) => ({ ...prev, ras: value }))
+                        }
+                      >
+                        <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                          <SelectValue placeholder="Pilih Ras" />
+                        </SelectTrigger>
+                        <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
+                          {RasKucing.map((ras) => (
+                            <SelectItem key={ras} value={ras}>
+                              {ras}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </View>
+                  </View>
+                </Container>
+
+                <Container className="w-full">
+                  <View className="flex flex-col lg:flex-row justify-between items-center gap-4">
+                    <View className="w-full space-y-2">
+                      <Text className="text-base font-semibold text-gradient-neutral">
+                        Umur (tahun) :
+                      </Text>
+                      <Input
+                        placeholder="Contoh : 1"
+                        type="number"
+                        inputMode="numeric"
+                        value={formBikinKucing.umur ?? ''}
+                        onChange={(e) =>
+                          setFormBikinKucing((prev) => ({
+                            ...prev,
+                            umur: e.target.value === '' ? null : Number(e.target.value),
+                          }))
+                        }
+                        className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      />
+                    </View>
+
+                    <View className="w-full space-y-2">
+                      <Text className="text-base font-semibold text-gradient-neutral">
+                        Berat (kg) :
+                      </Text>
+                      <Input
+                        placeholder="Contoh : 2"
+                        type="number"
+                        inputMode="numeric"
+                        value={formBikinKucing.berat ?? ''}
+                        onChange={(e) =>
+                          setFormBikinKucing((prev) => ({
+                            ...prev,
+                            berat: e.target.value === '' ? null : Number(e.target.value),
+                          }))
+                        }
+                        className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      />
+                    </View>
+                  </View>
+                </Container>
+
+                <Container className="w-full">
+                  <Text className="text-base font-semibold text-gradient-neutral">
+                    Tingkat Aktivitas
+                  </Text>
+                  <View className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+                    {aktivitas.map((item) => (
+                      <div
+                        key={item.label}
+                        onClick={() =>
+                          setFormBikinKucing((prev) => ({
+                            ...prev,
+                            tingkatAktivitas: item.label,
+                          }))
+                        }
+                        className={` w-full rounded-xl p-4 cursor-pointer transition-all duration-300 hover-lift h-full card-glass shadow-enhanced animate-glow backdrop-blur-enhanced ${
+                          formBikinKucing.tingkatAktivitas === item.label
+                            ? 'gradient-primary/20 border-primary'
+                            : 'border-[var(--shapeV1-parent)]/50 bg-[var(--shapeV2-parent)]/50'
+                        }`}
+                      >
+                        <View className="flex justify-center items-center flex-col gap-2">
+                          <Text
+                            className={`text-base font-semibold ${
+                              formBikinKucing.tingkatAktivitas === item.label
+                                ? 'text-gradient-primary'
+                                : 'text-foreground'
+                            }`}
+                          >
+                            {item.label}
+                          </Text>
+                          <Text className="text-sm text-center text-muted-foreground">
+                            {item.desc}
+                          </Text>
+                        </View>
+                      </div>
+                    ))}
+                  </View>
+                </Container>
+
+                <Container className="w-full">
+                  <Text className="text-base font-semibold text-gradient-neutral">
+                    Kondisi Kesehatan (opsional)
+                  </Text>
+                  <View className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-3">
+                    {PenyakitKucing.map((item) => {
+                      const checked = formBikinKucing.kondisiKesehatan.includes(item);
+                      return (
+                        <label
+                          key={item}
+                          className="flex items-center gap-2 cursor-pointer h-full transition-all duration-300 animate-glow"
+                        >
+                          <input
+                            type="checkbox"
+                            value={item}
+                            checked={checked}
+                            onChange={(e) => {
+                              setFormBikinKucing((prev) => {
+                                let updated = [...prev.kondisiKesehatan];
+                                if (e.target.checked) {
+                                  updated.push(item);
+                                } else {
+                                  updated = updated.filter((val) => val !== item);
+                                }
+                                return { ...prev, kondisiKesehatan: updated };
+                              });
+                            }}
+                            className="w-5 h-5 text-primary  focus:ring-primary animate-glow"
+                          />
+                          <span className="text-foreground text-sm">{item}</span>
+                        </label>
+                      );
+                    })}
+                  </View>
+                </Container>
+
+                <View className="mt-6">
+                  <Button
+                    className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
+                    onClick={() => handleCreateCat()}
+                    disabled={CreateCat.isPending}
+                  >
+                    {CreateCat.isPending ? (
+                      <Fallback title="Tunggu Sebentar" />
+                    ) : (
+                      <>
+                        <Cat className="w-5 h-5 mr-2 " />
+                        Kirim
+                      </>
+                    )}
+                  </Button>
+                </View>
+              </View>
+            </Container>
+          </PopUp>
 
           <Spreed orientation="horizontal" className="mt-2" />
 
