@@ -42,7 +42,7 @@ export const NavbarAdminData: NavbarAppType[] = [
     icon: Settings,
   },
   {
-    title: 'Pesanan Saya',
+    title: 'Daftar Pesanan',
     href: '/admin/pesanan',
     icon: ShoppingBag,
   },
