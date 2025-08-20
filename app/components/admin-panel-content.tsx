@@ -324,59 +324,136 @@ const AdminPanelContent = () => {
       <View className="mt-4">
         {isActive === 'overview' && (
           <>
+            <View className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8 bg-gradient-primary/10 card-glass rounded-xl">
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Total Pengguna :
+                </Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_users ?? 0}
+                </Text>
+              </View>
+
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">Profil Kucing :</Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_kucing ?? 0}
+                </Text>
+              </View>
+
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Rekomendasi Dibuat :
+                </Text>
+                <Text className="text-2xl font-bold text-gradient-primary">
+                  {Over.data?.data.total_layanan ?? 0}
+                </Text>
+              </View>
+
+              <View className="p-6 bg-gradient-primary/30 card-glass rounded-xl shadow-enhanced hover-lift hover:scale-105 transition-all duration-300 flex justify-start items-start gap-4 flex-col animate-glow backdrop-blur-enhanced">
+                <Text className="text-lg font-semibold text-gradient-neutral">
+                  Tingkat Kepuasan :
+                </Text>
+                <View className="w-full card-glass p-4 rounded-lg shadow-enhanced animate-glow">
+                  <Bar
+                    data={{
+                      labels: ['Kepuasan'],
+                      datasets: [
+                        {
+                          label: 'Tingkat Kepuasan',
+                          data: [94],
+                          backgroundColor: 'rgba(69, 59, 207, 0.5)',
+                          borderColor: '#453BCF',
+                          borderWidth: 2,
+                          borderRadius: 8,
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          max: 100,
+                          title: {
+                            display: true,
+                            text: 'Persentase (%)',
+                            color: '#1F2937',
+                            font: { size: 14, weight: 'bold' },
+                          },
+                          ticks: {
+                            color: '#1F2937',
+                            stepSize: 20,
+                          },
+                          grid: {
+                            color: 'rgba(31, 41, 55, 0.1)',
+                          },
+                        },
+                        x: {
+                          ticks: {
+                            color: '#1F2937',
+                            font: { size: 12 },
+                          },
+                          grid: {
+                            display: false,
+                          },
+                        },
+                      },
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(69, 59, 207, 0.8)',
+                          titleColor: '#FFFFFF',
+                          bodyColor: '#FFFFFF',
+                          callbacks: {
+                            label: (context) => `${context.parsed.y}%`,
+                          },
+                        },
+                      },
+                      animation: {
+                        duration: 1500,
+                        easing: 'easeOutBounce',
+                      },
+                    }}
+                    height={180}
+                  />
+                </View>
+              </View>
+            </View>
+            <View className="col-span-2 p-6 bg-gradient-primary/20 card-glass rounded-xl  mt-4 shadow-enhanced animate-glow">
+              <Text className="font-bold text-xl text-gradient-primary mb-4">
+                Ras Kucing Populer
+              </Text>
+              {Over.data?.data.ras_kucing_Populer?.map((r: any) => (
                 <View
-                  key={i}
-                  className="p-6 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 
-                     backdrop-blur-md rounded-xl shadow-lg hover:scale-105 hover:shadow-xl 
-                     transition-all duration-300 flex flex-col justify-center items-start gap-2"
+                  key={r._id}
+                  className="flex items-center gap-4 mb-3 hover-lift hover:scale-105 transition-all duration-300"
                 >
-                  <Text className="text-base font-medium text-foreground/80">{item.label}</Text>
-                  <Text className="text-3xl font-extrabold text-gradient-primary">
-                    {item.value}
+                  <Text className="w-32 text-foreground font-semibold text-gradient-primary">
+                    {r._id}
+                  </Text>
+                  <div className="h-4 bg-gray-200/30 rounded-full flex-1 card-glass animate-pulse shadow-enhanced">
+                    <div
+                      className="h-4 gradient-primary rounded-full"
+                      style={{
+                        width: `${
+                          (r.count /
+                            Math.max(
+                              ...Over.data.data.ras_kucing_Populer.map((x: any) => x.count)
+                            )) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </div>
+                  <Text className="w-12 text-right text-gradient-primary font-semibold">
+                    {r.count}
                   </Text>
                 </View>
               ))}
-            </View>
-
-            {/* Ras Kucing Populer */}
-            <View
-              className="p-6 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 
-                     backdrop-blur-md rounded-xl shadow-lg mt-6"
-            >
-              <Text className="font-bold text-xl text-gradient-primary mb-6">
-                Ras Kucing Populer
-              </Text>
-
-              <View className="space-y-4">
-                {Over.data?.data.ras_kucing_Populer?.map((r: any, idx: number) => {
-                  const maxCount = Math.max(
-                    ...Over.data.data.ras_kucing_Populer.map((x: any) => x.count)
-                  );
-                  const widthPercent = (r.count / maxCount) * 100;
-
-                  return (
-                    <View key={r._id} className="flex items-center gap-4 group">
-                      {/* Nama Ras */}
-                      <Text className="w-32 text-sm font-semibold text-foreground/90 group-hover:text-gradient-primary transition-colors">
-                        {r._id}
-                      </Text>
-
-                      {/* Progress Bar */}
-                      <div className="h-4 bg-white/10 rounded-full flex-1 overflow-hidden shadow-inner">
-                        <div
-                          className="h-4 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700 ease-out"
-                          style={{ width: `${widthPercent}%` }}
-                        />
-                      </div>
-
-                      {/* Jumlah */}
-                      <Text className="w-12 text-right text-sm font-bold text-gradient-primary">
-                        {r.count}
-                      </Text>
-                    </View>
-                  );
-                })}
-              </View>
             </View>
           </>
         )}
@@ -795,7 +872,6 @@ const AdminPanelContent = () => {
       <PopUp isOpen={isModal === 'Tambah-Layanan'} onClose={() => setIsModal(null)}>
         <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-6">
           <Text className="text-2xl font-bold text-gradient-primary">Tambah Layanan Baru</Text>
-
           <View className="space-y-2">
             <Label className="text-base font-semibold text-gradient-neutral">Nama Layanan</Label>
             <Input
