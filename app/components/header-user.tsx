@@ -57,9 +57,9 @@ export default function HeaderAppUser() {
         )}
       </View>
       <View className="flex justify-center items-center gap-2">
-        <Button variant="ghost" className="">
-          <Chart />
-        </Button>
+        {/* <Button variant="ghost" className=""> */}
+        <Chart />
+        {/* </Button> */}
         <Button variant="ghost">
           <Users />
         </Button>
