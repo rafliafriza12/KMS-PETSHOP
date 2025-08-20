@@ -291,7 +291,7 @@ const DashboardUserContainer = () => {
 
                 <View className="mt-6">
                   <Button
-                    className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
+                    className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300  font-semibold"
                     onClick={() => handleCreateCat()}
                     disabled={CreateCat.isPending}
                   >
@@ -342,7 +342,7 @@ const DashboardUserContainer = () => {
               )}
             </Container>
           ) : (
-            <EmptyKucing />
+            <EmptyKucing onKucing={() => setIsPopUp('kucing')} />
           )}
         </View>
       </Container>
