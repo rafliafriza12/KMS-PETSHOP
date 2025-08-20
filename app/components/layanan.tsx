@@ -587,6 +587,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
       {onKnow && formBikinKnowledge && setFormBikinKnowledge && (
         <PopUp isOpen={isModal === 'Knowledge'} onClose={() => handleOpenModal(null)}>
           <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-4">
+            <View className="w-full h-full">
+              <View className="flex justify-between items-center">
+                <Text>Tambah Knowledge</Text>
+                <X onClick={() => handleOpenModal(null)} />
+              </View>
+            </View>
             <Label className="text-base font-semibold text-gradient-neutral">Ras :</Label>
             <Select
               onValueChange={(value) =>
@@ -596,7 +602,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Ras" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -612,7 +618,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.ras.map((ras, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm "
                 >
                   {ras}
                   <button
@@ -643,7 +649,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">Maksimal Umur :</Label>
@@ -657,7 +663,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">Minimal Berat :</Label>
@@ -671,7 +677,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">
@@ -687,7 +693,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">
@@ -703,7 +709,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Tingkat Aktivitas" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -717,7 +723,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.tingkatAktivitas.map((tingkatAktivitas, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm "
                 >
                   {tingkatAktivitas}
                   <button
@@ -746,7 +752,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Kondisi" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -762,7 +768,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               {formBikinKnowledge?.kondisi.map((kondisi, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
+                  className="px-3 py-1 gradient-primary/20 rounded-full flex items-center gap-2 text-foreground text-sm "
                 >
                   {kondisi}
                   <button
@@ -782,9 +788,9 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               ))}
             </div>
 
-            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 " />
             <Button
-              className=" gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow font-semibold"
+              className=" gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift w-full h-full transition-all duration-300  font-semibold"
               onClick={() => {
                 if (onKnow) {
                   onKnow(formBikinKnowledge);
