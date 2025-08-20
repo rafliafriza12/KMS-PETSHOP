@@ -43,7 +43,7 @@ import Fallback from './ui/fallback';
 import { RasKucing } from '../core/constants/ras';
 import { PenyakitKucing } from '../core/constants/penyakit';
 import Link from 'next/link';
-import { cn } from '../utils/utils';
+import { usePathname } from 'next/navigation';
 
 interface LayananComponentProps {
   data: LayanananByRekomendasiType | LayananAppType;
@@ -94,8 +94,10 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
   const selectData = useAppSelector((state) => state.cat.selectedCat);
   const layanan = 'layanan' in data ? data.layanan : data;
   const baseKnow = 'knowledge_id' in data ? data.knowledge_id : data._id;
+  const pathname = usePathname();
   const score = 'score' in data ? data.score : undefined;
   const alert = useAlert();
+  const showForAdmin = pathname.includes('/admin/admin-panel');
 
   useEffect(() => {
     console.log('idKnow', baseKnow);
@@ -243,8 +245,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
             {handleBagheKategori(layanan.kategori)}
           </View>
         </View>
+
         <View className="flex justify-center items-center flex-col gap-4">
-          <View className=" text-sm font-semibold">{handleRekomendasi(score ?? 0)}</View>
+          {!showForAdmin && (
+            <View className="text-sm font-semibold">{handleRekomendasi(score ?? 0)}</View>
+          )}
+
           {isSelect && role?.toLowerCase() === 'admin' && isActive === 'layanan' && (
             <View className="flex gap-3 flex-col">
               <Button
@@ -415,7 +421,6 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
         </PopUp>
       )}
 
-      {/* FULL W H */}
       {onEdit && formEditLayanan && setFormEditLayanan && (
         <PopUp isOpen={isModal === 'Edit'} onClose={() => handleOpenModal(null)}>
           <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-6">
@@ -431,7 +436,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                     namaLayanan: e.target.value,
                   }))
                 }
-                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
               />
             </View>
 
@@ -445,7 +450,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                     deskripsi: e.target.value,
                   }))
                 }
-                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
               />
             </View>
 
@@ -457,12 +462,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   onChange={(e) => setCurrentBenefit(e.target.value)}
                   placeholder="Tambah benefit"
                   onKeyDown={(e) => e.key === 'Enter' && handleAddBenefit()}
-                  className="card-glass w-full rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                  className="card-glass w-full rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift  h-full transition-all duration-300  backdrop-blur-enhanced"
                 />
                 <Button
                   type="button"
                   onClick={handleAddBenefit}
-                  className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-auto h-full transition-all duration-300 animate-glow"
+                  className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-auto h-full transition-all duration-300 "
                 >
                   <Plus className="w-4 h-4 mr-2 " />
                   Tambah
@@ -472,7 +477,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 {formEditLayanan.benefit.map((item, index) => (
                   <View
                     key={index}
-                    className="gradient-primary/20 px-3 py-1 rounded-full flex items-center gap-2 text-foreground text-sm animate-glow"
+                    className="gradient-primary/20 px-3 py-1 rounded-full flex items-center gap-2 text-foreground text-sm "
                   >
                     <Text>{item}</Text>
                     <button
@@ -498,7 +503,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                       harga: e.target.value === '' ? null : Number(e.target.value),
                     }))
                   }
-                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
                 />
               </View>
               <View className="space-y-2">
@@ -512,7 +517,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                       diskon: e.target.value === '' ? null : Number(e.target.value),
                     }))
                   }
-                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
                 />
               </View>
             </View>
@@ -531,7 +536,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                       durasiLayanan: e.target.value === '' ? null : Number(e.target.value),
                     }))
                   }
-                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                  className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
                 />
               </View>
               <View className="space-y-2">
@@ -545,7 +550,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                     }))
                   }
                 >
-                  <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                  <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                     <SelectValue placeholder="Kategori" />
                   </SelectTrigger>
                   <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -562,7 +567,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               <Button
                 variant="outline"
                 onClick={() => handleOpenModal(null)}
-                className="gradient-neutral text-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow border-gray-200/50"
+                className="gradient-neutral text-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300  border border-[var(--shapeV1-parent)]"
               >
                 <X className="w-4 h-4 mr-2 " />
                 Batal
@@ -574,7 +579,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   }
                 }}
                 disabled={isPending}
-                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 animate-glow"
+                className="gradient-primary text-primary-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300 "
               >
                 <Save className="w-4 h-4 mr-2 " />
                 {isPending ? <Fallback title="Tunggu Sebentar" /> : 'Simpan Layanan'}
@@ -586,7 +591,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
       {onKnow && formBikinKnowledge && setFormBikinKnowledge && (
         <PopUp isOpen={isModal === 'Knowledge'} onClose={() => handleOpenModal(null)}>
-          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-4">
+          <View className="w-full p-6  card-glass rounded-xl shadow-enhanced space-y-4">
             <View className="w-full h-full">
               <View className="flex justify-between items-center">
                 <Text>Tambah Knowledge</Text>
@@ -602,7 +607,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Ras" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -649,7 +654,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all border duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">Maksimal Umur :</Label>
@@ -663,7 +668,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50  hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">Minimal Berat :</Label>
@@ -677,7 +682,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50  hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">
@@ -693,7 +698,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   max_berat: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50  hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">
@@ -709,7 +714,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20  hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Tingkat Aktivitas" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -752,7 +757,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 }))
               }
             >
-              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
+              <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20  hover-lift w-full h-full transition-all duration-300  backdrop-blur-enhanced">
                 <SelectValue placeholder="Pilih Kondisi" />
               </SelectTrigger>
               <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -788,7 +793,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
               ))}
             </div>
 
-            <Spreed orientation="horizontal" className="my-4 border-gray-200/50 " />
+            <Spreed orientation="horizontal" className="my-4  " />
             <Button
               className=" gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift w-full h-full transition-all duration-300  font-semibold"
               onClick={() => {
