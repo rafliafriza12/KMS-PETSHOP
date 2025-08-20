@@ -324,13 +324,6 @@ const AdminPanelContent = () => {
       <View className="mt-4">
         {isActive === 'overview' && (
           <>
-            {/* Statistik Card */}
-            <View className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
-              {[
-                { label: 'Total Pengguna', value: Over.data?.data.total_users ?? 0 },
-                { label: 'Profil Kucing', value: Over.data?.data.total_kucing ?? 0 },
-                { label: 'Rekomendasi Dibuat', value: Over.data?.data.total_layanan ?? 0 },
-              ].map((item, i) => (
                 <View
                   key={i}
                   className="p-6 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 
@@ -594,12 +587,12 @@ const AdminPanelContent = () => {
                     Nama :
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
+                    <User className="  z-1 absolute left-3 top-1/2 -translate-y-1/2  w-5 h-5 " />
                     <Input
                       id="text"
                       type="text"
                       placeholder="Nama Anda"
-                      className="pl-12 pr-4 py-3 h-full card-glass rounded-lg text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="pl-12 pr-4 py-3 h-full card-glass rounded-lg text-foreground  transition-all duration-300 z-1 "
                       onChange={(e) =>
                         setFormTambahaPengguna((prev) => ({
                           ...prev,
@@ -615,12 +608,12 @@ const AdminPanelContent = () => {
                     Email :
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
+                    <Mail className="z-1 absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 " />
                     <Input
                       id="email"
                       type="email"
                       placeholder="Masukkan email Anda"
-                      className="pl-12 pr-4 py-3 card-glass rounded-lg h-full text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="pl-12 pr-4 py-3 card-glass rounded-lg h-full text-foreground  transition-all duration-300 z-1 "
                       onChange={(e) =>
                         setFormTambahaPengguna((prev) => ({
                           ...prev,
@@ -639,12 +632,12 @@ const AdminPanelContent = () => {
                     Password :
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-primary w-5 h-5 " />
+                    <Lock className="z-1 absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 " />
                     <Input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Masukkan password Anda"
-                      className="pl-12 pr-12 py-3 card-glass h-full rounded-lg text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="pl-12 pr-12 py-3 card-glass h-full rounded-lg text-foreground  transition-all duration-300 z-1 "
                       onChange={(e) =>
                         setFormTambahaPengguna((prev) => ({
                           ...prev,
@@ -673,7 +666,7 @@ const AdminPanelContent = () => {
                       setFormTambahaPengguna((prev) => ({ ...prev, role: value }))
                     }
                   >
-                    <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift  transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                    <SelectTrigger className="w-full card-glass rounded-lg p-3  transition-all duration-300  backdrop-blur-enhanced">
                       <SelectValue placeholder="Pilih role" />
                     </SelectTrigger>
                     <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -684,7 +677,7 @@ const AdminPanelContent = () => {
                 </div>
 
                 <Button
-                  className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
+                  className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full  hover:opacity-90 transition-all duration-300  font-semibold"
                   size="lg"
                   onClick={() => handleTambahPengguna()}
                   disabled={tambahPengguna.isPending}

@@ -59,7 +59,6 @@ interface LayananComponentProps {
   isActive?: 'overview' | 'pengguna' | 'knowledge' | 'layanan' | null;
   formBikinKnowledge?: FormBikinKnowledgeSchema;
   setFormBikinKnowledge?: React.Dispatch<React.SetStateAction<FormBikinKnowledgeSchema>>;
-
   formAddToChart?: FormAddToChartSchema;
   setFormAddToChart?: React.Dispatch<React.SetStateAction<FormAddToChartSchema>>;
   onAddToChart?: (payload: FormAddToChartSchema) => void;
@@ -359,7 +358,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                 </Label>
               </View>
               <Input
-                className=" card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                className=" card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50  w-full h-full transition-all duration-300   backdrop-blur-enhanced"
                 type="date"
                 value={formAddToChart.jadwal?.split('T')[0] || ''}
                 onChange={(e) => {
@@ -388,7 +387,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   }));
                 }}
               >
-                <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift w-full h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                <SelectTrigger className=" card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50  w-full h-full transition-all duration-300 backdrop-blur-enhanced">
                   <SelectValue placeholder="Pilih Jam" />
                 </SelectTrigger>
                 <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -423,9 +422,12 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
       {onEdit && formEditLayanan && setFormEditLayanan && (
         <PopUp isOpen={isModal === 'Edit'} onClose={() => handleOpenModal(null)}>
-          <View className="w-full p-6 bg-gradient-primary/10 card-glass rounded-xl shadow-enhanced space-y-6">
-            <Text className="text-2xl font-bold text-gradient-primary">Layanan Edit</Text>
-
+          <View className="w-full p-6 border card-glass rounded-xl shadow-enhanced space-y-6">
+            <View className="flex justify-between items-center">
+              <Text className="text-2xl font-bold text-gradient-primary">Layanan Edit</Text>
+              <X onClick={() => handleOpenModal(null)} />
+            </View>
+            <Spreed orientation="horizontal" className="my-4 border-gray-200/50" />
             <View className="space-y-2">
               <Label className="text-base font-semibold text-gradient-neutral">Nama Layanan</Label>
               <Input
@@ -565,14 +567,6 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
 
             <View className="flex justify-end gap-3 pt-4">
               <Button
-                variant="outline"
-                onClick={() => handleOpenModal(null)}
-                className="gradient-neutral text-foreground px-4 py-2 rounded-full hover-lift w-full h-full transition-all duration-300  border border-[var(--shapeV1-parent)]"
-              >
-                <X className="w-4 h-4 mr-2 " />
-                Batal
-              </Button>
-              <Button
                 onClick={() => {
                   if (onEdit) {
                     onEdit(formEditLayanan);
@@ -594,7 +588,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
           <View className="w-full p-6  card-glass rounded-xl shadow-enhanced space-y-4">
             <View className="w-full h-full">
               <View className="flex justify-between items-center">
-                <Text>Tambah Knowledge</Text>
+                <Text className="text-lg font-semibold">Tambah Knowledge</Text>
                 <X onClick={() => handleOpenModal(null)} />
               </View>
             </View>
@@ -654,7 +648,7 @@ const LayananComponent: React.FC<LayananComponentProps> = ({
                   min_umur: e.target.value === '' ? null : Number(e.target.value),
                 }))
               }
-              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all border duration-300  backdrop-blur-enhanced"
+              className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50  border-[var(--shapeV1-parent)] hover-lift w-full h-full transition-all border duration-300  backdrop-blur-enhanced"
             />
 
             <Label className="text-base font-semibold text-gradient-neutral">Maksimal Umur :</Label>

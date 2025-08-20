@@ -196,7 +196,7 @@ const Kucing: React.FC<
                           namaKucing: e.target.value,
                         }))
                       }
-                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50  h-full transition-all duration-300  backdrop-blur-enhanced"
                     />
                   </View>
 
@@ -209,7 +209,7 @@ const Kucing: React.FC<
                         setFormEditKucing((prev) => ({ ...prev, ras: value }))
                       }
                     >
-                      <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced">
+                      <SelectTrigger className="w-full card-glass rounded-lg p-3 bg-gradient-primary/20 border-gray-200/50  h-full transition-all duration-300 backdrop-blur-enhanced">
                         <SelectValue placeholder="Pilih Ras" />
                       </SelectTrigger>
                       <SelectContent className="card-glass bg-[var(--shapeV2-parent)]/80 backdrop-blur-enhanced rounded-lg shadow-enhanced">
@@ -241,7 +241,7 @@ const Kucing: React.FC<
                           umur: e.target.value === '' ? null : Number(e.target.value),
                         }))
                       }
-                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 h-full transition-all duration-300 backdrop-blur-enhanced"
                     />
                   </View>
 
@@ -260,7 +260,7 @@ const Kucing: React.FC<
                           berat: e.target.value === '' ? null : Number(e.target.value),
                         }))
                       }
-                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 hover-lift h-full transition-all duration-300 animate-glow backdrop-blur-enhanced"
+                      className="card-glass rounded-lg p-3 text-foreground bg-[var(--shapeV2-parent)]/50 border-gray-200/50 h-full transition-all duration-300 backdrop-blur-enhanced"
                     />
                   </View>
                 </View>
@@ -280,7 +280,7 @@ const Kucing: React.FC<
                           tingkatAktivitas: item.label,
                         }))
                       }
-                      className={` w-full rounded-xl p-4 cursor-pointer transition-all duration-300 hover-lift h-full card-glass shadow-enhanced animate-glow backdrop-blur-enhanced ${
+                      className={` w-full rounded-xl p-4 cursor-pointer transition-all duration-300 h-full card-glass shadow-enhanced backdrop-blur-enhanced ${
                         formEditKucing.tingkatAktivitas === item.label
                           ? 'gradient-primary/20 border-primary'
                           : 'border-[var(--shapeV1-parent)]/50 bg-[var(--shapeV2-parent)]/50'
@@ -315,7 +315,7 @@ const Kucing: React.FC<
                     return (
                       <label
                         key={item}
-                        className="flex items-center gap-2 cursor-pointer h-full transition-all duration-300 animate-glow"
+                        className="flex items-center gap-2 cursor-pointer h-full transition-all duration-300"
                       >
                         <input
                           type="checkbox"
@@ -332,7 +332,7 @@ const Kucing: React.FC<
                               return { ...prev, kondisiKesehatan: updated };
                             });
                           }}
-                          className="w-5 h-5 text-primary border-gray-200/50 rounded focus:ring-primary animate-glow"
+                          className="w-5 h-5 text-primary border-gray-200/50 rounded focus:ring-primary"
                         />
                         <span className="text-foreground text-sm">{item}</span>
                       </label>
@@ -341,9 +341,9 @@ const Kucing: React.FC<
                 </View>
               </Container>
 
-              <Spreed orientation="horizontal" className="my-4 border-gray-200/50 animate-glow" />
+              <Spreed orientation="horizontal" className="my-4 border-gray-200/50" />
               <Button
-                className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300 animate-glow font-semibold"
+                className="w-full gradient-primary text-primary-foreground px-6 py-3 rounded-full hover-lift hover:opacity-90 transition-all duration-300   font-semibold"
                 onClick={() => handleEditCat()}
                 disabled={editCat.isPending}
               >
